@@ -10,7 +10,10 @@
 // @match        https://angular.io/*
 // @grant        none
 // ==/UserScript==
-
+/**
+* In order to change font on angular.io, the font must be installed
+* on user's system.
+*/
 (function() {
     'use strict';
     let ff = 'Fira Sans';
