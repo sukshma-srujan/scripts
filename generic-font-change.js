@@ -7,6 +7,7 @@
 // @match        https://stackoverflow.com/*
 // @match        https://dzone.com/*
 // @match        https://www.tutorialspoint.com/*
+// @match        https://angular.io/*
 // @grant        none
 // ==/UserScript==
 
