@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Change fonts of a websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -30,7 +30,7 @@
 * {
   font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
 }
-code *, pre *{
+code,code *, pre,pre *{
   font-family: '${mf}', Consolas, Courier, monospace !important;
 }
 `;
