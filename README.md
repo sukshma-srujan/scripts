@@ -1,5 +1,5 @@
 # scripts
-A collection of scripts for changing appearances of websites.
+A collection of scripts for changing appearance many different websites.
 
 These scripts can be used by importing into a browser addon that can inject scritps into webpages such as Tampermonkey.
 
