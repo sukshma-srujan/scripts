@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.4
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -33,6 +33,10 @@
 }
 code,code *, pre,pre *{
   font-family: '${mf}', Consolas, Courier, monospace !important;
+}
+/* angular.io specfic */
+.material-icons, .material-icons span {
+  font-family: 'Material Icons' !important;
 }
 `;
     
