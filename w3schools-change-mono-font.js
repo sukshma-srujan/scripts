@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         W3Schools: Change Mono Font
 // @namespace    https://github.com/optimus29
-// @version      1.0
+// @version      1.1
 // @description  Change mono font
 // @author       Optimus Prime
 // @match        https://www.w3schools.com/*
@@ -16,8 +16,8 @@
         let mf2 = sf.split(' ').join('+');
         let css = `
 @import url('https://fonts.googleapis.com/css?family=${mf2}');
-.w3-code, .w3-code * {
-  font-family: '${mf}', consolas, monospace;
+.w3-example, .w3-example * {
+  font-family: '${mf}', consolas, monospace !important;
 }
 `;
 
