@@ -13,10 +13,10 @@
 
     function applyStyle() {
         let mf = "Fira Mono";
-        let mf2 = sf.split(' ').join('+');
+        let mf2 = mf.split(' ').join('+');
         let css = `
 @import url('https://fonts.googleapis.com/css?family=${mf2}');
-.w3-example, .w3-example * {
+.w3-code, .w3-code * {
   font-family: '${mf}', consolas, monospace !important;
 }
 `;
