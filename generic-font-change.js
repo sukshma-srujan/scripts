@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
-// @namespace    http://tampermonkey.net/
-// @version      1.4
+// @namespace    https://github.com/optimus29
+// @version      1.5
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -10,6 +10,8 @@
 // @match        https://angular.io/*
 // @match        https://superuser.com/*
 // @match        https://www.w3schools.com/*
+// @match        http://www.learningtelugu.org/*
+// @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
 /**
