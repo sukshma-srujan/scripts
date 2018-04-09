@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         W3Schools: Change Mono Font
 // @namespace    https://github.com/optimus29
-// @version      1.1
+// @version      1.2
 // @description  Change mono font
 // @author       Optimus Prime
 // @match        https://www.w3schools.com/*
