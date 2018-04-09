@@ -27,5 +27,5 @@
         document.head.appendChild(style);
     };
 
-    window.setTimeout(applyStyle, 4000);
+    window.setTimeout(applyStyle, 1000);
 })();
