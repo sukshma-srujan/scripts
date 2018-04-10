@@ -1,17 +1,17 @@
 // ==UserScript==
 // @name         Torrent Filter
-// @namespace    optimus29
-// @version      0.1
+// @namespace    https://github.com/optimus29
+// @version      1.0
 // @description  Filter torrent search results on website family "1337x"
 // @author       Optimus Prime
-// @match        https://x1337x.ws/search/*
-// @match        https://x1337x.ws/popular*
-// @match        https://x1337x.ws/cat/*
-// @match        https://x1337x.ws/sort-cat/*
-// @match        https://x1337x.ws/sub/*
+// @match        https://x1337x.eu/search/*
+// @match        https://x1337x.eu/popular*
+// @match        https://x1337x.eu/cat/*
+// @match        https://x1337x.eu/sort-cat/*
+// @match        https://x1337x.eu/sub/*
+// @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
-
 const FILTER_UI_HTML = `
 <div id="jk-outer-wrapper">
 	<div id="jk-wrapper-toggle"><span>F</span></div>
@@ -86,7 +86,7 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
 // name column class name
 // size column class name
 // seeds column class name
-(function () {
+(function() {
     'use strict';
     'allow pasting';
     // constants related to file name
@@ -99,8 +99,7 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
     const FILE_SIZE_NO_COMPARISON = 12;
 
     var _g = {
-        rowSet: [
-        ], // all result rows
+        rowSet: [], // all result rows
         web: {
             '1337x': {
                 siteName: 'https://1337x',
@@ -110,7 +109,7 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
                 sizeColSel: '.coll-4',
                 seedColSel: '.coll-2'
             },
-			'x1337x': {
+            'x1337x': {
                 siteName: 'https://x1337x',
                 containerSel: '.table-list',
                 rowSel: 'tr',
@@ -125,88 +124,89 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
             seedCb: null,
             nameInput: null,
             sizeInput: null,
-			buttonToggle: null,
-			uiDisplayStatus:false,
-			uiWrapper:null,
+            buttonToggle: null,
+            uiDisplayStatus: false,
+            uiWrapper: null,
 
-            createUI: function () {
-				let head = document.getElementsByTagName("head")[0];
-				let body = document.getElementsByTagName("body")[0];
+            createUI: function() {
+                let head = document.getElementsByTagName("head")[0];
+                let body = document.getElementsByTagName("body")[0];
 
-				let uiStyle = document.createElement("style");
-				uiStyle.innerHTML = FILTER_UI_STYLE;
+                let uiStyle = document.createElement("style");
+                uiStyle.innerHTML = FILTER_UI_STYLE;
 
-				body.innerHTML += FILTER_UI_HTML;
+                body.innerHTML += FILTER_UI_HTML;
 
-				head.appendChild(uiStyle);
+                head.appendChild(uiStyle);
 
-				this.nameCb = document.getElementById("jk-checkbox-name");
-				this.sizeCb = document.getElementById("jk-checkbox-size");
-				this.seedCb = document.getElementById("jk-checkbox-seed");
+                this.nameCb = document.getElementById("jk-checkbox-name");
+                this.sizeCb = document.getElementById("jk-checkbox-size");
+                this.seedCb = document.getElementById("jk-checkbox-seed");
 
-				this.nameInput = document.getElementById("jk-input-name");
-				this.sizeInput = document.getElementById("jk-input-size");
-				this.buttonToggle = document.getElementById("jk-wrapper-toggle");
-				this.uiWrapper = document.getElementById("jk-wrapper");
+                this.nameInput = document.getElementById("jk-input-name");
+                this.sizeInput = document.getElementById("jk-input-size");
+                this.buttonToggle = document.getElementById("jk-wrapper-toggle");
+                this.uiWrapper = document.getElementById("jk-wrapper");
 
-				let that = this;
-				
-				this.buttonToggle.addEventListener("click", function(event){
-					if (that.uiDisplayStatus) that.hideUI();
-					else that.showUI();
-					
-					e.stopPropagation();
-					e.preventDefault();
-				}, false);
+                let that = this;
 
-				let buttonApply = document.getElementById("button-apply");
-				let buttonRemove = document.getElementById("button-remove");
-				
-				
-				buttonApply.addEventListener("click", function(){
-					_g.filter.applyFilters();
-				}, false);
+                this.buttonToggle.addEventListener("click", function(event) {
+                    if (that.uiDisplayStatus) that.hideUI();
+                    else that.showUI();
 
-				buttonRemove.addEventListener("click", function() {
-					_g.filter.removeAllFilters();
-				}, false);
-				
-            },
-			
+                    e.stopPropagation();
+                    e.preventDefault();
+                }, false);
 
-            showUI: function () {
-				this.uiWrapper.style.display = "block";
-				this.uiDisplayStatus = true;
+                let buttonApply = document.getElementById("button-apply");
+                let buttonRemove = document.getElementById("button-remove");
+
+
+                buttonApply.addEventListener("click", function() {
+                    _g.filter.applyFilters();
+                }, false);
+
+                buttonRemove.addEventListener("click", function() {
+                    _g.filter.removeAllFilters();
+                }, false);
+
             },
 
-            hideUI: function () {
-				this.uiWrapper.style.display = "";
-				this.uiDisplayStatus = false;
+
+            showUI: function() {
+                this.uiWrapper.style.display = "block";
+                this.uiDisplayStatus = true;
             },
 
-            nameSelected: function () {
+            hideUI: function() {
+                this.uiWrapper.style.display = "";
+                this.uiDisplayStatus = false;
+            },
+
+            nameSelected: function() {
                 return (this.nameCb != null) ? this.nameCb.checked : false;
             },
-            sizeSelected: function () {
+            sizeSelected: function() {
                 return (this.sizeCb != null) ? this.sizeCb.checked : false;
             },
-            seedSelected: function () {
+            seedSelected: function() {
                 return (this.seedCb != null) ? this.seedCb.checked : false;
             },
-            getNameString: function () {
+            getNameString: function() {
                 return (this.nameInput === null) ? null : this.nameInput.value;
             },
-            getNamePos: function () {
+            getNamePos: function() {
                 let radios = document.querySelectorAll('input[name="jkNamePos47"]');
-				let val = null, i;
-				
-				for (i = 0; i < radios.length; i++) {
-					if (radios[i].checked) {
-						val = radios[i].value;
-						break;
-					}
-				}
-				
+                let val = null,
+                    i;
+
+                for (i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        val = radios[i].value;
+                        break;
+                    }
+                }
+
                 switch (val) {
                     case 'start':
                         return TEXT_POS_AT_START;
@@ -216,21 +216,21 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
                         return TEXT_POS_AT_ANYWHERE;
                 }
             },
-            getSizeString: function () {
+            getSizeString: function() {
                 return (this.sizeInput === null) ? null : this.sizeInput.value;
             },
-            getSizeComparison: function () {
+            getSizeComparison: function() {
                 let radios = document.querySelectorAll('input[name="jkSizeCmp47"]');
-				let val = null;
-				let i;
-				
-				for (i = 0; i < radios.length; i++) {
-					if (radios[i].checked) {
-						val = radios[i].value;
-						break;
-					}
-				}
-				
+                let val = null;
+                let i;
+
+                for (i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        val = radios[i].value;
+                        break;
+                    }
+                }
+
                 if (val) {
                     return (val === 'lessthan') ? FILE_SIZE_LESS_THAN : FILE_SIZE_GREATER_THAN;
                 } else {
@@ -239,223 +239,223 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
             }
         },
         filter: {
-            applyFilterName: function (colSelector, str, position) {
-				let i;
-				let rowSet = _g.rowSet;
+            applyFilterName: function(colSelector, str, position) {
+                let i;
+                let rowSet = _g.rowSet;
 
-				console.log('search key: ' + str + '  position: ' + position + "  sel: " + colSelector);
-				for (i = 0; i < rowSet.length; i++) {
-					let node = rowSet[i].querySelector(colSelector);
-					
-					if (!node) continue;
-					
-					let name = node.textContent.toUpperCase();
-					let flag = false;
-					str = str.toUpperCase();
+                console.log('search key: ' + str + '  position: ' + position + "  sel: " + colSelector);
+                for (i = 0; i < rowSet.length; i++) {
+                    let node = rowSet[i].querySelector(colSelector);
 
-					switch (position) {
-						case TEXT_POS_AT_START:
-							flag = name.startsWith(str);
-							break;
-						case TEXT_POS_AT_END:
-							flag = name.endsWith(str);
-							break;
-						default:
-							flag = (name.indexOf(str) != -1);
-					}
+                    if (!node) continue;
 
-					if (!flag) this.hideRow(rowSet[i]);
-				}
+                    let name = node.textContent.toUpperCase();
+                    let flag = false;
+                    str = str.toUpperCase();
+
+                    switch (position) {
+                        case TEXT_POS_AT_START:
+                            flag = name.startsWith(str);
+                            break;
+                        case TEXT_POS_AT_END:
+                            flag = name.endsWith(str);
+                            break;
+                        default:
+                            flag = (name.indexOf(str) != -1);
+                    }
+
+                    if (!flag) this.hideRow(rowSet[i]);
+                }
             },
 
-            applyFilterSize: function (colSelector, sizeStr, comparison) {
-				let i;
-				let sizeLimit = _g.util.parseSizeStr(sizeStr);
-				let rowSet = _g.rowSet;
+            applyFilterSize: function(colSelector, sizeStr, comparison) {
+                let i;
+                let sizeLimit = _g.util.parseSizeStr(sizeStr);
+                let rowSet = _g.rowSet;
 
-				if (sizeLimit === -1 || comparison === FILE_SIZE_NO_COMPARISON) return;
+                if (sizeLimit === -1 || comparison === FILE_SIZE_NO_COMPARISON) return;
 
-				//console.log("TorrentFilter::size filter:: sizeLimit: " + sizeLimit + "  op: " + comparison);
-				for (i = 0; i < rowSet.length; i++) {
-					let rowSizeStr = rowSet[i].querySelector(colSelector).childNodes[0].nodeValue;
-					let flag = false;
-					let fileSize = _g.util.parseSizeStr(rowSizeStr);
-					
-					if (fileSize == -1) {
-						console.log("TorrentFilter::Error in parsing file size: " + rowSizeStr);
-					}
+                //console.log("TorrentFilter::size filter:: sizeLimit: " + sizeLimit + "  op: " + comparison);
+                for (i = 0; i < rowSet.length; i++) {
+                    let rowSizeStr = rowSet[i].querySelector(colSelector).childNodes[0].nodeValue;
+                    let flag = false;
+                    let fileSize = _g.util.parseSizeStr(rowSizeStr);
 
-					if (comparison === FILE_SIZE_LESS_THAN) {
-						flag = (fileSize > sizeLimit);
-					} else {
-						flag = (fileSize < sizeLimit);
-					}
-					
-					//console.log("row idx: " + i + "  rowSize: " + rowSizeStr + "  fileSize: " + fileSize + "  flag: " + flag);
+                    if (fileSize == -1) {
+                        console.log("TorrentFilter::Error in parsing file size: " + rowSizeStr);
+                    }
 
-					if (flag) this.hideRow(rowSet[i]);
-				}
+                    if (comparison === FILE_SIZE_LESS_THAN) {
+                        flag = (fileSize > sizeLimit);
+                    } else {
+                        flag = (fileSize < sizeLimit);
+                    }
+
+                    //console.log("row idx: " + i + "  rowSize: " + rowSizeStr + "  fileSize: " + fileSize + "  flag: " + flag);
+
+                    if (flag) this.hideRow(rowSet[i]);
+                }
             },
 
-            applyFilterSeed: function (colSelector, minSeed) {
-				let i;
-				let rowSet = _g.rowSet;
+            applyFilterSeed: function(colSelector, minSeed) {
+                let i;
+                let rowSet = _g.rowSet;
 
-				console.log("--applying filter seed");
+                console.log("--applying filter seed");
 
-				if (minSeed === undefined) minSeed = 1;
+                if (minSeed === undefined) minSeed = 1;
 
-				for (i = 0; i < rowSet.length; i++) {
-					let seedCount = parseInt(rowSet[i].querySelector(colSelector).textContent);
+                for (i = 0; i < rowSet.length; i++) {
+                    let seedCount = parseInt(rowSet[i].querySelector(colSelector).textContent);
 
-					//console.log('row  idx: ' + i + '  seedCount: ' + seedCount);
+                    //console.log('row  idx: ' + i + '  seedCount: ' + seedCount);
 
-					if (seedCount < minSeed) this.hideRow(rowSet[i]);
-				}
+                    if (seedCount < minSeed) this.hideRow(rowSet[i]);
+                }
             },
 
-            removeAllFilters: function () {
-				let i;
-				let rowSet = _g.rowSet;
+            removeAllFilters: function() {
+                let i;
+                let rowSet = _g.rowSet;
 
-				console.log("Removing all filters");
+                console.log("Removing all filters");
 
-				for (i = 0; i < rowSet.length; i++) {
-					this.displayRow(rowSet[i]);
-				}
+                for (i = 0; i < rowSet.length; i++) {
+                    this.displayRow(rowSet[i]);
+                }
             },
-			applyFilters: function () {
-				console.log("Applying filters");
-				// get rquired names
-				var pageData = _g.util.getPageData();
-				if (pageData === null) return;
+            applyFilters: function() {
+                console.log("Applying filters");
+                // get rquired names
+                var pageData = _g.util.getPageData();
+                if (pageData === null) return;
 
-				try {
-					// may throw SYNTAX_ERR exception
-					_g.rowSet = document.querySelectorAll(pageData.containerSel + ' ' + pageData.rowSel);
-				} catch (e) {
-					console.log(e);
-					return;
-				}
+                try {
+                    // may throw SYNTAX_ERR exception
+                    _g.rowSet = document.querySelectorAll(pageData.containerSel + ' ' + pageData.rowSel);
+                } catch (e) {
+                    console.log(e);
+                    return;
+                }
 
-				if (_g.rowSet.length === 0) {
-					console.log('No rows found.');
-					return;
-				} else {
-					console.log('Number of result rows: ' + _g.rowSet.length);
-				}
+                if (_g.rowSet.length === 0) {
+                    console.log('No rows found.');
+                    return;
+                } else {
+                    console.log('Number of result rows: ' + _g.rowSet.length);
+                }
 
-				// first remove any previous filtering
-				this.removeAllFilters();
+                // first remove any previous filtering
+                this.removeAllFilters();
 
-				// applying filters
-				let ui = _g.ui;
+                // applying filters
+                let ui = _g.ui;
 
-				if (ui.nameSelected()) {
-					console.log("Applying name filter");
+                if (ui.nameSelected()) {
+                    console.log("Applying name filter");
 
-					this.applyFilterName(pageData.nameColSel, ui.getNameString(), ui.getNamePos());
-				}
+                    this.applyFilterName(pageData.nameColSel, ui.getNameString(), ui.getNamePos());
+                }
 
-				if (ui.sizeSelected()) {
-					console.log("Applying name filter");
+                if (ui.sizeSelected()) {
+                    console.log("Applying name filter");
 
-					this.applyFilterSize(pageData.sizeColSel, ui.getSizeString(), ui.getSizeComparison());
-				}
+                    this.applyFilterSize(pageData.sizeColSel, ui.getSizeString(), ui.getSizeComparison());
+                }
 
-				if (ui.seedSelected()) {
-					console.log("Applying name filter");
+                if (ui.seedSelected()) {
+                    console.log("Applying name filter");
 
-					this.applyFilterSeed(pageData.seedColSel);
-				}
+                    this.applyFilterSeed(pageData.seedColSel);
+                }
 
-				console.log("All filter applied");
-			},
+                console.log("All filter applied");
+            },
 
-			hideRow: function(row) {
-				// check whether element is already hidden by some other filter
-				if (row.hasAttribute("data-jk-style")) return;
+            hideRow: function(row) {
+                // check whether element is already hidden by some other filter
+                if (row.hasAttribute("data-jk-style")) return;
 
-				let dispStyle = row.style.display;
+                let dispStyle = row.style.display;
 
-				if (!dispStyle) dispStyle = "";
+                if (!dispStyle) dispStyle = "";
 
-				// save display style if any set by website script
-				row.setAttribute("data-jk-style", dispStyle);
-				// hide row
-				row.style.display = "none";
-			},
+                // save display style if any set by website script
+                row.setAttribute("data-jk-style", dispStyle);
+                // hide row
+                row.style.display = "none";
+            },
 
-			displayRow: function(row) {
-				let dispStyle = row.getAttribute("data-jk-style");
+            displayRow: function(row) {
+                let dispStyle = row.getAttribute("data-jk-style");
 
-				if (!dispStyle) dispStyle = "";
+                if (!dispStyle) dispStyle = "";
 
-				row.removeAttribute("data-jk-style");
-				row.style.display = dispStyle;
-			}
+                row.removeAttribute("data-jk-style");
+                row.style.display = dispStyle;
+            }
         },
-		util:{
-			parseSizeStr: function(sizeStr) {
-				let units = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'EB', 'PB'];
-				if (typeof(sizeStr) === 'string' || sizeStr instanceof String) {
-					let parts = sizeStr.split(' ');
-					let i;
+        util: {
+            parseSizeStr: function(sizeStr) {
+                let units = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'EB', 'PB'];
+                if (typeof(sizeStr) === 'string' || sizeStr instanceof String) {
+                    let parts = sizeStr.split(' ');
+                    let i;
 
-					// length of parts is other than 2 or the first element is not a number
-					if (parts.length == 0 || isNaN(parts[0])) return -1;
+                    // length of parts is other than 2 or the first element is not a number
+                    if (parts.length == 0 || isNaN(parts[0])) return -1;
 
-					let unitPart = (parts.length === 1) ? units[2] : parts[1].toUpperCase();
+                    let unitPart = (parts.length === 1) ? units[2] : parts[1].toUpperCase();
 
-					// find index of unit which is in sizeStr
-					let unitIdx = -1;
+                    // find index of unit which is in sizeStr
+                    let unitIdx = -1;
 
-					for (i = 0; i < units.length; i++) {
-						if (units[i] === unitPart) {
-							unitIdx = i;
-							break;
-						}
-					}
+                    for (i = 0; i < units.length; i++) {
+                        if (units[i] === unitPart) {
+                            unitIdx = i;
+                            break;
+                        }
+                    }
 
-					// unitPart is not in array of units
-					if (unitIdx === -1) return -1;
+                    // unitPart is not in array of units
+                    if (unitIdx === -1) return -1;
 
-					// calculating size in bytes
-					let size = parseFloat(parts[0], 10) * Math.pow(1024, unitIdx);
+                    // calculating size in bytes
+                    let size = parseFloat(parts[0], 10) * Math.pow(1024, unitIdx);
 
-					return size;
-				}
+                    return size;
+                }
 
-				return -1;
-			},
+                return -1;
+            },
 
-    		getPageData: function () {
-				let pageData = null;
-				let pageUrl = window.location.href;
+            getPageData: function() {
+                let pageData = null;
+                let pageUrl = window.location.href;
 
-				for (var p in _g.web) {
-					if (pageUrl.indexOf(_g.web[p].siteName) === 0) {
-						pageData = _g.web[p];
-						break;
-					}
-				}
-				return pageData;
-			}
-		}
+                for (var p in _g.web) {
+                    if (pageUrl.indexOf(_g.web[p].siteName) === 0) {
+                        pageData = _g.web[p];
+                        break;
+                    }
+                }
+                return pageData;
+            }
+        }
     };
 
 
-    var init = function () {
-		try {
-			console.log("Creating UI of filter.");
-			_g.ui.createUI();
-			console.log("UI of filter created.");
-			
-			if($) console.log("jQuery has been loaded");
-		} catch (e) {
-			console.log(e);
-		}
+    var init = function() {
+        try {
+            console.log("Creating UI of filter.");
+            _g.ui.createUI();
+            console.log("UI of filter created.");
+
+            if ($) console.log("jQuery has been loaded");
+        } catch (e) {
+            console.log(e);
+        }
     };
 
-	init();
-}) ();
+    init();
+})();
