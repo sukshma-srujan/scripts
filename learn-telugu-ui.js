@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Learn Telugu UI
 // @namespace    https://github.com/optimus29
-// @version      1.0
+// @version      1.1
 // @description  Transform the website
 // @author       Optimus Prime
 // @match        http://www.learningtelugu.org/cp-brown/*
