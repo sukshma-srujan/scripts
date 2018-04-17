@@ -108,7 +108,14 @@ body,
 }
 #header {
   background-color: #000;
-  background-size: 100%;
+  background-size: 100% 100%;
+
+}
+#navbar-inner {
+  width: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 #sidebar-left {
   width: 30% !important;
