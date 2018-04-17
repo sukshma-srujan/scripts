@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.5
+// @version      1.6
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -33,7 +33,9 @@
 * {
   font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
 }
-code,code *, pre,pre *{
+code, code *, pre, pre *,
+.w3-code, .w3-code * /* w3schools specific */
+{
   font-family: '${mf}', Consolas, Courier, monospace !important;
 }
 /* angular.io specfic */
