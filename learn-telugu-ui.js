@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Learn Telugu UI
 // @namespace    https://github.com/optimus29
-// @version      1.1
+// @version      1.2
 // @description  Transform the website
 // @author       Optimus Prime
 // @match        http://www.learningtelugu.org/cp-brown/*
@@ -131,11 +131,34 @@ body,
   width: 100%;
   height: auto;
 }
+#attachments {
+  border-collapse: collapse;
+  background-color: transparent;
+  margin: 2rem 0;
+}
+#attachments thead tr th, #attachments tbody tr td {
+  background-color: transparent;
+}
+tr.odd, tr.even {
+  background-color: transparent;
+  border: 0;
+}
+#attachments thead tr th {
+  padding: 15px 25px;
+  background: #e7e7a0;
+}
+#attachments tbody tr td {
+  padding: 12px 25px;
+  background-color: #f7f7e0;
+}
+#attachments tbody tr + tr td {
+  border-top: 1px solid #e7e7d0;
+}
 .content audio {
-  margin: 1.5rem 0;
+  margin: 2rem 0;
 }
 .button-bar {
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 .button-bar:after {
   content: " ";
@@ -156,8 +179,8 @@ body,
   font-weight: bold;
   min-width: 120px;
   text-align: center;
-  font-size: 1.25rem;
-  line-height: 2.5;
+  font-size: 1rem;
+  line-height: 2.2;
 }
 
 #footer {
