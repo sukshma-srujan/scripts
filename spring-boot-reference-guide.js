@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.4
+// @version      1.5
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -32,14 +32,18 @@ body {
   box-shadow: 0 0 10px #ccc;
   font-size: 16px;
   background-color: #fffffa;
+  color: #332;
+}
+a {
+  color: #5fa134;
 }
 code, code *, pre, pre *
 {
   font-family: 'Fira Mono', Consolas, Courier, monospace !important;
 }
-.informaltable {
+.informaltable, .note {
   width: 100%;
-  overflow: scroll;
+  overflow-x: auto;
 }
 div.important code, div.note code, div.tip code, div.warning code,
 code, pre {
@@ -65,7 +69,7 @@ pre {
   color: #466010;
 }
 h1, h2, h3, h4, h5, h6 {
-  color: #444 !important;
+  color: #443 !important;
 }
 `;
     
