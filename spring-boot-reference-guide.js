@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.5
+// @version      1.6
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -76,4 +76,9 @@ h1, h2, h3, h4, h5, h6 {
     let style = document.createElement('style');
     style.innerHTML = css;
     document.head.appendChild(style);
+
+    var pres = document.getElementsByTagName('pre');
+    for (var p of pres) {
+        p.innerHTML = p.innerHTML.replace(/\t/g, '   ');
+    }
 })();
