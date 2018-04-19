@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.2
+// @version      1.3
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -45,13 +45,13 @@ code, pre {
 }
 pre {
   padding: 1.5rem !important;
-  margin: 1.5rem 0;
+  margin: -1.5rem 0;
 }
 .sidebar {
   border: 0;
   padding:1px 1.5rem;
   background: #fffff4;
-  margin: 1.5rem 0;
+  margin: -1.5rem 0;
 }
 `;
     
