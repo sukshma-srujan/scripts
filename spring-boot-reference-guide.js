@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.6
+// @version      1.1
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -18,24 +18,42 @@
 
     let css = 
 `
-@import url('https://fonts.googleapis.com/css?family=${ff2}:400,400i,700,700i');
-@import url('https://fonts.googleapis.com/css?family=${mf2}:400,700');
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Fira+Mono:400,700');
 * {
-  font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
+  font-family: 'Fira Sans', Ubuntu, 'Segoe UI', sans-serif !important;
 }
 body {
   width: 65%;
   padding: 0 40px;
   margin: 0 auto;
   box-shadow: 0 0 10px #aaa;
+  font-size: 16px;
 }
 code, code *, pre, pre *
 {
-  font-family: '${mf}', Consolas, Courier, monospace !important;
+  font-family: 'Fira Mono', Consolas, Courier, monospace !important;
 }
 .informaltable {
   width: 100%;
   overflow: scroll;
+}
+div.important code, div.note code, div.tip code, div.warning code,
+code, pre {
+  border: 0 !important;
+  background: #f0f0f0;
+}
+pre {
+  padding: 20px !important;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.sidebar {
+  border: 0;
+  padding:1px 20px;
+  background: #f7f7f0;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 `;
     
