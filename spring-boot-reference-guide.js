@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.1
+// @version      1.2
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -25,7 +25,7 @@
 }
 body {
   width: 65%;
-  padding: 0 40px;
+  padding: 0 3rem;
   margin: 0 auto;
   box-shadow: 0 0 10px #aaa;
   font-size: 16px;
@@ -44,16 +44,14 @@ code, pre {
   background: #f0f0f0;
 }
 pre {
-  padding: 20px !important;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding: 1.5rem !important;
+  margin: 1.5rem 0;
 }
 .sidebar {
   border: 0;
-  padding:1px 20px;
-  background: #f7f7f0;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  padding:1px 1.5rem;
+  background: #fffff4;
+  margin: 1.5rem 0;
 }
 `;
     
