@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.7
+// @version      1.8
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -26,6 +26,7 @@ html {
   background-color: #171717;
 }
 body {
+  min-width: 700px;
   width: 65%;
   padding: 0 3rem;
   margin: 0 auto;
