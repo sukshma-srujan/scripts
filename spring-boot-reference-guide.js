@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.6
+// @version      1.7
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -53,6 +53,25 @@ code, pre {
 div.important code, div.note code, div.tip code, div.warning code,
 code, code * {
   color: #321 !important;
+  white-space: normal !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+
+  /*
+   * Code for hypheing long words was taken from source below:
+   * https://css-tricks.com/snippets/css/prevent-long-urls-from-breaking-out-of-container/ 
+   */
+  -ms-word-break: break-all;
+  /* This is the dangerous one in WebKit, as it breaks things wherever */
+  word-break: break-all;
+  /* Instead use this non-standard one: */
+  word-break: break-word;
+
+  /* Adds a hyphen where the word breaks, if supported (No Blink) */
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
 }
 pre {
   padding: 1.5rem !important;
@@ -70,6 +89,18 @@ pre {
 }
 h1, h2, h3, h4, h5, h6 {
   color: #443 !important;
+}
+div.table {
+  margin: 1.5rem 0;
+}
+div.table .table-contents {
+  width: 100%;
+  overflow-x: auto;
+}
+div.important, div.note, div.tip, div.warning {
+  margin: 1.5rem 0 !important;
+  width: 100%;
+  overflow-x: auto;
 }
 `;
     
