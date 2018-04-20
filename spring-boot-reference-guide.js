@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.9
+// @version      1.10
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -47,7 +47,7 @@ code, code *, pre, pre *
   overflow-x: auto;
 }
 div.important code, div.note code, div.tip code, div.warning code,
-code, pre {
+code {
   border: 0 !important;
   background: #f0f0f0;
 }
@@ -77,6 +77,8 @@ code, code * {
 pre {
   padding: 1.5rem !important;
   margin: 1.5rem -1.5rem;
+  border: 0 !important;
+  background: #ececea;
 }
 .sidebar {
   border: 0;
