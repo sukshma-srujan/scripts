@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.10
+// @version      1.11
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -37,6 +37,9 @@ body {
 }
 a {
   color: #5fa134;
+}
+.title > a {
+  color: #443;
 }
 code, code *, pre, pre *
 {
