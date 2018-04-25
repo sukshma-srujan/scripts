@@ -5,6 +5,7 @@
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
+// @match        https://docs.spring.io/spring-security/site/docs/5.0.4.RELEASE/reference/htmlsingle/
 // ==/UserScript==
 
 (function iife(){
