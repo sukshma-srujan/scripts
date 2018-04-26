@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.12
+// @version      1.13
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -24,17 +24,18 @@
   font-family: 'Fira Sans', Ubuntu, 'Segoe UI', sans-serif !important;
 }
 html {
-  background-color: #171717;
+  background-color: #1717170;
 }
 body {
   min-width: 700px;
   width: 65%;
-  padding: 0 3rem;
-  margin: 0 auto;
+  padding: 3rem 3rem;
+  margin: 3rem auto;
   box-shadow: 0 0 10px #ccc;
   font-size: 16px;
   background-color: #fffffa;
   color: #332;
+  /*! padding-top: 20px; */
 }
 a {
   color: #5fa134;
@@ -97,6 +98,10 @@ pre {
 h1, h2, h3, h4, h5, h6 {
   color: #443 !important;
 }
+h1 {
+  margin-top: 0;
+  padding-top: 0;
+}
 div.table {
   margin: 1.5rem 0;
 }
@@ -108,6 +113,16 @@ div.important, div.note, div.tip, div.warning {
   margin: 1.5rem 0 !important;
   width: 100%;
   overflow-x: auto;
+}
+div.calloutlist > table > tbody > tr > td {
+  padding-left: 0 !important;
+  vertical-align: baseline;
+}
+div.calloutlist > table > tbody > tr > td:first-of-type > p > a {
+  display: block;
+}
+div.calloutlist > table > tbody > tr > td > p {
+  word-break: break-all;
 }
 `;
     
