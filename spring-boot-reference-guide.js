@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.13
+// @version      1.14
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -18,13 +18,13 @@
     let mf2 = mf.split(' ').join('+');
 
     let css = 
-`@import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,700,700i');
+`@import url('https://fonts.googleapis.com/css?family=Fira+Sans:300,400,400i,500,500i');
 @import url('https://fonts.googleapis.com/css?family=Fira+Mono:400,700');
 * {
   font-family: 'Fira Sans', Ubuntu, 'Segoe UI', sans-serif !important;
-}
+}/**/
 html {
-  background-color: #1717170;
+  background-color: #e7e7e4;
 }
 body {
   min-width: 700px;
@@ -38,7 +38,13 @@ body {
   /*! padding-top: 20px; */
 }
 a {
-  color: #5fa134;
+  color: #4a7d28;
+}
+div.toc > dl > dt,
+div.toc > dl > dd > dl > dt,
+div.toc > dl > dd > dl > dd > dl > dt,
+p.releaseinfo {
+  font-weight: 500;
 }
 .title > a {
   color: #443;
@@ -96,7 +102,13 @@ pre {
   color: #466010;
 }
 h1, h2, h3, h4, h5, h6 {
+  color: #030300 !important;
+  font-weight: 300;
+  word-break: break-all;
+}
+b, strong, .strong {
   color: #443 !important;
+  font-weight: 500;
 }
 h1 {
   margin-top: 0;
@@ -123,6 +135,24 @@ div.calloutlist > table > tbody > tr > td:first-of-type > p > a {
 }
 div.calloutlist > table > tbody > tr > td > p {
   word-break: break-all;
+}
+h6 {
+  font-size: 1.15rem;
+}
+h5 {
+  font-size: 1.32rem;
+}
+h4 {
+  font-size: 1.52rem;
+}
+h3 {
+  font-size: 1.75rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h1 {
+  font-size: 2.31rem;
 }
 `;
     
