@@ -1,9 +1,14 @@
 // ==UserScript==
 // @name         Torrent Filter
 // @namespace    https://github.com/optimus29
-// @version      1.0
+// @version      1.1
 // @description  Filter torrent search results on website family "1337x"
 // @author       Optimus Prime
+// @match        https://x1337x.ws/search/*
+// @match        https://x1337x.ws/popular*
+// @match        https://x1337x.ws/cat/*
+// @match        https://x1337x.ws/sort-cat/*
+// @match        https://x1337x.ws/sub/*
 // @match        https://x1337x.eu/search/*
 // @match        https://x1337x.eu/popular*
 // @match        https://x1337x.eu/cat/*
