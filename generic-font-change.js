@@ -35,6 +35,7 @@
   font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
 }
 code, code *, pre, pre *,
+tt, tt *,
 .w3-code, .w3-code * /* w3schools specific */
 {
   font-family: '${mf}', Consolas, Courier, monospace !important;
