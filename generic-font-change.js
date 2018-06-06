@@ -5,6 +5,7 @@
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
+// @match        https://meta.stackexchange.com/*
 // @match        https://dzone.com/*
 // @match        https://www.tutorialspoint.com/*
 // @match        https://angular.io/*
