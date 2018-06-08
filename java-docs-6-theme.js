@@ -2,7 +2,7 @@
 // @name         Java 6 Docs Theme
 // @namespace    https://github.com/optimus29
 // @website      https://github.com/optimus29
-// @version      1.0
+// @version      1.1
 // @description  Java 6 Docs Theme
 // @author       Optimus Prime
 // @match        https://docs.oracle.com/javaee/6/api/*
@@ -21,6 +21,9 @@ body {
 h1, h2, h3, h4, h5, h6,
 b, strong {
   color: #333;
+}
+.NavBarFont1Rev b{
+  color: #fff !important;
 }
 a, a:link {
   color: #004D40 !important;
