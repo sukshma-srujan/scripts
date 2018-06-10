@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.16
+// @version      1.17
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -50,9 +50,13 @@ p.releaseinfo {
 .title > a {
   color: #443;
 }
+p code {
+  line-height: 1.2;
+}
 code, code *, pre, pre *
 {
   font-family: '${mf}', Consolas, Courier, monospace !important;
+  line-height: 1.4
 }
 .informaltable, .note {
   width: 100%;
