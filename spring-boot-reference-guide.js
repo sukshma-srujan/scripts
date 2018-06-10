@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.15
+// @version      1.16
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
@@ -19,10 +19,10 @@
     let mf2 = mf.split(' ').join('+');
 
     let css = 
-`@import url('https://fonts.googleapis.com/css?family=Fira+Sans:300,400,400i,500,500i');
-@import url('https://fonts.googleapis.com/css?family=Fira+Mono:400,700');
+`@import url('https://fonts.googleapis.com/css?family=${ff2}:300,400,400i,500,500i');
+@import url('https://fonts.googleapis.com/css?family=${mf2}:400,700');
 * {
-  font-family: 'Fira Sans', Ubuntu, 'Segoe UI', sans-serif !important;
+  font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
 }/**/
 html {
   background-color: #e7e7e4;
@@ -52,7 +52,7 @@ p.releaseinfo {
 }
 code, code *, pre, pre *
 {
-  font-family: 'Fira Mono', Consolas, Courier, monospace !important;
+  font-family: '${mf}', Consolas, Courier, monospace !important;
 }
 .informaltable, .note {
   width: 100%;
