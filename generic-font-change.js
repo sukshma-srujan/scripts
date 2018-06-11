@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.10
+// @version      1.11
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -32,8 +32,8 @@
 
     let css = 
 `
-@import url('https://fonts.googleapis.com/css?family=${ff2}:400,400i,700,700i');
-@import url('https://fonts.googleapis.com/css?family=${mf2}:400,700');
+@import url('https://fonts.googleapis.com/css?family=${ff2}:300,300i,400,400i,500,500i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=${mf2}:400,500,700');
 * {
   font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
 }
