@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Spring Boot Reference Guide
 // @namespace    https://github.com/optimus29
-// @version      1.17
+// @version      1.18
 // @description  Change appearance
 // @author       Optimus Prime
 // @match        https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
 // @match        https://docs.spring.io/spring-security/site/docs/5.0.4.RELEASE/reference/htmlsingle/
+// @match        https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/
 // @match        https://docs.spring.io/spring-framework/docs/3.0.x/reference/expressions.html
 // ==/UserScript==
 
