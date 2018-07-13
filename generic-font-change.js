@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.11
+// @version      1.12
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -46,6 +46,10 @@ tt, tt *,
 /* angular.io specfic */
 .material-icons, .material-icons span {
   font-family: 'Material Icons' !important;
+}
+/* websites that use font awesome */
+.fa {
+  font-family: 'FontAwesome' !important;
 }
 `;
     
