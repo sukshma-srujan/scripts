@@ -15,6 +15,7 @@
 // @match        https://www.w3schools.com/*
 // @match        http://www.learningtelugu.org/*
 // @match        https://docs.oracle.com/*
+// @match        http://www.coreservlets.com/*
 // @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
