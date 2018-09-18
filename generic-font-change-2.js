@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change 2
 // @namespace    optimus29
-// @version      1.1
+// @version      1.2
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://www.bing.com/*
@@ -19,13 +19,18 @@
 
     let css = 
 `
-@import url('https://fonts.googleapis.com/css?family=${ff2}:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=${ff2}:400,400i,500,500i');
 @import url('https://fonts.googleapis.com/css?family=${mf}:400,700');
 * {
   font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
 }
 code,code *, pre,pre *{
   font-family: '${mf}', Consolas, Courier, monospace !important;
+}
+h1, h2, h3, h4, h5, h6,
+b, strong,
+th {
+  font-weight: 500 !important;
 }
 `;
     
