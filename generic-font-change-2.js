@@ -5,6 +5,7 @@
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://www.bing.com/*
+// @match        https://docs.spring.io/spring/docs/4.0.x/*
 // @grant        none
 // ==/UserScript==
 
