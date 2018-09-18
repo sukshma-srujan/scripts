@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.13
+// @version      1.14
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -16,6 +16,7 @@
 // @match        http://www.learningtelugu.org/*
 // @match        https://docs.oracle.com/*
 // @match        http://www.coreservlets.com/*
+// @match        https://docs.spring.io/spring/docs/4.0.x/*
 // @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
