@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         Generic Font Change 2
 // @namespace    optimus29
-// @version      1.2
+// @version      1.3
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://www.bing.com/*
-// @match        https://docs.spring.io/spring/docs/4.0.x/*
 // @grant        none
 // ==/UserScript==
 
