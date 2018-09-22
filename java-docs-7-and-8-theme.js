@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Java Docs 8 Theme
 // @namespace    optimus29
-// @version      0.1
+// @version      1.0
 // @description  Change Java 8 Docs appearance
 // @author       Optimus Prime
 // @match        https://docs.oracle.com/javase/8/*
