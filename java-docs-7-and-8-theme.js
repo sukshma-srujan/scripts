@@ -5,6 +5,7 @@
 // @description  Change Java 8 Docs appearance
 // @author       Optimus Prime
 // @match        https://docs.oracle.com/javase/8/*
+// @match        https://docs.oracle.com/javase/7/*
 // @grant        none
 // ==/UserScript==
 
@@ -80,7 +81,11 @@ a, a:link, a:visited {
 }
 a:hover {
     color: #00aa66 !important;
-}`;
+}
+.memberNameLink {
+    font-weight: bold !important;
+}
+`;
 
     let style = document.createElement('style');
     style.innerHTML = css;
