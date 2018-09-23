@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Java Docs 8 Theme
 // @namespace    optimus29
-// @version      1.1
+// @version      1.2
 // @description  Change Java 8 Docs appearance
 // @author       Optimus Prime
 // @match        https://docs.oracle.com/javase/8/*
@@ -82,8 +82,7 @@ a, a:link, a:visited {
 a:hover {
     color: #00aa66 !important;
 }
-td.colLast a:link,
-.memberNameLink {
+a:link {
     font-weight: normal !important;
 }
 `;
