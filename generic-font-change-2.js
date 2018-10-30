@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         Generic Font Change 2
 // @namespace    optimus29
-// @version      1.4
+// @version      1.5
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://www.bing.com/*
-// @match        https://xerox-jira.atlassian.net/*
 // @grant        none
 // ==/UserScript==
 
