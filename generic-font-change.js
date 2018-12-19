@@ -18,6 +18,7 @@
 // @match        http://www.coreservlets.com/*
 // @match        https://docs.spring.io/spring/docs/*
 // @match        https://xerox-jira.atlassian.net/*
+// @match        https://dba.stackexchange.com/*
 // @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
