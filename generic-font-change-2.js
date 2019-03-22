@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Generic Font Change 2
 // @namespace    optimus29
-// @version      1.5
+// @version      1.6
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://www.bing.com/*
+// @match        https://dev.azure.com/*
 // @grant        none
 // ==/UserScript==
 
@@ -30,6 +31,9 @@ h1, h2, h3, h4, h5, h6,
 b, strong,
 th {
   font-weight: 500 !important;
+}
+.fabric-icon {
+  font-family: 'FabricMDL2Icons' !important;
 }
 `;
     
