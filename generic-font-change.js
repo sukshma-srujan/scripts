@@ -1,7 +1,7 @@
-*// ==UserScript==
+// ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.18
+// @version      1.19
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
