@@ -1,7 +1,7 @@
-// ==UserScript==
+*// ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.17
+// @version      1.18
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -18,7 +18,7 @@
 // @match        http://www.coreservlets.com/*
 // @match        https://docs.spring.io/spring/docs/*
 // @match        https://xerox-jira.atlassian.net/*
-// @match        https://dba.stackexchange.com/*
+// @match        https://*.stackexchange.com/*
 // @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
