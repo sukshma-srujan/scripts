@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.19
+// @version      1.20
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -19,6 +19,8 @@
 // @match        https://docs.spring.io/spring/docs/*
 // @match        https://xerox-jira.atlassian.net/*
 // @match        https://*.stackexchange.com/*
+// @match        https://results.eci.gov.in/*
+// @match        http://results.eci.gov.in/*
 // @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
@@ -28,24 +30,27 @@
 */
 (function() {
     'use strict';
-    let ff = 'Fira Sans';
-    let ff2 = ff.split(' ').join('+');
+    let normalFontEn = 'Fira Sans';
+    let normalFontEnCode = normalFontEn.split(' ').join('+');
+    let normalFontHi = 'Noto Sans';
+    let normalFontHiCode = normalFontHi.split(' ').join('+');
     
-    let mf = 'Fira Mono';
-    let mf2 = mf.split(' ').join('+');
+    let monoFontEn = 'Fira Mono';
+    let monoFontEnCode = monoFontEn.split(' ').join('+');
 
     let css = 
 `
-@import url('https://fonts.googleapis.com/css?family=${ff2}:300,300i,400,400i,500,500i,700,700i');
-@import url('https://fonts.googleapis.com/css?family=${mf2}:400,500,700');
+@import url('https://fonts.googleapis.com/css?family=${normalFontEnCode}:300,300i,400,400i,500,500i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=${normalFontHiCode}:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=${monoFontEnCode}:400,500,700');
 * {
-  font-family: '${ff}', Ubuntu, 'Segoe UI', sans-serif !important;
+  font-family: '${normalFontEn}', '${normalFontHi}', Ubuntu, 'Segoe UI', sans-serif !important;
 }
 code, code *, pre, pre *,
 tt, tt *,
 .w3-code, .w3-code * /* w3schools specific */
 {
-  font-family: '${mf}', Consolas, Courier, monospace !important;
+  font-family: '${monoFontEn}', Consolas, Courier, monospace !important;
 }
 /* angular.io specfic */
 .material-icons, .material-icons span {
