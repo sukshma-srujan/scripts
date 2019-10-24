@@ -1,19 +1,12 @@
 // ==UserScript==
 // @name         Torrent Filter
 // @namespace    https://github.com/optimus29
-// @version      1.1
+// @version      1.2
 // @description  Filter torrent search results on website family "1337x"
 // @author       Optimus Prime
-// @match        https://x1337x.ws/search/*
-// @match        https://x1337x.ws/popular*
-// @match        https://x1337x.ws/cat/*
-// @match        https://x1337x.ws/sort-cat/*
-// @match        https://x1337x.ws/sub/*
-// @match        https://x1337x.eu/search/*
-// @match        https://x1337x.eu/popular*
-// @match        https://x1337x.eu/cat/*
-// @match        https://x1337x.eu/sort-cat/*
-// @match        https://x1337x.eu/sub/*
+// @match        https://x1337x.ws/*
+// @match        https://x1337x.eu/*
+// @match        https://1337x.to/*
 // @website      https://github.com/optimus29
 // @grant        none
 // ==/UserScript==
@@ -65,20 +58,20 @@ const FILTER_UI_STYLE = `
 #jk-wrapper{ z-index: 1000; padding:20px; border-radius:2px; background:#fff; box-shadow:0 0 15px #666; display:none; }
 .jk-option-wrapper{ margin-left:2em; }
 .jk-option-wrapper + .jk-option-wrapper { padding-top:15px; }
-#jk-input-name,#jk-input-size{ width:200px; padding:0; border:0; background: transparent; border-bottom:2px solid #00695c; font-family: inherit; }
+#jk-input-name,#jk-input-size{ width:200px; padding:0; border:0; background: transparent; border-bottom:2px solid #da3a04; font-family: inherit; }
 input[type=checkbox]:not(old),
 input[type=radio]:not(old) { width: 2em; margin: 0; padding: 0; font-size: 1em; opacity: 0; }
 
 input[type=checkbox]:not(old)+label{ display: inline-block; margin-left: -4em; margin-right: 0.5em; line-height: 1.5em; }
 input[type=radio]:not(old)+label { display: inline-block; margin-left: -2.5em; margin-right: 0.5em; line-height: 1.5em; }
-input[type=checkbox]:not(old)+label>span { display: inline-block; margin: 0.25em 0.5em 0.25em 0.25em; border: 0.09em solid #00695c; border-radius: 10%; background: #fff; vertical-align: middle; }
+input[type=checkbox]:not(old)+label>span { display: inline-block; margin: 0.25em 0.5em 0.25em 0.25em; border: 0.09em solid #da3a04; border-radius: 10%; background: #fff; vertical-align: middle; }
 
-input[type=radio]:not(old)+label>span { display: inline-block; margin: 0.25em 0.5em 0.25em 0.25em; border: 0.09em solid #00695c; border-radius: 100%; background: #fff; vertical-align: middle; }
-input[type=checkbox]:not(old):checked+label>span>span{ display: block; width: 0.6em; height: 0.6em; margin:2px; border-radius: 10%; background: #00695c; }
-input[type=radio]:not(old):checked+label>span>span { display: block; width: 0.6em; height: 0.6em; margin:2px; border-radius: 100%; background: #00695c; }
+input[type=radio]:not(old)+label>span { display: inline-block; margin: 0.25em 0.5em 0.25em 0.25em; border: 0.09em solid #da3a04; border-radius: 100%; background: #fff; vertical-align: middle; }
+input[type=checkbox]:not(old):checked+label>span>span{ display: block; width: 0.6em; height: 0.6em; margin:2px; border-radius: 10%; background: #da3a04; }
+input[type=radio]:not(old):checked+label>span>span { display: block; width: 0.6em; height: 0.6em; margin:2px; border-radius: 100%; background: #da3a04; }
 input[type=checkbox]:not(old)+label>span>span,
 input[type=radio]:not(old)+label>span>span { display: block; width: 0.6em; height: 0.6em; margin:2px; border-radius: 100%; background: #fff; }
-input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: none; appearance:none; padding:9px 25px; border:0; background:#00695c; text-transform:uppercase; font-size:0.8em; font-weight:600; color:white; border-radius:2px; cursor: pointer; }
+input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: none; appearance:none; padding:9px 25px; border:0; background:#da3a04; text-transform:uppercase; font-size:0.8em; font-weight:600; color:white; border-radius:2px; cursor: pointer; }
 .jk-checkbox-label { font-size:1.2em; }
 #jk-wrapper-toggle{ position: absolute; top:1em; left:-3em; width:3em; height:3em; text-align: center; line-height: 3em; display:inline-block; border-radius:3px; border-top-right-radius: 0; border-bottom-right-radius: 0; background:#fff; box-shadow:0 0 10px #666; cursor: pointer; z-index: 1; }
 #jk-wrapper-toggle span { font-size:1.2em; font-weight: bold; }
@@ -95,13 +88,24 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
     'use strict';
     'allow pasting';
     // constants related to file name
-    const TEXT_POS_AT_START = 1;
-    const TEXT_POS_AT_END = 2;
-    const TEXT_POS_AT_ANYWHERE = 3;
+    const TEXT_POS_AT_START = 'start';
+    const TEXT_POS_AT_END = 'end';
+    const TEXT_POS_AT_ANYWHERE = 'anywhere';
     // constants related to file size
-    const FILE_SIZE_LESS_THAN = 10;
-    const FILE_SIZE_GREATER_THAN = 11;
-    const FILE_SIZE_NO_COMPARISON = 12;
+    const FILE_SIZE_LESS_THAN = 'lessthan';
+    const FILE_SIZE_GREATER_THAN = 'greaterthan';
+    const FILE_SIZE_NO_COMPARISON = 'nocomparison';
+    const SESSION_KEY = 'EKtagrwzXJGFKSncJxFsgvurYIyIaAzF';
+    const UI_INIT_VALUE = {
+        nameFilterActive: false,
+        nameFilterValue: '',
+        nameFilterPos: TEXT_POS_AT_ANYWHERE,
+        sizeFilterActive: false,
+        sizeFilterValue: '',
+        sizeFilterCompare: FILE_SIZE_LESS_THAN,
+        seedFilterActive: false,
+        showUi: false
+    };
 
     var _g = {
         rowSet: [], // all result rows
@@ -132,8 +136,62 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
             buttonToggle: null,
             uiDisplayStatus: false,
             uiWrapper: null,
+            state: JSON.parse(JSON.stringify(UI_INIT_VALUE)),
+
+            isInvalidPage: function() {
+                var pageData = _g.util.getPageData();
+                return (!pageData);
+            },
+
+            saveState: function() {
+                this.populateState();
+                const stateStr = JSON.stringify(_g.ui.state);
+                sessionStorage.setItem(SESSION_KEY, stateStr);
+            },
+
+            restoreState: function() {
+                const stateStr = sessionStorage.getItem(SESSION_KEY);
+
+                if (!stateStr) {
+                    console.info('No saved state found.');
+                    return;
+                }
+
+                _g.ui.state = JSON.parse(stateStr);
+            },
+
+            populateState: function() {
+                _g.ui.state.nameFilterActive = this.nameCb.checked;
+                _g.ui.state.nameFilterPos = document.querySelector('input[name=jkNamePos47]:checked').value;
+                _g.ui.state.nameFilterValue = this.nameInput.value;
+
+                _g.ui.state.sizeFilterActive = this.sizeCb.checked;
+                _g.ui.state.sizeFilterCompare = document.querySelector('input[name=jkSizeCmp47]:checked').value;
+                _g.ui.state.sizeFilterValue = this.sizeInput.value;
+
+                _g.ui.state.seedFilterActive = this.seedCb.checked;
+            },
+
+            resetState: function() {
+                _g.ui.state = JSON.parse(JSON.stringify(UI_INIT_VALUE));
+            },
+
+            applyState: function() {
+                // set state to UI
+                this.nameCb.checked = _g.ui.state.nameFilterActive;
+                document.querySelector('input[name=jkNamePos47][value=' + _g.ui.state.nameFilterPos + ']').checked = true;
+                this.nameInput.value = _g.ui.state.nameFilterValue;
+
+                this.sizeCb.checked = _g.ui.state.sizeFilterActive;
+                document.querySelector('input[name=jkSizeCmp47][value=' + _g.ui.state.sizeFilterCompare + ']').checked = true;
+                this.sizeInput.value = _g.ui.state.sizeFilterValue;
+
+                this.seedCb.checked = _g.ui.state.seedFilterActive;
+            },
 
             createUI: function() {
+                if (_g.ui.isInvalidPage()) return;
+
                 let head = document.getElementsByTagName("head")[0];
                 let body = document.getElementsByTagName("body")[0];
 
@@ -155,8 +213,8 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
 
                 let that = this;
 
-                this.buttonToggle.addEventListener("click", function(event) {
-                    if (that.uiDisplayStatus) that.hideUI();
+                this.buttonToggle.addEventListener("click", function(e) {
+                    if (that.state.showUi) that.hideUI();
                     else that.showUI();
 
                     e.stopPropagation();
@@ -175,17 +233,23 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
                     _g.filter.removeAllFilters();
                 }, false);
 
+                this.restoreState();
+                this.applyState();
+                if (this.state.showUi) this.showUI();
+                _g.filter.applyFilters();
             },
 
 
             showUI: function() {
                 this.uiWrapper.style.display = "block";
-                this.uiDisplayStatus = true;
+                this.state.showUi = true;
+                this.saveState();
             },
 
             hideUI: function() {
                 this.uiWrapper.style.display = "";
-                this.uiDisplayStatus = false;
+                this.state.showUi = false;
+                this.saveState();
             },
 
             nameSelected: function() {
@@ -282,7 +346,7 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
 
                 //console.log("TorrentFilter::size filter:: sizeLimit: " + sizeLimit + "  op: " + comparison);
                 for (i = 0; i < rowSet.length; i++) {
-                    let rowSizeStr = rowSet[i].querySelector(colSelector).childNodes[0].nodeValue;
+                    let rowSizeStr = rowSet[i].querySelector(colSelector).childNodes[0].nodeValue || '';
                     let flag = false;
                     let fileSize = _g.util.parseSizeStr(rowSizeStr);
 
@@ -328,6 +392,8 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
                 for (i = 0; i < rowSet.length; i++) {
                     this.displayRow(rowSet[i]);
                 }
+                _g.ui.resetState();
+                _g.ui.saveState();
             },
             applyFilters: function() {
                 console.log("Applying filters");
@@ -374,6 +440,7 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
                     this.applyFilterSeed(pageData.seedColSel);
                 }
 
+                _g.ui.saveState();
                 console.log("All filter applied");
             },
 
@@ -406,6 +473,7 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
                 if (typeof(sizeStr) === 'string' || sizeStr instanceof String) {
                     let parts = sizeStr.split(' ');
                     let i;
+                    parts[0] = parts[0].replace(/[,]/g, '');
 
                     // length of parts is other than 2 or the first element is not a number
                     if (parts.length == 0 || isNaN(parts[0])) return -1;
@@ -455,8 +523,6 @@ input.button{ -ms-appearance: none; -webkit-appearance: none; -moz-appearance: n
             console.log("Creating UI of filter.");
             _g.ui.createUI();
             console.log("UI of filter created.");
-
-            if ($) console.log("jQuery has been loaded");
         } catch (e) {
             console.log(e);
         }
