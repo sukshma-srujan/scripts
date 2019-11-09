@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Torrent Filter
 // @namespace    https://github.com/optimus29
-// @version      2.0
+// @version      2.1
 // @description  Filter torrent data tables in website family "1337x"
 // @author       Optimus Prime
-// @include      /^http?s://?x1337x\.../.*$/
+// @include      /^https?:\/\/x?1337x\...\/.*$/
 // @grant        none
 // @website      https://github.com/optimus29
 // ==/UserScript==
@@ -254,7 +254,7 @@ log.info = function () {
     if (LOG_LEVEL_INFO >= LOGGING_LEVEL) console.log.apply(null, getArgs(getTime(), APP_NAME, " INFO", arguments));
 }
 
-log.warning = function () {
+log.warn = function () {
     if (LOG_LEVEL_WARNING >= LOGGING_LEVEL) console.warn.apply(null, getArgs(getTime(), APP_NAME, " WARN", arguments));
 }
 
@@ -292,7 +292,7 @@ const UI_DEFALUT_CONFIG = {
 };
 
 const DATA_SPECS = [{
-        siteNames: [/^http?s:\/\/?x1337x/],
+        siteNames: [/^https?:\/\/x?1337x.*/],
         rowSel: '.table-list > tbody > tr',
         nameColSel: '.coll-1 a:nth-of-type(2)',
         sizeColSel: '.coll-4',
