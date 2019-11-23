@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Torrent Filter
 // @namespace    https://github.com/optimus29
-// @version      2.2
+// @version      2.3
 // @description  Filter torrent data tables in websites
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/.*$/
