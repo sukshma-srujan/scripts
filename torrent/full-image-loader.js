@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      0.9.0
+// @version      1.0.0
 // @description  Loads full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -16,25 +16,40 @@
 
     const SPEC = [
         {
+            attemptName: "remove-th",
+            pattern: /.th(\.jpe?g|\.png)$/i,
+            replacements: ['$1']
+        },
+        {
             attemptName: "dot-th",
             pattern: /th(\.jpe?g|\.png)$/i,
-            replacements: ['md', 'lg']
+            replacements: ['md$1', 'lg$1']
         },
         {
             attemptName: "partial-th",
             pattern: /(.+)\/(sm|th)\/(.+)/i,
-            replacements: ["/big/"]
+            replacements: ["$1/big/$3"]
         },
         {
             attemptName: "partial-small-1",
             pattern: /^(.+)\/small\/small_(.+)$/i,
-            replacements: ["/big/"]
+            replacements: ["$1/big/$2"]
         },
         {
             attemptName: "partial-small-2",
             pattern: /^(.+)\/small\/([a-z1-9]+)(\/small\-)(.+)$/i,
-            replacements: ["/big/"]
-        }//
+            replacements: ["$1/big/$2/$4"]
+        },
+        {
+            attemptName: "partial-small-3",
+            pattern: /^(.+)\/small\/(.+)$/i,
+            replacements: ["$1/big/$2"]
+        },
+        {
+            attemptName: "partial-os",
+            pattern: /^(.+)\/os\/(.+)$/i,
+            replacements: ["$1/o/$2"]
+        }
     ];
 
     const PATTERNS = [/.+\/big\/.+/i];
@@ -117,7 +132,7 @@
             borderRadius: ".5rem",
             minWidth: "80%",
             maxWidth: "100%",
-            boxShadow: "rgb(100,100,100,.5) 0 0 .5rem",
+            boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
             margin: "0 auto"
         };
 
@@ -194,20 +209,7 @@
 
         log("trying " + spec.attemptName + " with replacement [" + replacement + "] for src " + imageSrc);
 
-        switch (spec.attemptName) {
-            case "dot-th":
-                imageNewSrc = imageSrc.replace(pattern, replacement + "$1");
-                break;
-            case "partial-th":
-                imageNewSrc = imageSrc.replace(pattern, "$1" + replacement + "$3")
-                break;
-            case "partial-small-1":
-                imageNewSrc = imageSrc.replace(pattern, "$1" + replacement + "$2")
-                break;
-            case "partial-small-2":
-                imageNewSrc = imageSrc.replace(pattern, "$1" + replacement + "$2/$4")
-                break;
-        }
+        imageNewSrc = imageSrc.replace(pattern, replacement);
 
         if (imageSrc !== imageNewSrc) image.src = imageNewSrc;
         else handleImgLoadAttempsExhausted(image);
