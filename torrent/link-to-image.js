@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/optimus29
-// @version      0.1
+// @version      1.0
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -65,30 +65,30 @@
     const specs = [
         {
             name: "jpeg.html",
-            pattern: /^(.*)\/(ia|y)-o\/(.*.jpe?g)(.html)$/i,
-            replacement: "$1/o/$3"
-        }/*,
+            pattern: /^(.*)\/(ia|ib|y)-([a-z])\/(.*.jpe?g)(.html)$/i,
+            replacement: "$1/$3/$4"
+        },
         {
             name: "jpeg.html",
             condition: function (link) {
-                let result = window.location.href.match(/\d{2}-\d{2}-\d{2}/) && link.match(/\/img-/);
+                let result = window.location.href.match(/\d{2}-\d{2}-\d{2}\/?$/) && link.match(/\/img-/);
 
                 return (result ? true : false);
             },
             getImageUrl: function(url) {
-                let date = window.location.href.match(/\d{2}-\d{2}-\d{2}/)[0];
+                let date = window.location.href.match(/\d{2}-\d{2}-\d{2}\/?$/)[0];
                 let dateParts = date.split("-");
-                let urlPart = "20" + dateParts[2] + "/" + dateParts[0] + "/" + dateParts[1];
+                let urlPart = "20" + (dateParts[2].endsWith("/") ? dateParts[2] : dateParts[2] + "/") + dateParts[0] + "/" + dateParts[1];
                 let newUrl = url.replace(/\/img-(.+).html/, "/upload/big/" + urlPart + "/$1.jpeg");
                 console.log("LinkToImage - newUrl: " + newUrl);
 
                 return newUrl;
             }
-        }*/
+        }
     ];
 
     function containsImageChild(parent) {
-        if (parent.children.length == 0) return false;
+        if (!parent.children || parent.children.length == 0) return false;
 
         for (let child of parent.children) if (child.tagName === "IMG") return true;
 
@@ -102,7 +102,12 @@
         if (!anchors) return;
 
         for (let anchor of anchors) {
-            if (!anchor.href || containsImageChild(anchor)) continue;
+            if (!anchor.href || containsImageChild(anchor)) {
+                console.log("Anchor contains img element or does not have href. Skipping. href: " + anchor.href);
+                continue;
+            }
+
+            //console.log("Testing anchor for converting into image: anchor.href" + anchor.href);
 
             for (let spec of specs) {
                 let newUrl;

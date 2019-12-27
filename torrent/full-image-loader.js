@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.0.0
+// @version      1.0.1
 // @description  Loads full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -49,6 +49,11 @@
             attemptName: "partial-os",
             pattern: /^(.+)\/os\/(.+)$/i,
             replacements: ["$1/o/$2"]
+        },
+        {
+            attemptName: "partial-s",
+            pattern: /^(.+)\/s\/(.+)$/i,
+            replacements: ["$1/i/$2"]
         }
     ];
 

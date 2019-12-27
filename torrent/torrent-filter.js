@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Torrent Filter
 // @namespace    https://github.com/optimus29
-// @version      2.3
+// @version      2.3.0
 // @description  Filter torrent data tables in websites
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/.*$/
@@ -229,7 +229,6 @@
         if (seconds < 10) seconds = '0' + seconds;
         if (millis < 100) millis = '0' + millis;
         if (millis < 10) millis = '0' + millis;
-
 
         currentDateTime = yyyy + '' + mm + '' + dd + ' ' + hours + '' + minutes + '' + seconds + ',' + millis;
 
@@ -644,7 +643,5 @@
         ui.setExcludeZeroSeed(uiState.currentState.seedFilterActive);
     }
 
-
     ui.init();
-
 })();

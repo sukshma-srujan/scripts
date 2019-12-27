@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Generic Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.20
+// @version      1.20.1
 // @description  Change fonts of websites
 // @author       Optimus Prime
 // @match        https://stackoverflow.com/*
@@ -29,40 +29,44 @@
 * on user's system.
 */
 (function() {
-    'use strict';
-    let normalFontEn = 'Fira Sans';
-    let normalFontEnCode = normalFontEn.split(' ').join('+');
-    let normalFontHi = 'Noto Sans';
-    let normalFontHiCode = normalFontHi.split(' ').join('+');
-    
-    let monoFontEn = 'Fira Mono';
-    let monoFontEnCode = monoFontEn.split(' ').join('+');
+  'use strict';
+  const enFontUrl = "https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,500,500i,700,700i";
+  const hiFontUrl = "https://fonts.googleapis.com/css?family=Noto+Sans:400,400i,700,700i";
+  const monoFontUrl = "https://fonts.googleapis.com/css?family=Fira+Mono:400,500,700";
 
-    let css = 
+  function getFontName(url) {
+      return url.replace(/.+family=(.+):.+/, "$1").split("+").join(" ");
+  }
+
+  const enFontName = getFontName(enFontUrl);
+  const hiFontName = getFontName(hiFontUrl);
+  const monoFontName = getFontName(monoFontUrl);
+
+  let css =
 `
-@import url('https://fonts.googleapis.com/css?family=${normalFontEnCode}:300,300i,400,400i,500,500i,700,700i');
-@import url('https://fonts.googleapis.com/css?family=${normalFontHiCode}:400,400i,700,700i');
-@import url('https://fonts.googleapis.com/css?family=${monoFontEnCode}:400,500,700');
+@import url(${enFontUrl});
+@import url(${hiFontUrl});
+@import url(${monoFontUrl});
 * {
-  font-family: '${normalFontEn}', '${normalFontHi}', Ubuntu, 'Segoe UI', sans-serif !important;
+font-family: '${enFontName}', '${hiFontName}', Ubuntu, 'Segoe UI', sans-serif !important;
 }
 code, code *, pre, pre *,
 tt, tt *,
 .w3-code, .w3-code * /* w3schools specific */
 {
-  font-family: '${monoFontEn}', Consolas, Courier, monospace !important;
+font-family: '${monoFontName}', Consolas, Courier, monospace !important;
 }
 /* angular.io specfic */
 .material-icons, .material-icons span {
-  font-family: 'Material Icons' !important;
+font-family: 'Material Icons' !important;
 }
 /* websites that use font awesome */
 .fa {
-  font-family: 'FontAwesome' !important;
+font-family: 'FontAwesome' !important;
 }
 `;
-    
-    let style = document.createElement('style');
-    style.innerHTML = css;
-    document.head.appendChild(style);
+
+  let style = document.createElement('style');
+  style.innerHTML = css;
+  document.head.appendChild(style);
 })();

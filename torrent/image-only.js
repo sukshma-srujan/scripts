@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Only
 // @namespace    https://github.com/optimus29
-// @version      1.0
+// @version      1.0.1
 // @description  Detect image and show only the image.
 // @author       Optimus Prime
 // @match        http://*/*
@@ -25,12 +25,18 @@
     else {
         console.log("Image only is starting...");
         window.varabcdef8e234dhfjf = "running";
+        window.maxRetries = 60;
     }
+
+    if (window.retries) window.retries += 1;
+    else window.retries = 0;
 
     function loadImageWithRetires() {
         const SELECTORS = [
             "#image-viewer > #image-viewer-container > img",
-            "img#soDaBug"
+            "a > img.centred_resized",
+            "img#soDaBug",
+            "#container > #image_details + img"
         ];
 
         let img;
@@ -46,7 +52,8 @@
                 return;
         }
         else {
-            setTimeout(loadImageWithRetires, 1000);
+            if (window.maxRetries > window.retries) setTimeout(loadImageWithRetires, 1000);
+            else console.log("Image only is exiting.");
         }
 
         if (typeof wuLu === "function") {
