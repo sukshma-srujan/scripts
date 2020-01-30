@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/optimus29
-// @version      1.0
+// @version      1.1
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -29,6 +29,14 @@
         }
     }
 
+    function onImageLoadFailedHandler(e) {
+        const img = e.target;
+        if (/(\.md\.png)$/.test(img.src)) {
+            const newSrc = img.src.replace(/(\.md)\.png$/, '$1.jpg');
+            img.src = newSrc;
+        }
+    }
+
     function convertLinkIntoImage(anchor, link) {
         const wrapper = document.createElement("div");
         const img = document.createElement("img");
@@ -46,7 +54,7 @@
             parent.appendChild(wrapper);
         }
 
-        console.log("convertLinkIntoImage - anchor", anchor, "link", link);
+        //console.log("convertLinkIntoImage - anchor", anchor, "link", link);
 
         styleImage(img);
         wrapper.appendChild(anchor);
@@ -60,6 +68,7 @@
         applyStyle(wrapper, {
             textAlign: "center"
         });
+        img.onerror = onImageLoadFailedHandler;
     }
 
     const specs = [
@@ -69,7 +78,7 @@
             replacement: "$1/$3/$4"
         },
         {
-            name: "jpeg.html",
+            name: "jpeg.html-2",
             condition: function (link) {
                 let result = window.location.href.match(/\d{2}-\d{2}-\d{2}\/?$/) && link.match(/\/img-/);
 
@@ -81,6 +90,58 @@
                 let urlPart = "20" + (dateParts[2].endsWith("/") ? dateParts[2] : dateParts[2] + "/") + dateParts[0] + "/" + dateParts[1];
                 let newUrl = url.replace(/\/img-(.+).html/, "/upload/big/" + urlPart + "/$1.jpeg");
                 console.log("LinkToImage - newUrl: " + newUrl);
+
+                return newUrl;
+            }
+        },
+        {
+            name: "image-infer-date",
+            condition: function(link) {
+                if (/^(http.+)\/(image)\/(.+)$/.test(link)) {
+                    const dateUploadElem = document.querySelector('.box-info-heading + div > div > ul:nth-of-type(3) > li:nth-of-type(3)');
+                    if (dateUploadElem) {
+                        const dateUploadLabel = dateUploadElem.querySelector('strong');
+                        if (dateUploadLabel && dateUploadLabel.textContent.toLowerCase().indexOf('date uploaded') > -1) {
+                            const dateValue = dateUploadElem.querySelector('span');
+                            // if date value contains hours or days
+                            if (dateValue && (dateValue.textContent.indexOf('hours') > -1 || dateValue.textContent.indexOf('day') > -1)) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                return false;
+            },
+            getImageUrl: function(url) {
+                const periodString = document.querySelector('.box-info-heading + div > div > ul:nth-of-type(3) > li:nth-of-type(3) > span').textContent;
+                const date = new Date();
+
+                if (periodString.indexOf('day') > -1) {
+                    const days = +periodString.substring(0, periodString.indexOf(' '));
+                    console.log('link to image:: days', days);
+                    date.setDate(date.getDate() - days);
+                }
+                else {
+                    const hours = +periodString.substring(0, periodString.indexOf(' '));
+                    console.log('link to image:: hours', hours);
+                    date.setHours(date.getHours() - hours);
+                }
+
+                date.setMinutes(date.getMinutes() - 30);
+                date.setHours(date.getHours() - 5);
+
+                let dd = date.getDate();
+                let mm = date.getMonth() + 1;
+                let year = date.getFullYear() + '';
+
+                console.log('link to image:: ', year, mm, dd);
+
+                dd = (dd < 10) ? ('0' + dd.toString()) : ('' + dd.toString());
+                mm = (mm < 10) ? ('0' + mm.toString()) : ('' + mm.toString());
+
+                const urlParts = url.match(/^(http.+)\/(image)\/(.+)$/);
+                var newUrl = urlParts[1] + '/' + urlParts[2] + 's/' + year + '/' + mm + '/' + dd + '/' + urlParts[3] + '.md.png';
 
                 return newUrl;
             }
@@ -96,7 +157,7 @@
     }
 
     function linkToImage() {
-        console.log("Image to Link is starting...");
+        console.log("Link to image started...");
         const anchors = document.querySelectorAll("a.js-modal-url");
         let count = 0;
         if (!anchors) return;
@@ -107,7 +168,7 @@
                 continue;
             }
 
-            //console.log("Testing anchor for converting into image: anchor.href" + anchor.href);
+            //console.log("Testing anchor for converting into image", anchor.href);
 
             for (let spec of specs) {
                 let newUrl;
@@ -117,6 +178,7 @@
                 }
                 else if (spec.condition && spec.condition(anchor.href)) {
                     newUrl = spec.getImageUrl(anchor.href);
+                    console.log("link to image:: new url", newUrl);
                 }
 
                 if (newUrl) {
