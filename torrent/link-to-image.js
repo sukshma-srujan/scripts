@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/optimus29
-// @version      1.1
+// @version      1.1.1
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -14,7 +14,7 @@
         const imageStyle = {
             display: "block",
             borderRadius: ".5rem",
-            minWidth: "80%",
+            minWidth: "90%",
             maxWidth: "100%",
             boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
             margin: "0 auto"
