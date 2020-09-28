@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/optimus29
-// @version      1.1.1
+// @version      1.1.2
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -97,7 +97,7 @@
         {
             name: "image-infer-date",
             condition: function(link) {
-                if (/^(http.+)\/(image)\/(.+)$/.test(link)) {
+                if (/^(http.+)\/(image)\/(.+)$/.test(link) && link.indexOf("imgpinga.ga") === -1) {
                     const dateUploadElem = document.querySelector('.box-info-heading + div > div > ul:nth-of-type(3) > li:nth-of-type(3)');
                     if (dateUploadElem) {
                         const dateUploadLabel = dateUploadElem.querySelector('strong');
