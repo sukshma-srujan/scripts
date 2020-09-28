@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Only
 // @namespace    https://github.com/optimus29
-// @version      1.0.1
+// @version      1.0.2
 // @description  Detect image and show only the image.
 // @author       Optimus Prime
 // @match        http://*/*
@@ -15,6 +15,14 @@
     const url = window.location.href;
     if (/\.(jpe?g|png)$/i.test(url)) {
         console.log("Window already has an image opened.");
+        const pat = /^.+\.((sm|md)\.(jpe?g|png))$/;
+        if (pat.test(url)) {
+            console.log("Medium or small size image detecting.");
+            const arr = pat.exec(url);
+            const newUrl = url.replace(arr[1], arr[3]);
+            console.log("Redirecting to new url: " + newUrl);
+            window.location.href = newUrl;
+        }
         return;
     }
 
@@ -33,7 +41,7 @@
 
     function loadImageWithRetires() {
         const SELECTORS = [
-            "#image-viewer > #image-viewer-container > img",
+            "#image-viewer-container > img",
             "a > img.centred_resized",
             "img#soDaBug",
             "#container > #image_details + img"
