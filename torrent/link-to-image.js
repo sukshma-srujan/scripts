@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/optimus29
-// @version      1.1.2
+// @version      1.1.3
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -145,6 +145,11 @@
 
                 return newUrl;
             }
+        },
+        {
+            name: "jpeg.html-3",
+            pattern: /^(http:\/\/)(.+)\/imgt-u\/(.*)(.*.jpe?g)(.html)$/i,
+            replacement: "https://$2/u/$3$4"
         }
     ];
 
