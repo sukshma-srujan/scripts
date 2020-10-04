@@ -1,75 +1,122 @@
 // ==UserScript==
 // @name         Image Only
 // @namespace    https://github.com/optimus29
-// @version      1.0.2
+// @version      1.1.0
 // @description  Detect image and show only the image.
 // @author       Optimus Prime
 // @match        http://*/*
 // @match        https://*/*
 // ==/UserScript==
 
+(function () {
+    "use strict";
+    const APP_NAME = "Image Only";
+    function log(...args) {
+        console.log.apply(null, [APP_NAME, new Date().toISOString(), "--", ...args]);
+    }
 
-(function() {
-    'use strict';
-
-    const url = window.location.href;
-    if (/\.(jpe?g|png)$/i.test(url)) {
-        console.log("Window already has an image opened.");
-        const pat = /^.+\.((sm|md)\.(jpe?g|png))$/;
-        if (pat.test(url)) {
-            console.log("Medium or small size image detecting.");
-            const arr = pat.exec(url);
-            const newUrl = url.replace(arr[1], arr[3]);
-            console.log("Redirecting to new url: " + newUrl);
-            window.location.href = newUrl;
+    function isThisScriptAlreadyRunning() {
+        if (window.varabcdef8e234dhfjf) {
+            window.varabcdef8e234dhfjf = "running";
+            return true;
         }
+        return false;
+    }
+
+    function isCurrentUrlAnImage() {
+        return /\.(jpe?g|png)$/i.test(window.location.href);
+    }
+
+    let abortExeuction = false;
+    let abortMessage = "";
+    if (isThisScriptAlreadyRunning()) {
+        abortMessage = "Script is already running.";
+        abortExeuction = true;
+    }
+    if (isCurrentUrlAnImage()) {
+        abortMessage = "Current URL is already an image.";
+        abortExeuction = true;
+    }
+
+    if (abortExeuction) {
+        log(abortMessage);
         return;
     }
 
-    if (typeof window.varabcdef8e234dhfjf !== "undefined") {
-        console.log("Image only is already running");
-        return;
-    }
-    else {
-        console.log("Image only is starting...");
-        window.varabcdef8e234dhfjf = "running";
-        window.maxRetries = 60;
-    }
+    /**
+   * Executes a task for the given number times with a specified interval.
+   * Delay for the first execution can be specified with `startAfter` parameters.
+   * Default value of `startAfter` is 0. Scheduling of the task stops if the task
+   * function returns a **truthy** value.
+   *
+   * @param {function} taskFn task to execute
+   * @param {number} times number of times task should be executed
+   * @param {number} interval interval in millis between two subsequent task execution
+   * @param {number} startAfter delay in millis before first execution
+   */
+    function retry(taskFn, times, interval, startAfter) {
+        const idfCompletedTries = "image_only_completed_tries";
+        sessionStorage.setItem(idfCompletedTries, 0);
 
-    if (window.retries) window.retries += 1;
-    else window.retries = 0;
-
-    function loadImageWithRetires() {
-        const SELECTORS = [
-            "#image-viewer-container > img",
-            "a > img.centred_resized",
-            "img#soDaBug",
-            "#container > #image_details + img"
-        ];
-
-        let img;
-        for (let imgSelector of SELECTORS) {
-            img = document.querySelector(imgSelector);
-
-            if (img && img.src) break;
-            else img = null;
-        }
-
-        if (img && /^https?:\/\/.*/.test(img.src)) {
-                window.location.href = img.src;
+        function start() {
+            const completedTries = +sessionStorage.getItem(idfCompletedTries);
+            if (completedTries >= times) {
+                sessionStorage.removeItem(idfCompletedTries);
                 return;
+            }
+            sessionStorage.setItem(idfCompletedTries, completedTries + 1);
+            if (!taskFn()) {
+                setTimeout(start, interval);
+            }
         }
-        else {
-            if (window.maxRetries > window.retries) setTimeout(loadImageWithRetires, 1000);
-            else console.log("Image only is exiting.");
-        }
-
-        if (typeof wuLu === "function") {
-            console.log("Image url found");
-            wuLu();
-        }
-        console.log("No image found to show in full page.");
+        setTimeout(start, startAfter);
     }
 
-    loadImageWithRetires();
+    function showImage() {
+        function getImageElement() {
+            const IMAGE_SELECTORS = [
+                "#image-viewer-container > img",
+                "a > img.centred_resized",
+                "img#soDaBug",
+                "#container > #image_details + img",
+            ];
+
+            let imageElement;
+            for (let imgSelector of IMAGE_SELECTORS) {
+                imageElement = document.querySelector(imgSelector);
+
+                if (imageElement && imageElement.src) {
+                    break;
+                }
+            }
+            return imageElement;
+        }
+
+        function getFullSizeImageUrl(url) {
+            const pat = /^.+\.((sm|md)\.(jpe?g|png))$/;
+            let newUrl = url;
+            if (pat.test(url)) {
+                console.log("Medium or small size image detected.");
+                const arr = pat.exec(url);
+                newUrl = url.replace(arr[1], arr[3]);
+            }
+            return newUrl;
+        }
+
+        if (typeof window.wuLu === "function") {
+            console.log("Function to display image found.");
+            window.wuLu();
+            return true;
+        }
+
+        const imageElement = getImageElement();
+
+        if (imageElement) {
+            window.location.href = getFullSizeImageUrl(imageElement.src);
+            return true;
+        }
+        return false;
+    }
+
+    retry(showImage, 60, 1000, 0);
 })();
