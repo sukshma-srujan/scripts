@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Torrent Filter
 // @namespace    https://github.com/optimus29
-// @version      2.3.0
+// @version      2.4.0
 // @description  Filter torrent data tables in websites
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/.*$/
@@ -10,11 +10,10 @@
 // @website      https://github.com/optimus29
 // ==/UserScript==
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    const FILTER_UI_HTML =
-          `
+  const FILTER_UI_HTML = `
 <div id="jk-outer-wrapper" style="z-index: 100000;">
 <div id="jk-wrapper-toggle"><span>F</span></div>
 <div id="jk-wrapper">
@@ -53,16 +52,17 @@
 </div>
 `;
 
-
-    const FILTER_UI_STYLE =
-          `
+  const FILTER_UI_STYLE = `
 #jk-outer-wrapper {
     display: inline-block;
     font-size: 14px;
-    font-family: "Ubuntu Condensed", sans-serif;
     position: fixed;
     top: 0px;
     right: 0px;
+}
+#jk-outer-wrapper,
+#jk-outer-wrapper * {
+    font-family: "Ubuntu", sans-serif;
 }
 #jk-wrapper {
     z-index: 1000;
@@ -71,6 +71,9 @@
     background: #fff;
     box-shadow: 0 0 15px #666;
     display: none;
+}
+#jk-wrapper label {
+    font-size: .75rem;
 }
 .jk-option-wrapper {
     margin-left: 0em;
@@ -195,453 +198,437 @@
 }
 `;
 
-    const LOG_LEVEL_NONE = -1;
-    const LOG_LEVEL_TRACE = 0;
-    const LOG_LEVEL_DEBUG = 10;
-    const LOG_LEVEL_INFO = 20;
-    const LOG_LEVEL_WARNING = 30;
-    const LOG_LEVEL_ERROR = 40;
+  const LOG_LEVEL_DEBUG = 10;
+  const LOG_LEVEL_INFO = 20;
+  const LOG_LEVEL_WARNING = 30;
+  const LOG_LEVEL_ERROR = 40;
 
-    const LOGGING_LEVEL = LOG_LEVEL_DEBUG;
+  const LOGGING_LEVEL = LOG_LEVEL_DEBUG;
 
-    var log = {};
+  var log = {};
 
-    const APP_NAME = "TF";
+  const APP_NAME = "TF";
 
-    function getTime() {
-        var currentDateTime = new Date();
-        var dd = currentDateTime.getDate();
-        var mm = currentDateTime.getMonth() + 1; //January is 0!
-        var hours = currentDateTime.getHours();
-        var minutes = currentDateTime.getMinutes();
-        var seconds = currentDateTime.getSeconds();
-        var millis = currentDateTime.getMilliseconds();
+  function getArgs(logLevel, argumentArr) {
+    return [new Date().toISOString(), APP_NAME, logLevel, ...argumentArr];
+  }
 
-        var yyyy = currentDateTime.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd;
+  log.debug = function () {
+    if (LOG_LEVEL_DEBUG >= LOGGING_LEVEL) {
+      console.debug.apply(null, getArgs("DEBUG", arguments));
+    }
+  };
+
+  log.info = function () {
+    if (LOG_LEVEL_INFO >= LOGGING_LEVEL) {
+      console.log.apply(null, getArgs("INFO", arguments));
+    }
+  };
+
+  log.warn = function () {
+    if (LOG_LEVEL_WARNING >= LOGGING_LEVEL) {
+      console.warn.apply(null, getArgs("WARN", arguments));
+    }
+  };
+
+  log.error = function () {
+    if (LOG_LEVEL_ERROR >= LOGGING_LEVEL) {
+      console.error.apply(null, getArgs("ERROR", arguments));
+    }
+  };
+
+  const SIZE_UNITS = ["BYTES", "KB", "MB", "GB", "TB", "EB", "PB"];
+  const SIZE_UNITS_MULTIPLIER = [
+    Math.pow(1024, 0), // BYTES
+    Math.pow(1024, 1), // KB
+    Math.pow(1024, 2), // MB
+    Math.pow(1024, 3), // GB
+    Math.pow(1024, 4), // TB
+    Math.pow(1024, 5), // EB
+    Math.pow(1024, 6), // PB
+  ];
+
+  const TEXT_POS_AT_START = "start";
+  const TEXT_POS_AT_END = "end";
+  const TEXT_POS_AT_ANYWHERE = "anywhere";
+
+  const FILE_SIZE_LESS_THAN = "lessthan";
+  const FILE_SIZE_GREATER_THAN = "greaterthan";
+
+  const SESSION_KEY = "EKtagrwzXJGFKSncJxFsgvurYIyIaAzF";
+
+  const UI_DEFALUT_CONFIG = {
+    nameFilterValue: "",
+    nameFilterPos: TEXT_POS_AT_ANYWHERE,
+    sizeFilterValue: "",
+    sizeFilterCompare: FILE_SIZE_LESS_THAN,
+    seedFilterActive: false,
+    showUi: false,
+  };
+
+  const DATA_SPECS = [
+    {
+      siteNames: [/^https?:\/\/x?1337x.*/],
+      containerSel: ".table-list",
+      rowSel: "tbody > tr",
+      nameColSel: ".coll-1 a:nth-of-type(2)",
+      sizeColSel: ".coll-4",
+      seedColSel: ".coll-2",
+    },
+    {
+      siteNames: [/^https:\/\/www\.torrentfunk.*/],
+      containerSel: ".tmain",
+      rowSel: "tbody > tr + tr",
+      nameColSel: "td:first-of-type > div > a",
+      sizeColSel: "td:nth-of-type(3)",
+      seedColSel: ".tul",
+    },
+  ];
+
+  var util = {};
+
+  util.getDataSpec = function () {
+    const url = window.location.href;
+
+    for (var dataSpec of DATA_SPECS) {
+      for (let siteName of dataSpec.siteNames) {
+        if (siteName.test(url)) return dataSpec;
+      }
+    }
+
+    return null;
+  };
+
+  util.getBytes = function (sizeStr, unit) {
+    if (!sizeStr) return 0;
+
+    sizeStr = sizeStr.trim().toUpperCase();
+    if (!unit) {
+      // check if sizeStr is in two parts
+      const parts = sizeStr.split(" ");
+      if (parts.length > 2) return 0;
+      else if (parts.length === 2) {
+        sizeStr = parts[0];
+
+        for (let i = 0; i < SIZE_UNITS.length; i++) {
+          if (parts[1] === SIZE_UNITS[i]) {
+            unit = i;
+            break;
+          }
         }
-        if (mm < 10) {
-            mm = '0' + mm;
+      } else {
+        for (let i = 0; i < SIZE_UNITS.length; i++) {
+          if (sizeStr.endsWith(SIZE_UNITS[i])) {
+            unit = i;
+            break;
+          }
         }
-        if (hours < 10) hours = '0' + hours;
-        if (minutes < 10) minutes = '0' + minutes;
-        if (seconds < 10) seconds = '0' + seconds;
-        if (millis < 100) millis = '0' + millis;
-        if (millis < 10) millis = '0' + millis;
-
-        currentDateTime = yyyy + '' + mm + '' + dd + ' ' + hours + '' + minutes + '' + seconds + ',' + millis;
-
-        return currentDateTime;
+      }
     }
 
-    function getArgs(time, appName, logLevel, argumentArr) {
-        const newArgs = [time, appName, logLevel];
+    return parseFloat(sizeStr) * SIZE_UNITS_MULTIPLIER[unit];
+  };
 
-        for (let arg of argumentArr) {
-            newArgs.push(arg);
-        }
+  var uiState = {};
+  uiState.currentState = {};
 
-        return newArgs;
+  uiState.getDefaultState = function () {
+    return JSON.parse(JSON.stringify(UI_DEFALUT_CONFIG));
+  };
+
+  uiState.resetState = function () {
+    this.currentState = this.getDefaultState();
+    this.saveState();
+  };
+
+  uiState.saveState = function () {
+    const currentStateJson = JSON.stringify(this.currentState);
+    localStorage.setItem(SESSION_KEY, currentStateJson);
+  };
+
+  uiState.restoreState = function () {
+    const savedStateJson = localStorage.getItem(SESSION_KEY);
+    if (savedStateJson) {
+      this.currentState = JSON.parse(savedStateJson);
+    } else {
+      this.currentState = this.getDefaultState();
+    }
+  };
+
+  util.getTextFromHtmlNode = function (htmlNode) {
+    if (!htmlNode) return "";
+
+    for (let child of htmlNode.childNodes) {
+      if (child instanceof HTMLElement) continue;
+
+      return child.textContent;
     }
 
+    return "";
+  };
 
-    log.debug = function () {
-        if (LOG_LEVEL_DEBUG >= LOGGING_LEVEL) console.debug.apply(null, getArgs(getTime(), APP_NAME, "DEBUG", arguments));
+  function RowData(rowHtml, dataSpec) {
+    this.name = util
+      .getTextFromHtmlNode(rowHtml.querySelector(dataSpec.nameColSel))
+      .replace("⭐", "")
+      .trim()
+      .toUpperCase();
+    this.seedCount = parseInt(rowHtml.querySelector(dataSpec.seedColSel).textContent);
+    this.size = util.getBytes(util.getTextFromHtmlNode(rowHtml.querySelector(dataSpec.sizeColSel)));
+    this.html = rowHtml;
+  }
+
+  var ui = {
+    nameInput: null,
+    sizeInput: null,
+    exclueZeroCb: null,
+    buttonApply: null,
+    buttonReset: null,
+    buttonToggleUi: null,
+    tableData: null,
+  };
+
+  ui.setupButtons = function () {
+    this.buttonToggleUi.addEventListener("click", function () {
+      uiState.currentState.showUi = !uiState.currentState.showUi;
+      ui.showHideUi();
+      uiState.saveState();
+    });
+
+    this.buttonApply.addEventListener("click", function () {
+      ui.applyFilters();
+    });
+
+    this.buttonReset.addEventListener("click", function () {
+      ui.resetFilters();
+    });
+  };
+
+  ui.showHideUi = function () {
+    var display = uiState.currentState.showUi ? "block" : "none";
+    document.querySelector("#jk-wrapper").style.display = display;
+  };
+
+  ui.createUi = function () {
+    let head = document.getElementsByTagName("head")[0];
+    let body = document.getElementsByTagName("body")[0];
+
+    let uiStyle = document.createElement("style");
+    uiStyle.innerHTML = FILTER_UI_STYLE;
+    head.appendChild(uiStyle);
+
+    var htmlWrapper = document.createElement("div");
+    htmlWrapper.innerHTML = FILTER_UI_HTML;
+    body.appendChild(htmlWrapper);
+  };
+
+  ui.setupInputs = function () {
+    function enterKeyHandler(event) {
+      if (event.keyCode === 13) ui.applyFilters();
     }
 
-    log.info = function () {
-        if (LOG_LEVEL_INFO >= LOGGING_LEVEL) console.log.apply(null, getArgs(getTime(), APP_NAME, " INFO", arguments));
+    this.nameInput.addEventListener("keyup", enterKeyHandler);
+    this.sizeInput.addEventListener("keyup", enterKeyHandler);
+
+    log.debug("Input setup complete.");
+  };
+
+  ui.onFilterCanNotBeUsed = function () {
+    this.buttonToggleUi.style.background = "#fa9";
+    this.buttonToggleUi.style.cursor = "not-allowed";
+  };
+
+  ui.init = function () {
+    uiState.restoreState();
+    ui.createUi();
+
+    // get HTML widgets
+    this.nameInput = document.getElementById("jk-input-name");
+    this.sizeInput = document.getElementById("jk-input-size");
+    this.buttonApply = document.getElementById("button-apply");
+    this.buttonReset = document.getElementById("button-remove");
+    this.exclueZeroCb = document.getElementById("jk-checkbox-seed");
+    this.buttonToggleUi = document.getElementById("jk-wrapper-toggle");
+
+    // get HTML data
+    const dataSpec = util.getDataSpec();
+    if (!dataSpec) {
+      log.warn("No data spec found for this page.");
+      ui.onFilterCanNotBeUsed();
+      return;
     }
 
-    log.warn = function () {
-        if (LOG_LEVEL_WARNING >= LOGGING_LEVEL) console.warn.apply(null, getArgs(getTime(), APP_NAME, " WARN", arguments));
+    ui.tableData = [];
+    const containers = document.querySelectorAll(dataSpec.containerSel);
+
+    for (let container of containers) {
+      const contents = container.querySelectorAll(dataSpec.rowSel);
+      const rowDataArr = [];
+
+      for (let htmlData of contents) {
+        const rowData = new RowData(htmlData, dataSpec);
+        rowDataArr.push(rowData);
+      }
+
+      ui.tableData.push(rowDataArr);
     }
 
-    log.error = function () {
-        if (LOG_LEVEL_ERROR >= LOGGING_LEVEL) console.error.apply(null, getArgs(getTime(), APP_NAME, "ERROR", arguments));
+    if (ui.tableData.length === 0) {
+      ui.onFilterCanNotBeUsed();
+      return;
     }
 
-    const SIZE_UNITS = ['BYTES', 'KB', 'MB', 'GB', 'TB', 'EB', 'PB'];
-    const SIZE_UNITS_MULTIPLIER = [
-        Math.pow(1024, 0), // BYTES
-        Math.pow(1024, 1), // KB
-        Math.pow(1024, 2), // MB
-        Math.pow(1024, 3), // GB
-        Math.pow(1024, 4), // TB
-        Math.pow(1024, 5), // EB
-        Math.pow(1024, 6) // PB
-    ];
+    ui.setupButtons();
+    ui.setupInputs();
+    ui.applyStateToUi();
+    ui.applyFilters();
+    ui.showHideUi();
+  };
 
-    const TEXT_POS_AT_START = 'start';
-    const TEXT_POS_AT_END = 'end';
-    const TEXT_POS_AT_ANYWHERE = 'anywhere';
+  ui.getNameValue = function () {
+    return this.nameInput.value;
+  };
 
-    const FILE_SIZE_LESS_THAN = 'lessthan';
-    const FILE_SIZE_GREATER_THAN = 'greaterthan';
+  ui.setNameValue = function (val) {
+    this.nameInput.value = val;
+  };
 
-    const SESSION_KEY = 'EKtagrwzXJGFKSncJxFsgvurYIyIaAzF';
+  ui.getNamePosValue = function () {
+    return document.querySelector("input[name=jkNamePos47]:checked").value;
+  };
 
-    const UI_DEFALUT_CONFIG = {
-        nameFilterValue: "",
-        nameFilterPos: TEXT_POS_AT_START,
-        sizeFilterValue: "",
-        sizeFilterCompare: FILE_SIZE_LESS_THAN,
-        seedFilterActive: false,
-        showUi: false
-    };
+  ui.setNamePosValue = function (val) {
+    document.querySelector("input[name=jkNamePos47][value=" + val + "]").checked = true;
+  };
 
-    const DATA_SPECS = [{
-        siteNames: [/^https?:\/\/x?1337x.*/],
-        containerSel: '.table-list',
-        rowSel: 'tbody > tr',
-        nameColSel: '.coll-1 a:nth-of-type(2)',
-        sizeColSel: '.coll-4',
-        seedColSel: '.coll-2'
-    }, {
-        siteNames: [/^https:\/\/www\.torrentfunk.*/],
-        containerSel: '.tmain',
-        rowSel: 'tbody > tr + tr',
-        nameColSel: 'td:first-of-type > div > a',
-        sizeColSel: 'td:nth-of-type(3)',
-        seedColSel: '.tul'
-    }
-                       ];
+  ui.getSizeValue = function () {
+    return this.sizeInput.value;
+  };
 
-    var util = {};
+  ui.setSizeValue = function (val) {
+    this.sizeInput.value = val;
+  };
 
-    util.getDataSpec = function () {
-        const url = window.location.href;
+  ui.getSizeCmpValue = function () {
+    return document.querySelector("input[name=jkSizeCmp47]:checked").value;
+  };
 
-        for (var dataSpec of DATA_SPECS) {
-            for (let siteName of dataSpec.siteNames) {
-                if (siteName.test(url)) return dataSpec;
-            }
-        }
+  ui.setSizeCmpValue = function (val) {
+    document.querySelector("input[name=jkSizeCmp47][value=" + val + "]").checked = true;
+  };
 
-        return null;
-    }
+  ui.getExcludeZeroSeed = function () {
+    return this.exclueZeroCb.checked;
+  };
 
-    util.getBytes = function (sizeStr, unit) {
-        if (!sizeStr) return 0;
+  ui.setExcludeZeroSeed = function (val) {
+    this.exclueZeroCb.checked = val;
+  };
 
-        sizeStr = sizeStr.trim().toUpperCase();
-        if (!unit) {
-            // check if sizeStr is in two parts
-            const parts = sizeStr.split(" ");
-            if (parts.length > 2) return 0;
-            else if (parts.length === 2) {
-                sizeStr = parts[0];
+  ui.applyFilters = function () {
+    ui.beforeApplyFilters();
+    let rowCount = 0;
+    let totalRowCount = 0;
 
-                for (let i = 0; i < SIZE_UNITS.length; i++) {
-                    if (parts[1] === SIZE_UNITS[i]) {
-                        unit = i;
-                        break;
-                    }
-                }
-            }
-            else {
-                for (let i = 0; i < SIZE_UNITS.length; i++) {
-                    if (sizeStr.endsWith(SIZE_UNITS[i])) {
-                        unit = i;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return parseFloat(sizeStr) * SIZE_UNITS_MULTIPLIER[unit];
-    }
-
-    var uiState = {};
-    uiState.currentState = {};
-
-    uiState.getDefaultState = function() {
-        return JSON.parse(JSON.stringify(UI_DEFALUT_CONFIG));
-    }
-
-    uiState.resetState = function () {
-        this.currentState = this.getDefaultState();
-        this.saveState();
-    }
-
-    uiState.saveState = function () {
-        const currentStateJson = JSON.stringify(this.currentState);
-        sessionStorage.setItem(SESSION_KEY, currentStateJson);
-    }
-
-    uiState.restoreState = function () {
-        const savedStateJson = sessionStorage.getItem(SESSION_KEY);
-        if (savedStateJson) {
-            this.currentState = JSON.parse(savedStateJson);
-            log.info("State restored from session storage.");
+    for (let rowDataArr of ui.tableData) {
+      totalRowCount += rowDataArr.length;
+      for (let rowData of rowDataArr) {
+        if (ui.canShowRow(rowData)) {
+          rowData.html.style.display = "";
+          rowCount++;
         } else {
-            log.info("No state found in session storage. Using default state.")
-            this.currentState = this.getDefaultState();
+          rowData.html.style.display = "none";
         }
+      }
     }
 
-    util.getTextFromHtmlNode = function (htmlNode) {
-        if (!htmlNode) return '';
+    ui.afterApplyFilters();
 
-        for (let child of htmlNode.childNodes) {
-            if (child instanceof HTMLElement) continue;
+    log.info("Filters applied successfully. Showing " + rowCount + " of " + totalRowCount);
+  };
 
-            return child.textContent;
-        }
+  ui.beforeApplyFilters = function () {
+    ui.populateStateFromUi();
+    uiState.saveState();
 
-        return '';
+    this.sizeThreshold = util.getBytes(uiState.currentState.sizeFilterValue);
+    log.debug("Size threshold", this.sizeThreshold);
+  };
+
+  ui.afterApplyFilters = function () {};
+
+  ui.sizeThreshold = 0;
+  ui.canShowRow = function (rowData) {
+    if (rowData.seedCount === 0 && uiState.currentState.seedFilterActive) return false;
+
+    if (uiState.currentState.sizeFilterValue) {
+      const dataSize = rowData.size;
+
+      if (
+        uiState.currentState.sizeFilterCompare === FILE_SIZE_GREATER_THAN &&
+        dataSize <= this.sizeThreshold
+      ) {
+        return false;
+      }
+
+      if (
+        uiState.currentState.sizeFilterCompare === FILE_SIZE_LESS_THAN &&
+        dataSize >= this.sizeThreshold
+      ) {
+        return false;
+      }
     }
 
-    function RowData(rowHtml, dataSpec) {
-        this.name = util.getTextFromHtmlNode(rowHtml.querySelector(dataSpec.nameColSel)).replace("⭐", "").trim().toUpperCase();
-        this.seedCount = parseInt(rowHtml.querySelector(dataSpec.seedColSel).textContent);
-        this.size = util.getBytes(util.getTextFromHtmlNode(rowHtml.querySelector(dataSpec.sizeColSel)));
-        this.html = rowHtml;
+    if (uiState.currentState.nameFilterValue) {
+      const str = uiState.currentState.nameFilterValue.toUpperCase();
+      const name = rowData.name;
+
+      switch (uiState.currentState.nameFilterPos) {
+        case TEXT_POS_AT_START:
+          if (!name.startsWith(str)) return false;
+          break;
+        case TEXT_POS_AT_END:
+          if (!name.endsWith(str)) return false;
+          break;
+        default:
+          if (name.indexOf(str) === -1) return false;
+      }
     }
 
-    var ui = {
-        nameInput: null,
-        sizeInput: null,
-        exclueZeroCb: null,
-        buttonApply: null,
-        buttonReset: null,
-        buttonToggleUi: null,
-        tableData: null
-    };
+    return true;
+  };
 
-    ui.setupButtons = function () {
-        this.buttonToggleUi.addEventListener('click', function () {
-            uiState.currentState.showUi = !uiState.currentState.showUi;
-            ui.showHideUi();
-            uiState.saveState();
-        });
+  ui.resetFilters = function () {
+    uiState.resetState();
+      // resetState makes the variable showUi falsy
+      // however, state is reset while UI is still visible
+      // this causes a discrepency in the filter UI visible
+      // state in the data and actual visibility of the UI.
+    uiState.currentState.showUi = true;
+    ui.applyStateToUi();
+    ui.applyFilters();
 
-        this.buttonApply.addEventListener('click', function () {
-            ui.applyFilters();
-        });
+    log.info("Filters resetted successfully.");
+  };
 
-        this.buttonReset.addEventListener('click', function () {
-            ui.resetFilters();
-        });
-    }
+  ui.populateStateFromUi = function () {
+    uiState.currentState.nameFilterValue = ui.getNameValue();
+    uiState.currentState.nameFilterPos = ui.getNamePosValue();
+    uiState.currentState.sizeFilterValue = ui.getSizeValue();
+    uiState.currentState.sizeFilterCompare = ui.getSizeCmpValue();
+    uiState.currentState.seedFilterActive = ui.getExcludeZeroSeed();
 
-    ui.showHideUi = function () {
-        var display = uiState.currentState.showUi ? "block" : "none";
-        document.querySelector("#jk-wrapper").style.display = display;
-    }
+    log.info("Populated state from UI.");
+    log.debug("State: ", uiState.currentState);
+  };
 
-    ui.createUi = function () {
-        let head = document.getElementsByTagName("head")[0];
-        let body = document.getElementsByTagName("body")[0];
+  ui.applyStateToUi = function () {
+    ui.setNameValue(uiState.currentState.nameFilterValue);
+    ui.setNamePosValue(uiState.currentState.nameFilterPos);
+    ui.setSizeValue(uiState.currentState.sizeFilterValue);
+    ui.setSizeCmpValue(uiState.currentState.sizeFilterCompare);
+    ui.setExcludeZeroSeed(uiState.currentState.seedFilterActive);
+  };
 
-        let uiStyle = document.createElement("style");
-        uiStyle.innerHTML = FILTER_UI_STYLE;
-        head.appendChild(uiStyle);
-
-        var htmlWrapper = document.createElement("div");
-        htmlWrapper.innerHTML = FILTER_UI_HTML;
-        body.appendChild(htmlWrapper);
-    }
-
-    ui.setupInputs = function () {
-        function enterKeyHandler (event) {
-            if (event.keyCode === 13) ui.applyFilters();
-        }
-
-        this.nameInput.addEventListener('keyup', enterKeyHandler);
-        this.sizeInput.addEventListener('keyup', enterKeyHandler);
-
-        log.debug("Input setup complete.");
-    }
-
-    ui.onFilterCanNotBeUsed = function () {
-        this.buttonToggleUi.style.background = "#fa9";
-        this.buttonToggleUi.style.cursor = "not-allowed";
-    }
-
-    ui.init = function () {
-        uiState.restoreState();
-        ui.createUi();
-
-        // get HTML widgets
-        this.nameInput = document.getElementById("jk-input-name");
-        this.sizeInput = document.getElementById("jk-input-size");
-        this.buttonApply = document.getElementById("button-apply");
-        this.buttonReset = document.getElementById("button-remove");
-        this.exclueZeroCb = document.getElementById("jk-checkbox-seed");
-        this.buttonToggleUi = document.getElementById("jk-wrapper-toggle");
-
-        // get HTML data
-        const dataSpec = util.getDataSpec();
-        if (!dataSpec) {
-            log.warn("No data spec found for this page.");
-            ui.onFilterCanNotBeUsed();
-            return;
-        }
-
-        ui.tableData = [];
-        const containers = document.querySelectorAll(dataSpec.containerSel);
-
-        for (let container of containers) {
-            const contents = container.querySelectorAll(dataSpec.rowSel);
-            const rowDataArr = [];
-
-            for (let htmlData of contents) {
-                const rowData = new RowData(htmlData, dataSpec);
-                rowDataArr.push(rowData);
-            }
-
-            ui.tableData.push(rowDataArr);
-        }
-
-        if (ui.tableData.length === 0) {
-            ui.onFilterCanNotBeUsed();
-            return;
-        }
-
-        ui.setupButtons();
-        ui.setupInputs();
-        ui.applyStateToUi();
-        ui.applyFilters();
-        ui.showHideUi();
-    }
-
-    ui.getNameValue = function () {
-        return this.nameInput.value;
-    }
-
-    ui.setNameValue = function (val) {
-        this.nameInput.value = val;
-    }
-
-    ui.getNamePosValue = function () {
-        return document.querySelector('input[name=jkNamePos47]:checked').value;
-    }
-
-    ui.setNamePosValue = function (val) {
-        document.querySelector('input[name=jkNamePos47][value=' + val + ']').checked = true;
-    }
-
-    ui.getSizeValue = function () {
-        return this.sizeInput.value;
-    }
-
-    ui.setSizeValue = function (val) {
-        this.sizeInput.value = val;
-    }
-
-    ui.getSizeCmpValue = function () {
-        return document.querySelector('input[name=jkSizeCmp47]:checked').value;
-    }
-
-    ui.setSizeCmpValue = function (val) {
-        document.querySelector('input[name=jkSizeCmp47][value=' + val + ']').checked = true;
-    }
-
-    ui.getExcludeZeroSeed = function() {
-        return this.exclueZeroCb.checked;
-    }
-
-    ui.setExcludeZeroSeed = function(val) {
-        this.exclueZeroCb.checked = val;
-    }
-
-    ui.applyFilters = function () {
-        ui.beforeApplyFilters();
-        let rowCount = 0;
-        let totalRowCount = 0;
-
-        for (let rowDataArr of ui.tableData) {
-            totalRowCount += rowDataArr.length;
-            for (let rowData of rowDataArr) {
-                if (ui.canShowRow(rowData)) {
-                    rowData.html.style.display = '';
-                    rowCount++;
-                }
-                else {
-                    rowData.html.style.display = 'none';
-                }
-            }
-        }
-
-        ui.afterApplyFilters();
-
-        log.info("Filters applied successfully. Showing " + rowCount + " of " + totalRowCount);
-    }
-
-    ui.beforeApplyFilters = function () {
-        ui.populateStateFromUi();
-        uiState.saveState();
-
-        this.sizeThreshold = util.getBytes(uiState.currentState.sizeFilterValue);
-        log.debug("Size threshold", this.sizeThreshold);
-    }
-
-    ui.afterApplyFilters = function () {
-    }
-
-    ui.sizeThreshold = 0;
-    ui.canShowRow = function (rowData) {
-        if (rowData.seedCount === 0 && uiState.currentState.seedFilterActive) return false;
-
-        if (uiState.currentState.sizeFilterValue) {
-            const dataSize = rowData.size;
-
-            if (uiState.currentState.sizeFilterCompare === FILE_SIZE_GREATER_THAN && dataSize <= this.sizeThreshold) {
-                return false;
-            }
-
-            if (uiState.currentState.sizeFilterCompare === FILE_SIZE_LESS_THAN && dataSize >= this.sizeThreshold) {
-                return false;
-            }
-        }
-
-        if (uiState.currentState.nameFilterValue) {
-            const str = uiState.currentState.nameFilterValue.toUpperCase();
-            const name = rowData.name;
-
-            switch (uiState.currentState.nameFilterPos) {
-                case TEXT_POS_AT_START:
-                    if (!name.startsWith(str)) return false;
-                    break;
-                case TEXT_POS_AT_END:
-                    if (!name.endsWith(str)) return false;
-                    break;
-                default:
-                    if (name.indexOf(str) === -1) return false;
-            }
-        }
-
-        return true;
-    }
-
-    ui.resetFilters = function () {
-        uiState.resetState();
-        ui.applyStateToUi();
-        ui.applyFilters();
-
-        log.info("Filters resetted successfully.");
-    }
-
-    ui.populateStateFromUi = function () {
-        uiState.currentState.nameFilterValue = ui.getNameValue();
-        uiState.currentState.nameFilterPos = ui.getNamePosValue();
-        uiState.currentState.sizeFilterValue = ui.getSizeValue();
-        uiState.currentState.sizeFilterCompare = ui.getSizeCmpValue();
-        uiState.currentState.seedFilterActive = ui.getExcludeZeroSeed();
-
-        log.info("Populated state from UI.");
-        log.debug("State: ", uiState.currentState);
-    }
-
-    ui.applyStateToUi = function () {
-        ui.setNameValue(uiState.currentState.nameFilterValue);
-        ui.setNamePosValue(uiState.currentState.nameFilterPos);
-        ui.setSizeValue(uiState.currentState.sizeFilterValue);
-        ui.setSizeCmpValue(uiState.currentState.sizeFilterCompare);
-        ui.setExcludeZeroSeed(uiState.currentState.seedFilterActive);
-    }
-
-    ui.init();
+  ui.init();
 })();
