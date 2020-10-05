@@ -79,6 +79,7 @@
                 "a > img.centred_resized",
                 "img#soDaBug",
                 "#container > #image_details + img",
+                "center img#myImg"
             ];
 
             let imageElement;
