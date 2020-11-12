@@ -1,8 +1,7 @@
-
 // ==UserScript==
 // @name         ECI Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.0
+// @version      1.0.1
 // @description  Change appearance of ECI websites
 // @author       Optimus Prime
 // @match        https://results.eci.gov.in/*
@@ -14,6 +13,12 @@
 
     const css =
 `
+body {
+  font-family: "Fira Sans" !important;
+}
+* {
+  font-family: inherit !important;
+}
 #div1 table tbody tr {
   font-size: 1rem !important;
 }
@@ -24,7 +29,6 @@ h3 u {
   font-weight: 300 !important;
   font-size: 2rem;
   text-decoration: none;
-
 }
 `;
     const css1 =
