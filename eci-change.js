@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ECI Font Change
 // @namespace    https://github.com/optimus29
-// @version      1.0.1
+// @version      1.1.0
 // @description  Change appearance of ECI websites
 // @author       Optimus Prime
 // @match        https://results.eci.gov.in/*
@@ -59,9 +59,32 @@ h3 u {
     }
     else if (/\/.+\/Constituencywise.+/.test(window.location.pathname)) {
         pageCss += css2;
+        const table = document.querySelector("#div1 table");
+        if (table) {
+            sortCandidateTable(table);
+        }
     }
     else {
         // do nothing
+    }
+
+    function sortCandidateTable(table) {
+        const trArray = [];
+        for (let i = 0; i < table.children[0].children.length; i++) {
+            trArray[i] = table.children[0].children[i];
+        }
+        const memberArray = trArray.slice(3, trArray.length - 1)
+        .sort((tr1, tr2) => {
+            return parseInt(tr2.children[5].textContent) - parseInt(tr1.children[5].textContent);
+        });
+        const newTrArray = trArray.slice(0, 3)
+        .concat(memberArray)
+        .concat(trArray.slice(trArray.length - 1));
+        const newTbody = document.createElement("tbody");
+        newTrArray.forEach(e => newTbody.appendChild(e));
+
+        table.children[0].remove();
+        table.appendChild(newTbody);
     }
 
     style.innerHTML = pageCss;
