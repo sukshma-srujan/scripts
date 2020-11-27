@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/optimus29
-// @version      1.1.3
+// @version      1.4.0
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
@@ -9,6 +9,18 @@
 
 (function() {
     'use strict';
+
+    function unstyleImage(image) {
+        const imageStyle = {
+            display: "block",
+            borderRadius: ".5rem",
+            minWidth: "2rem",
+            maxWidth: "2rem",
+            boxShadow: "",
+            margin: "0 auto"
+        };
+        applyStyle(image, imageStyle);
+    }
 
     function styleImage(image) {
         const imageStyle = {
@@ -19,7 +31,6 @@
             boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
             margin: "0 auto"
         };
-
         applyStyle(image, imageStyle);
     }
 
@@ -34,6 +45,8 @@
         if (/(\.md\.png)$/.test(img.src)) {
             const newSrc = img.src.replace(/(\.md)\.png$/, '$1.jpg');
             img.src = newSrc;
+        } else {
+            unstyleImage(img);
         }
     }
 
