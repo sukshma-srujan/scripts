@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Full Page Content
+// @name         1337x Full Page Content
 // @namespace    https://github.com/optimus29
-// @version      1.0
+// @version      1.0.1
 // @description  Make main content show in full width of page
 // @author       Optimus Prime
 // @match        https://1337x.to/torrent/*
@@ -24,11 +24,12 @@
     var css = `
 .full-content-ui {
   background: #171717;
-  padding: 1rem;
   border-top: .06rem solid #373737;
 }
 .full-content-ui label {
   color: white;
+  display: block;
+  padding: 1rem;
 }
 `;
 
