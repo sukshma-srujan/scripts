@@ -13,18 +13,19 @@
     const keyName = "fcui-qziuka";
     const html = `
 <div class="full-content-ui">
-  <div>
-<label class="checkbox" for="fullContentUiCb">
-  <span class="checkbox__input">
-    <input type="checkbox" id="fullContentUiCb">
-    <span class="checkbox__control">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path fill="none" stroke="currentColor" stroke-width="3" d="M1.73 12.91l6.37 6.37L22.79 4.59"></path></svg>
-    </span>
-  </span>
-  <span class="radio__label">Full Content UI</span>
-</label>
-  </div>
+   <div>
+      <label class="checkbox" for="fullContentUiCb">
+         <span class="checkbox__input">
+            <input type="checkbox" id="fullContentUiCb">
+            <span class="checkbox__control">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path fill="none" stroke="currentColor" stroke-width="3" d="M1.73 12.91l6.37 6.37L22.79 4.59"></path>
+               </svg>
+            </span>
+         </span>
+         <span class="radio__label">Full Content UI</span>
+      </label>
+   </div>
 </div>
 `;
 
