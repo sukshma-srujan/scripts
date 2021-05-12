@@ -53,7 +53,14 @@
             console.log("Direct image loader:: No image found to be loaded directly.");
         }
     }
+    
+    function linkInNewTab() {
+      for (let link of document.querySelectorAll('.table-list a')) {
+      link.setAttribute('target', '_blank');
+    }
+}
 
     page.linkCleaner();
     page.directImageLoader();
+    linkInNewTab();
 })();
