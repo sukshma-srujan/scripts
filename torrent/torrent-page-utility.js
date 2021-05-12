@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Torrent Page Utility
 // @namespace    https://github.com/optimus29
-// @version      1.2.0
+// @version      1.2.1
 // @description  Utilities for pages of a torrent website
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/.*$/
