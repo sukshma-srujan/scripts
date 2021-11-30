@@ -30,6 +30,18 @@
         console.log("Cleaned [" + linkCleanCount + "] links.");
     }
 
+    page.directImageLoader = function _directImageLoader() {
+        const imgs = document.querySelectorAll("img[data-original]");
+        if (imgs.length) {
+            for (let img of imgs) {
+                replaceImage(img);
+            }
+            console.log(`Direct image loader:: Directly loaded images: ${imgs.length}`);
+        } else {
+            console.log("Direct image loader:: No image found to be loaded directly.");
+        }
+    }
+
     function replaceImage(imageElem) {
         const newImageElem = document.createElement("img");
         newImageElem.src = imageElem.getAttribute("data-original");
@@ -42,25 +54,21 @@
         imageElem.remove();
     }
 
-    page.directImageLoader = function _directImageLoader() {
-        const imgs = document.querySelectorAll("img[data-original]");
-        if (imgs.length) {
-            for (let img of imgs) {
-                replaceImage(img);
-            }
-            console.log(`Direct image loader:: Directly loaded images: ${imgs.length}`);
-        } else {
-            console.log("Direct image loader:: No image found to be loaded directly.");
-        }
-    }
-    
     function linkInNewTab() {
       for (let link of document.querySelectorAll('.table-list a')) {
-      link.setAttribute('target', '_blank');
+          link.setAttribute('target', '_blank');
+      }
     }
-}
+
+    function changeStyle() {
+        const css = `.table-list td { font-size: 14px; }`;
+        const style = document.createElement('style');
+        style.innerHTML = css;
+        document.body.appendChild(style);
+    }
 
     page.linkCleaner();
     page.directImageLoader();
     linkInNewTab();
+    changeStyle();
 })();
