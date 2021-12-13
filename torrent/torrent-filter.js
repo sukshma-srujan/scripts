@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Torrent Filter
 // @namespace    https://github.com/optimus29
-// @version      2.4.1
+// @version      2.5.0
 // @description  Filter torrent data tables in websites
 // @author       Optimus Prime
-// @include      /^https?:\/\/x?1337x\...\/.*$/
+// @include      /^https?:\/\/(www.)?x?1337x.*$/
 // @match        https://www.torrentfunk.com/*
 // @grant        none
 // @website      https://github.com/optimus29
@@ -268,7 +268,7 @@
 
   const DATA_SPECS = [
     {
-      siteNames: [/^https?:\/\/x?1337x.*/],
+      siteNames: [/^https?:\/\/(www.)?x?1337x.*/],
       containerSel: ".table-list",
       rowSel: "tbody > tr",
       nameColSel: ".coll-1 a:nth-of-type(2)",
