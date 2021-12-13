@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/optimus29
-// @version      1.5.0
+// @version      1.6.0
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/x?1337x\...\/torrent/.*$/
