@@ -2,7 +2,7 @@
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
 // @version      1.1.0
-// @description  Loads full images from thumbnails on torrent description page.
+// @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
 // ==/UserScript==
