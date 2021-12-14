@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.1.0
+// @version      1.2.0
 // @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
@@ -10,10 +10,13 @@
 (function() {
     "use strict";
 
-    const APP_NAME = "IMG_UTIL";
+    const APP_NAME = "FULL_IMG_LOADER";
 
-    const log = console.log;
+    const log = function _log(msg) {
+        console.log(APP_NAME, msg);
+    }
 
+    const IMAGE_SELECTORS = "img[data-original], img.img-responsive.descrimg";
     const SPEC = [
         {
             attemptName: "remove-th",
@@ -93,7 +96,7 @@
     }
 
     function findImages() {
-        const images = document.querySelectorAll("img[data-original]");
+        const images = document.querySelectorAll(IMAGE_SELECTORS);
         const selectedImages = [];
 
         if (!images) {
@@ -101,6 +104,7 @@
             log("No images found.");
             return;
         }
+        preserveImgSrc(images);
 
         for (const image of images) {
             const origSrc = image.getAttribute("data-original");
@@ -241,10 +245,20 @@
         img.onerror = handleLoadFailure;
     }
 
+    function preserveImgSrc(images) {
+        for (let image of images) {
+            if (!image.getAttribute("data-original")) {
+                image.setAttribute("data-original", image.src);
+            }
+        }
+    }
+
     function loadFullImages() {
-        const images = document.querySelectorAll("img[data-original]");
+        const images = document.querySelectorAll(IMAGE_SELECTORS);
 
         if (!images) return;
+
+        preserveImgSrc(images);
 
         for (const image of images) {
             const origSrc = image.getAttribute("data-original");
