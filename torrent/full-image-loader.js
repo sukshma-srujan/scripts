@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.2.0
+// @version      1.3.0
 // @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
+// @include      /^https:\/\/(www.)?.*rarbg.*/torrent/.*$/
 // ==/UserScript==
 
 (function() {
@@ -16,7 +17,7 @@
         console.log(APP_NAME, msg);
     }
 
-    const IMAGE_SELECTORS = "img[data-original], img.img-responsive.descrimg";
+    const IMAGE_SELECTORS = "img[data-original], img.img-responsive.descrimg, #description > a > img";
     const SPEC = [
         {
             attemptName: "remove-th",
