@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
-// @namespace    https://github.com/optimus29
-// @version      1.7.0
+// @namespace    https://github.com/jkbhu85
+// @version      1.8.0
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
@@ -89,6 +89,11 @@
             name: "jpeg.html",
             pattern: /^(.*)\/(ia|ib|y|i|x)-([a-z])\/(.*.jpe?g)(.html)$/i,
             replacement: "$1/$3/$4"
+        },
+        {
+            name: "digit.html",
+            pattern: /^(.+\/\d{4}\/\d{2}\/\d{2}\/\d{2}\/\d\.)html$/i,
+            replacement: "$1jpg"
         },
         {
             name: "jpeg.html-2",
