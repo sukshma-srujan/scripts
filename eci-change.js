@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ECI Style Change
 // @namespace    https://github.com/optimus29
-// @version      1.3.0
+// @version      1.4.0
 // @description  Change appearance of ECI websites
 // @author       Optimus Prime
 // @match        https://results.eci.gov.in/*
@@ -29,12 +29,6 @@ select {
 }
 table {
   border-collapse: collapse;
-}
-#div1 table tbody tr {
-  font-size: 1rem !important;
-}
-#div1 table tbody tr td {
-  font-weight: normal !important;
 }
 h3, h3 u {
   font-weight: 300 !important;
@@ -106,6 +100,9 @@ table.partywise-trends > tbody > tr > td {
 table.partywise-trends > tbody > tr:first-of-type > td {
   border-bottom: .125rem solid #ccc;
   text-align: center;
+  font-weight: 500;
+  padding-top: 0;
+  font-size: 1rem;
 }
 table.partywise-trends > tbody > tr:nth-of-type(2) > td {
   border-bottom: .125rem solid #ccc;
@@ -114,6 +111,18 @@ table.partywise-trends > tbody > tr:nth-of-type(2) > td {
 table.partywise-trends > tbody > tr:last-of-type > td {
   border-top: .125rem solid #ccc;
   border-bottom: .125rem solid #ccc;
+}
+table.partywise-trends > tbody > tr:nth-of-type(2) > td > b {
+  font-weight: normal;
+}
+table.partywise-trends > tbody > tr:nth-of-type(3) > th {
+  text-align: right;
+}
+table.partywise-trends > tbody > tr:nth-of-type(3) > th:first-of-type {
+  text-align: left;
+}
+table.partywise-trends > tbody > tr:last-of-type > td {
+  font-weight: bold;
 }
 `;
     const css1 =
