@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         ECI Font Change
+// @name         ECI Style Change
 // @namespace    https://github.com/optimus29
-// @version      1.1.0
+// @version      1.2.0
 // @description  Change appearance of ECI websites
 // @author       Optimus Prime
 // @match        https://results.eci.gov.in/*
@@ -19,16 +19,95 @@ body {
 * {
   font-family: inherit !important;
 }
+select {
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  box-sizing: border-box;
+  height: auto !important;
+  background: #fff;
+  border: 1px solid #888;
+}
+table {
+  border-collapse: collapse;
+}
 #div1 table tbody tr {
   font-size: 1rem !important;
 }
 #div1 table tbody tr td {
   font-weight: normal !important;
 }
-h3 u {
+h3, h3 u {
   font-weight: 300 !important;
-  font-size: 2rem;
+  font-size: 1.25rem;
   text-decoration: none;
+}
+div.disclmr {
+  display: none;
+}
+div.gap-between {
+  margin-top: 7rem;
+}
+.ctl00_Menu1_1 {
+  border-radius: .25rem;
+}
+.round-s a {
+  border-radius: .25rem;
+  color: #e91e63;
+}
+.refresh-rgt {
+  margin-right: 1.5rem;
+}
+div.aclink.refresh-lft button {
+  border-radius: .25rem;
+}
+#divChart {
+  border: 0;
+}
+.partywise-state-selector {
+  border: 0;
+}
+.partywise-state-selector {
+  width: 75%;
+  margin: 1rem auto;
+}
+.partywise-state-selector > tbody > tr:first-of-type > td {
+  font-weight: bold;
+  font-size: 1rem;
+}
+.partywise-state-selector > tbody > tr:nth-of-type(2) > td > b {
+  display: none;
+}
+.partywise-state-selector > tbody > tr:nth-of-type(2) > td > select {
+  width: 50%;
+}
+.partywise-trends-container {
+  margin-left: -1rem;
+  margin-right: -1rem;
+  padding: 2.5rem;
+  border-radius: .25rem;
+  box-shadow: 0 0 .5rem #ccc;
+}
+.partywise-trends {
+  width: 100%;
+  padding: 1rem;
+}
+table.partywise-trends > tbody > tr > th,
+table.partywise-trends > tbody > tr > td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 0.05rem solid #ccc;
+}
+table.partywise-trends > tbody > tr:first-of-type > td {
+  border-bottom: .125rem solid #ccc;
+  text-align: center;
+}
+table.partywise-trends > tbody > tr:nth-of-type(2) > td {
+  border-bottom: .125rem solid #ccc;
+  text-align: center;
+}
+table.partywise-trends > tbody > tr:last-of-type > td {
+  border-top: .125rem solid #ccc;
+  border-bottom: .125rem solid #ccc;
 }
 `;
     const css1 =
@@ -89,4 +168,81 @@ h3 u {
 
     style.innerHTML = pageCss;
     document.head.appendChild(style);
+
+    function applyStyleToParent() {
+        const elems = document.querySelectorAll("#piecharts26");
+        for (let e of elems) {
+            e.parentNode.style.border = "0";
+        }
+    }
+    function stylizeClickLinksBelow() {
+        const elem = document.querySelector(".tabc > tbody > tr:nth-of-type(2) > td:first-of-type > div:first-of-type");
+        if (elem && elem.textContent.indexOf("links below") > -1) {
+            elem.style.fontWeight = 400;
+            elem.style.color = "#444";
+        }
+    }
+    applyStyleToParent();
+    stylizeClickLinksBelow();
+
+    function removeStyleRecursively(elem) {
+        ["style", "align"].forEach(a => elem.removeAttribute(a));
+        for (let child of elem.children) {
+            removeStyleRecursively(child);
+        }
+    }
+    function removeTableAttributes(table) {
+        ["cellspacing", "cellpadding", "border"].forEach(a => table.removeAttribute(a));
+    }
+
+
+    function stylizePartyWiseResultPage() {
+        if (location.href.indexOf("partywiseresult") < 0) return;
+
+        const stateSelectTable = (function findStateSelectElem() {
+            const tables = document.querySelectorAll(".tabc > tbody > tr > td > table > tbody > tr > td > table");
+            for (let table of tables) {
+                const td = table.querySelector("tbody > tr:first-of-type > td:first-of-type");
+                if (td) {
+                    const lcText = td.textContent.toLowerCase();
+                    if (lcText.indexOf("partywise") > -1 && lcText.indexOf("trends") > -1 && lcText.indexOf("result") > -1) {
+                        return table;
+                    }
+                }
+            }
+            return null;
+        })();
+
+        if (stateSelectTable) {
+            removeStyleRecursively(stateSelectTable);
+            removeTableAttributes(stateSelectTable);
+            stateSelectTable.classList.add("partywise-state-selector");
+        }
+
+        const partyTrendsTable = (function findPartyTrendsTable() {
+            const tables = document.querySelectorAll(".tabc > tbody > tr > td > table > tbody > tr > td > table");
+            for (let table of tables) {
+                const ct = table.querySelector("tbody > tr:nth-of-type(2) > td > div > table");
+                if (ct) {
+                    const td = ct.querySelector("tbody > tr:nth-of-type(2) > td > b > div");
+                    if (td && td.textContent.toLowerCase().indexOf("status") > -1
+                        && td.textContent.toLowerCase().indexOf("known") > -1) {
+                        return ct;
+                    }
+                }
+            }
+            return null;
+        })();
+
+        if (partyTrendsTable) {
+            removeStyleRecursively(partyTrendsTable.parentNode);
+            removeTableAttributes(partyTrendsTable);
+            partyTrendsTable.parentNode.classList.add("partywise-trends-container");
+            partyTrendsTable.classList.add("partywise-trends");
+            if (partyTrendsTable.parentNode.children[0].tagName === "BR") {
+                partyTrendsTable.parentNode.children[0].remove();
+            }
+        }
+    }
+    stylizePartyWiseResultPage();
 })();
