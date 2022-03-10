@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         ECI Style Change
 // @namespace    https://github.com/optimus29
-// @version      1.2.0
+// @version      1.3.0
 // @description  Change appearance of ECI websites
 // @author       Optimus Prime
 // @match        https://results.eci.gov.in/*
@@ -41,11 +41,17 @@ h3, h3 u {
   font-size: 1.25rem;
   text-decoration: none;
 }
+.wrap-sec {
+  margin-bottom: 2rem;
+}
+.refresh {
+  position: static;
+}
 div.disclmr {
   display: none;
 }
 div.gap-between {
-  margin-top: 7rem;
+  margin-top: 0rem;
 }
 .ctl00_Menu1_1 {
   border-radius: .25rem;
