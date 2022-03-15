@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.3.0
+// @version      1.4.0
 // @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
@@ -16,6 +16,15 @@
     const log = function _log(msg) {
         console.log(APP_NAME, msg);
     }
+
+    const imageStyle = {
+        display: "block",
+        borderRadius: ".5rem",
+        minWidth: "90%",
+        maxWidth: "100%",
+        boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
+        margin: "0 auto"
+    };
 
     const IMAGE_SELECTORS = "img[data-original], img.img-responsive.descrimg, #description > a > img";
     const SPEC = [
@@ -137,20 +146,11 @@
     }
 
     function styleImage(image) {
-        const imageStyle = {
-            display: "block",
-            borderRadius: ".5rem",
-            minWidth: "90%",
-            maxWidth: "100%",
-            boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
-            margin: "0 auto"
-        };
-
         applyStyle(image, imageStyle);
     }
 
     function applyStyle(element, cssStyle) {
-        for (const cssProperty in cssStyle) {
+        for (let cssProperty in cssStyle) {
             element.style[cssProperty] = cssStyle[cssProperty];
         }
     }
@@ -168,15 +168,20 @@
         parent.removeAttribute("href");
         parent.onclick = function() { return false; };
 
-        const hrefWrapper = document.createElement("div");
+        const hrefWrapper = document.createElement("a");
         const hrefStyle = {
-            color: "#999",
+            color: "#d63600",
             fontSize: ".75rem",
             padding: ".5rem 0",
-            textAlign: "center"
+            textAlign: "center",
+            display: "block",
+            fontFamily: "inherit",
+            textDecoration: "none"
         };
 
+        hrefWrapper.href = href;
         hrefWrapper.innerHTML = href;
+        hrefWrapper.setAttribute("target", "_blank");
         applyStyle(hrefWrapper, hrefStyle);
         image.after(hrefWrapper);
     }
@@ -288,5 +293,5 @@
         loadFullImages();
     }
 
-    main();
+    setTimeout(main, 3000);
 })();
