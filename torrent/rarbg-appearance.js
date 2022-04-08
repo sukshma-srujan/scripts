@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         RARBG Appearance
 // @namespace    https://github.com/jkbhu85
-// @version      1.0.0
+// @version      1.1.0
 // @description  Change appearance of rarbg webiste.
 // @author       Optimus Prime
 // @match        https://proxyrarbg.org/*
+// @match        https://www.rarbgprx.org/torrent/*
 // @grant        none
 // ==/UserScript==
 
