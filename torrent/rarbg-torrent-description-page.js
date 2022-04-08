@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RARBG Torrent Description Page
 // @namespace    https://github.com/jkbhu85
-// @version      1.0.0
+// @version      1.1.0
 // @description  Change appearance of the RARBG torrent description page.
 // @author       You
 // @match        https://proxyrarbg.org/torrent/*
