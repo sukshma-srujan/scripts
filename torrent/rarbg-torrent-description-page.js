@@ -5,6 +5,7 @@
 // @description  Change appearance of the RARBG torrent description page.
 // @author       You
 // @match        https://proxyrarbg.org/torrent/*
+// @match        https://www.rarbgprx.org/torrent/*
 // @grant        none
 // ==/UserScript==
 
