@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         RARBG Appearance
 // @namespace    https://github.com/jkbhu85
-// @version      1.1.0
+// @version      1.2.0
 // @description  Change appearance of rarbg webiste.
 // @author       Optimus Prime
 // @match        https://proxyrarbg.org/*
@@ -83,6 +83,10 @@ td.header3 {
   height: 1rem;
   padding: .5rem;
   line-height: 1rem;
+}
+/* hide bad things */
+div[data-darkreader-inline-bgcolor] {
+  display: none;
 }`;
 
     const style = document.createElement('style');
