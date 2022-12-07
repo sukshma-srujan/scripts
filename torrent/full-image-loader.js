@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.5.0
+// @version      1.5.1
 // @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
@@ -72,6 +72,11 @@
             attemptName: "partial-rs",
             pattern: /^(.+)\/rs\/(\d{4}\/\d{2})\/(.+)$/i,
             replacements: ["$1/r/$2/$3"]
+        },
+        {
+            attemptName: "t-to-o",
+            pattern: /^(.+)\/thumbs2(.+)\/(.+)\/(.+)_t(\..+)$/i,
+            replacements: ["$1/images2$2/$3/$4_o$5"]
         }
     ];
 
