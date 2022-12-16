@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Only
 // @namespace    https://github.com/optimus29
-// @version      1.1.1
+// @version      1.1.2
 // @description  Detect image and show only the image.
 // @author       Optimus Prime
 // @match        http://*/*
@@ -24,7 +24,9 @@
     }
 
     function isCurrentUrlAnImage() {
-        return /\.(jpe?g|png)$/i.test(window.location.href);
+        return /\.(jpe?g|png)$/i.test(window.location.href) &&
+            document.body.children.length == 1 &&
+            document.body.children[0].tagName == 'IMG';
     }
 
     let abortExeuction = false;
@@ -79,7 +81,8 @@
                 "a > img.centred_resized",
                 "img#soDaBug",
                 "#container > #image_details + img",
-                "center img#myImg"
+                "center img#myImg",
+                "a > img.pic.img.img-responsive"
             ];
 
             let imageElement;
@@ -89,6 +92,9 @@
                 if (imageElement && imageElement.src) {
                     break;
                 }
+            }
+            if (imageElement) {
+                log("Actual image element found.");
             }
             return imageElement;
         }
