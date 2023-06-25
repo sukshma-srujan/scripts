@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         The Pirate Bay Style
+// @name         The Pirate Bay Search Result Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.0
+// @version      1.1.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
 // @match        https://thepiratebay.org/search.php*
@@ -13,10 +13,11 @@
     'use strict';
 
     const css =
-`@import url('https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap');
+`
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@400;600&display=swap');
 body {
-  font-family: 'Titillium Web','Fira Sans';
-  font-size: 1rem;
+  font-family: 'Merienda', 'Fira Sans', sans-serif;
+  font-size: .85rem;
 }
 .browse .col-center {
   padding: 0;
@@ -61,7 +62,8 @@ body {
 #torrents.view-single li.list-entry span.item-icons {
   width: initial;
   display: table-cell;
-}`;
+}
+`;
     const style = document.createElement('style');
     style.innerHTML = css;
     document.body.appendChild(style);
