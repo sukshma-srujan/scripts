@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name         The Pirate Bay Search Result Style
+// @name         The Pirate Bay Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.1.0
+// @version      1.2.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
-// @match        https://thepiratebay.org/search.php*
+// @match        https://thepiratebay.org/*
 // @icon         https://www.google.com/s2/favicons?domain=thepiratebay.org
 // @grant        none
 // ==/UserScript==
@@ -62,6 +62,15 @@ body {
 #torrents.view-single li.list-entry span.item-icons {
   width: initial;
   display: table-cell;
+}
+/* Torrent description page */
+#description_container {
+  padding: 1rem;
+}
+#description_container > h2:first-of-type {
+  margin: -1rem;
+  margin-bottom: .5rem;
+  padding: 1rem 1.5rem;
 }
 `;
     const style = document.createElement('style');
