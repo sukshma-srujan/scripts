@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube Utilities
 // @namespace    http://tampermonkey.net/
-// @version      1.2.0
+// @version      1.3.0
 // @description  Open a video in a new tab in mobile youtube.
 // @author       Optimus Prime
 // @match        https://m.youtube.com/*
@@ -12,49 +12,58 @@
 
 (function() {
     'use strict';
-
     const css = `
 /* for opening videos in tab directly */
 @keyframes nodeInserted {
     from { opacity: 0.99; }
     to { opacity: 1; }
 }
-ytm-rich-item-renderer {
+ytm-media-item {
     animation-duration: 0.001s;
     animation-name: nodeInserted;
     position: relative;
-}
-ytm-rich-item-renderer > .video-cover {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }
 /* hide reels */
 ytm-reel-shelf-renderer {
     display: none !important;
 }
 `;
+    const attrViedoInNewTab = 'data-video-in-new-tab';
 
     const style = document.createElement('style');
     style.innerHTML = css;
     document.body.appendChild(style);
 
+    function findParent(elem) {
+        if (elem == document.body) {
+            return null;
+        }
+        if (elem.tagName.toLowerCase() === 'ytm-media-item') {
+            return elem;
+        }
+        return findParent(elem.parentNode);
+    }
+
+    window.openInNewTab = function(event) {
+        console.log(event.target.tagName);
+        let elem;
+        if ((elem = findParent(event.target)) != null) {
+            event.preventDefault();
+            event.stopPropagation();
+            const a = elem.querySelector("a.media-item-thumbnail-container");
+            if (a) {
+                console.log("Opening in new tab. Link: " + a.href);
+                window.open(a.href, "_blank");
+            }
+        }
+    }
+
     const coverSetter = function setupCover(elem) {
-        if (elem.getAttribute('data-cover-set') === 't') {
+        if (elem.getAttribute(attrViedoInNewTab) === 't') {
             return;
         }
-
-        const a = elem.querySelector("a.media-item-thumbnail-container");
-        if (a) {
-            const cover = document.createElement("a");
-            cover.classList.add('video-cover');
-            cover.setAttribute("href", a.getAttribute("href"));
-            cover.setAttribute("target", "_blank");
-            elem.appendChild(cover);
-            elem.setAttribute("data-cover-set", "t");
-        }
+        elem.onclick = window.openInNewTab;
+        elem.setAttribute(attrViedoInNewTab, "t");
     }
 
     const nodeInsertListener = function(event){
@@ -63,6 +72,16 @@ ytm-reel-shelf-renderer {
         }
     }
 
-    document.addEventListener("animationstart", nodeInsertListener, false);
-    document.querySelectorAll("ytm-rich-item-renderer").forEach(e => coverSetter(e));
+    function videoInNewTab() {
+        document.addEventListener("animationstart", nodeInsertListener, false);
+        console.log("Video in new tab set up for new items.");
+    }
+
+    function videoInNewTabExistingItems() {
+        const items = document.querySelectorAll("ytm-media-item");
+        items.forEach(e => coverSetter(e));
+        console.log("Video in new tab set up for existing [" + items.length + "] items.");
+    }
+    videoInNewTab();
+    videoInNewTabExistingItems();
 })();
