@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Youtube Utilities
 // @namespace    http://tampermonkey.net/
-// @version      1.3.0
+// @version      1.4.0
 // @description  Open a video in a new tab in mobile youtube.
 // @author       Optimus Prime
 // @match        https://m.youtube.com/*
-// @match        https://youtube.com/*
+// @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
