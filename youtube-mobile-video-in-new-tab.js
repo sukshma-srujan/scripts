@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Youtube Utilities
 // @namespace    http://tampermonkey.net/
-// @version      1.4.0
+// @version      1.5.0
 // @description  Open a video in a new tab in mobile youtube.
 // @author       Optimus Prime
 // @match        https://m.youtube.com/*
@@ -24,6 +24,8 @@ ytm-media-item {
     position: relative;
 }
 /* hide reels */
+ytd-reel-shelf-renderer,
+ytd-rich-shelf-renderer,
 ytm-reel-shelf-renderer {
     display: none !important;
 }
@@ -38,7 +40,8 @@ ytm-reel-shelf-renderer {
         if (elem == document.body) {
             return null;
         }
-        if (elem.tagName.toLowerCase() === 'ytm-media-item') {
+        const tg = elem.tagName.toLowerCase();
+        if (tg === 'ytm-media-item') {
             return elem;
         }
         return findParent(elem.parentNode);
@@ -48,6 +51,7 @@ ytm-reel-shelf-renderer {
         console.log(event.target.tagName);
         let elem;
         if ((elem = findParent(event.target)) != null) {
+            console.log('element found');
             event.preventDefault();
             event.stopPropagation();
             const a = elem.querySelector("a.media-item-thumbnail-container");
@@ -55,6 +59,8 @@ ytm-reel-shelf-renderer {
                 console.log("Opening in new tab. Link: " + a.href);
                 window.open(a.href, "_blank");
             }
+        } else {
+            console.warn('parent not found.');
         }
     }
 
