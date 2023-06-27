@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name         Open a video in a new tab
+// @name         Youtube Utilities
 // @namespace    http://tampermonkey.net/
-// @version      1.1.0
+// @version      1.2.0
 // @description  Open a video in a new tab in mobile youtube.
 // @author       Optimus Prime
-// @match        https://m.youtube.com/
+// @match        https://m.youtube.com/*
+// @match        https://youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
@@ -13,6 +14,7 @@
     'use strict';
 
     const css = `
+/* for opening videos in tab directly */
 @keyframes nodeInserted {
     from { opacity: 0.99; }
     to { opacity: 1; }
@@ -28,7 +30,12 @@ ytm-rich-item-renderer > .video-cover {
     bottom: 0;
     left: 0;
     right: 0;
-}`;
+}
+/* hide reels */
+ytm-reel-shelf-renderer {
+    display: none !important;
+}
+`;
 
     const style = document.createElement('style');
     style.innerHTML = css;
