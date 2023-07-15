@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Series Loader
 // @namespace    http://tampermonkey.net/
-// @version      1.3.0
+// @version      1.4.0
 // @description  Load images on the page that are in a series.
 // @author       Optimus Prime
 // @match        https://1337x.to/torrent/*
@@ -108,7 +108,7 @@
             img = linkElem.previousElementSibling;
         } else {
             img = document.createElement('img');
-            linkElem.insertBefore(img, linkElem);
+            linkElem.parentNode.insertBefore(img, linkElem);
         }
         img.classList.add('image-series');
         img.setAttribute('data-spec-name', specName);
