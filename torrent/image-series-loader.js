@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Series Loader
 // @namespace    http://tampermonkey.net/
-// @version      1.0.0
+// @version      1.1.0
 // @description  Load images on the page that are in a series.
 // @author       Optimus Prime
 // @match        https://1337x.to/torrent/*
@@ -24,9 +24,7 @@
     const imageStyle = {
         display: "block",
         borderRadius: ".5rem",
-        minWidth: "90%",
-        maxWidth: "100%",
-        maxHeight: '70vh',
+        maxHeight: '25rem',
         boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
         margin: "0 auto"
     };
