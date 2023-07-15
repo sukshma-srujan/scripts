@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Pirate Bay Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.2.0
+// @version      1.3.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
 // @match        https://thepiratebay.org/*
@@ -14,6 +14,7 @@
 
     const css =
 `
+@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Merienda:wght@400;600&display=swap');
 body {
   font-family: 'Merienda', 'Fira Sans', sans-serif;
@@ -71,6 +72,12 @@ body {
   margin: -1rem;
   margin-bottom: .5rem;
   padding: 1rem 1.5rem;
+}
+#description_container .text-box {
+  font: 1.25em "Syne Mono";
+  background: rgba(255,255,255,.5);
+  border-radius: .25rem;
+  padding: 1.5rem;
 }
 `;
     const style = document.createElement('style');
