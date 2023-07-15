@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/jkbhu85
-// @version      1.9.0
+// @version      1.10.0
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
@@ -9,29 +9,28 @@
 
 (function() {
     'use strict';
+    const loadingFailedImageStyle = {
+        display: "block",
+        borderRadius: ".5rem",
+        minWidth: "none",
+        maxWidth: "none",
+        boxShadow: "",
+        margin: "0 auto"
+    };
+    const loadedImageStyle = {
+        display: "block",
+        borderRadius: ".5rem",
+        maxHeight: '25rem',
+        boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
+        margin: "0 auto"
+    };
 
     function unstyleImage(image) {
-        const imageStyle = {
-            display: "block",
-            borderRadius: ".5rem",
-            minWidth: "2rem",
-            maxWidth: "2rem",
-            boxShadow: "",
-            margin: "0 auto"
-        };
-        applyStyle(image, imageStyle);
+        applyStyle(image, loadingFailedImageStyle);
     }
 
     function styleImage(image) {
-        const imageStyle = {
-            display: "block",
-            borderRadius: ".5rem",
-            minWidth: "90%",
-            maxWidth: "100%",
-            boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
-            margin: "0 auto"
-        };
-        applyStyle(image, imageStyle);
+        applyStyle(image, loadedImageStyle);
     }
 
     function applyStyle(element, cssStyle) {
