@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Series Loader
 // @namespace    http://tampermonkey.net/
-// @version      1.4.0
+// @version      1.5.0
 // @description  Load images on the page that are in a series.
 // @author       Optimus Prime
 // @match        https://1337x.to/torrent/*
@@ -32,7 +32,7 @@
     const specs = [{
         name: 'series-1',
         firstImageSelector: '.torrent-tabs .tab-content #description img.full-image-loader:first-of-type',
-        imgUrlPattern: /^https?:\/\/.+\/.+\/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/[a-zA-Z0-9\-]+\.mp4(.[0-9]{4}\.)jpg$/,
+        imgUrlPattern: /^https?:\/\/.+\/.+\/[0-9]{4}\/[0-9]{2}\/[0-9]{2}\/[a-zA-Z0-9\-\.']+\.mp4(.[0-9]{4}\.)jpg$/,
         linkElemSelector: '.torrent-tabs .tab-content #description a.js-modal-url',
         linkUrlPattern: /^https?:\/\/.+\/image\/[a-zA-Z0-9]{5}$/
     }];
