@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.5.1
+// @version      1.6.0
 // @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
-// @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
-// @include      /^https:\/\/(www.)?.*rarbg.*/torrent/.*$/
+// @match        https://1337x.*/torrent/*
+// @match        https://x1337x.*/torrent/*
 // ==/UserScript==
 
 (function() {
@@ -74,6 +74,11 @@
             replacements: ["$1/r/$2/$3"]
         },
         {
+            attemptName: "partial-as",
+            pattern: /^(.+)\/as\/(\d{4}\/\d{2})\/(.+)$/i,
+            replacements: ["$1/a/$2/$3"]
+        },
+        {
             attemptName: "t-to-o",
             pattern: /^(.+)\/thumbs2(.+)\/(.+)\/(.+)_t(\..+)$/i,
             replacements: ["$1/images2$2/$3/$4_o$5"]
@@ -102,6 +107,7 @@
         newImage.setAttribute(ATTR_ORIG_URL, originalUrl);
         newImage.src = originalUrl;
         newImage.style.display = "block";
+        newImage.classList.add('full-image-loader');
 
         if (attemptName) {
             newImage.setAttribute(ATTR_ATTEMP_IDX, attemptName);
