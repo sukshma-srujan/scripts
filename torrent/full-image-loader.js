@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.7.0
+// @version      1.8.0
 // @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @match        https://1337x.to/torrent/*
@@ -20,7 +20,6 @@
     const imageStyle = {
         display: "block",
         borderRadius: ".5rem",
-        minWidth: "90%",
         maxWidth: "100%",
         boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
         margin: "0 auto"
