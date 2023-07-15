@@ -12,15 +12,13 @@
     const loadingFailedImageStyle = {
         display: "block",
         borderRadius: ".5rem",
-        minWidth: "none",
-        maxWidth: "none",
         boxShadow: "",
         margin: "0 auto"
     };
     const loadedImageStyle = {
         display: "block",
         borderRadius: ".5rem",
-        maxHeight: '25rem',
+        maxWidth: '100%',
         boxShadow: "rgba(70, 70, 70, 0.75) 0px 0px 0.2rem",
         margin: "0 auto"
     };
