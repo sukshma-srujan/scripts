@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Piratebay Torrent Page Utilities
 // @namespace    http://tampermonkey.net/optimus-prime
-// @version      0.1
+// @version      1.0.0
 // @description  Various utilities for torrent description page on thepiratebay and its proxies
 // @author       Optimus Prime
 // @match        *://thepiratebay.org/description.php?id=*
