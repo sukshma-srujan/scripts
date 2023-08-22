@@ -1,11 +1,19 @@
 // ==UserScript==
 // @name         Image Series Loader
 // @namespace    http://tampermonkey.net/
-// @version      1.5.0
+// @version      1.6.0
 // @description  Load images on the page that are in a series.
 // @author       Optimus Prime
-// @match        https://1337x.to/torrent/*
-// @match        https://x1337x.ws/torrent/*
+// @match        *://*.1337x.to/*
+// @match        *://*.1337x.so/*
+// @match        *://*.1337x.st/*
+// @match        *://*.1337x.ws/*
+// @match        *://*.x1337x.ws/*
+// @match        *://*.1337x.eu/*
+// @match        *://*.1337x.se/*
+// @match        *://*.1337x.is/*
+// @match        *://*.1337x.gd/*
+// @match        *://l337xdarkkaqfwzntnfk5bmoaroivtl6xsbatabvlb52umg6v3ch44yd.onion/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=1337x.to
 // @grant        none
 // ==/UserScript==
@@ -64,6 +72,7 @@
         if (_g.currentCount >= _g.maxCount) {
             return;
         }
+        _g.currentCount++;
         const img = e.target;
         const baseUrl = img.src;
         const specName = img.getAttribute('data-spec-name');
