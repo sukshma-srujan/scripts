@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Torrent Page Utility
 // @namespace    https://github.com/optimus29
-// @version      1.4.0
+// @version      1.5.0
 // @description  Utilities for pages of a torrent website
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*$/
@@ -61,7 +61,7 @@
     }
 
     function changeStyle() {
-        const css = `.table-list td { font-size: 14px; }`;
+        const css = `.table-list td { font-size: 14px; } .manage-box + center { display: none; }`;
         const style = document.createElement('style');
         style.innerHTML = css;
         document.body.appendChild(style);
