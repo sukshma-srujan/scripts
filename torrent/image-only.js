@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Only
 // @namespace    https://github.com/optimus29
-// @version      1.1.2
+// @version      1.1.3
 // @description  Detect image and show only the image.
 // @author       Optimus Prime
 // @match        http://*/*
@@ -82,7 +82,8 @@
                 "img#soDaBug",
                 "#container > #image_details + img",
                 "center img#myImg",
-                "a > img.pic.img.img-responsive"
+                "a > img.pic.img.img-responsive",
+                "#full_image img#full_img"
             ];
 
             let imageElement;
