@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Piratebay Torrent Page Utilities
 // @namespace    http://tampermonkey.net/optimus-prime
-// @version      1.1.0
+// @version      1.2.0
 // @description  Various utilities for torrent description page on thepiratebay and its proxies
 // @author       Optimus Prime
 // @match        *://thepiratebay.org/description.php?id=*
@@ -32,6 +32,7 @@
     const linkWrapper = document.createElement("div");
     linkWrapper.classList.add("jk-section");
     linkWrapper.id = "linkSection";
+    const arr = [];
     for (const link of links) {
       const a = document.createElement("a");
       a.href = link;
@@ -39,6 +40,15 @@
       a.classList.add("jk-link", "jk-link-desc");
       a.setAttribute("target", "_blank");
       linkWrapper.appendChild(a);
+      arr.push(a);
+    }
+    if (arr.length > 1) {
+      const btnOpenAll = document.createElement("a");
+      btnOpenAll.href = "#";
+      btnOpenAll.addEventListener("click", (e) => arr.forEach(a => a.click()));
+      btnOpenAll.innerHTML = "Open All Links";
+      btnOpenAll.classList.add("jk-link", "jk-link-desc");
+      linkWrapper.appendChild(btnOpenAll);
     }
     descElem.appendChild(linkWrapper);
   }
