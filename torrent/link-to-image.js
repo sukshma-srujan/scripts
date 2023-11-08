@@ -5,6 +5,7 @@
 // @description  Link to image
 // @author       Optimus Prime
 // @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
+// @sandbox      JavaScript
 // ==/UserScript==
 
 (function() {
