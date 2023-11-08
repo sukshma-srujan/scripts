@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.8.0
+// @version      1.9.0
 // @description  Load full images from thumbnails on torrent description page.
 // @author       Optimus Prime
 // @match        https://1337x.to/torrent/*
