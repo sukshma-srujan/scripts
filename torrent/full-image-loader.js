@@ -6,6 +6,7 @@
 // @author       Optimus Prime
 // @match        https://1337x.to/torrent/*
 // @match        https://x1337x.ws/torrent/*
+// @sandbox      JavaScript
 // ==/UserScript==
 
 (function() {
