@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         1337x Full Page Content
 // @namespace    https://github.com/optimus29
-// @version      1.5.0
+// @version      1.6.0
 // @description  Make main content show in full width of page
 // @author       Optimus Prime
 // @match        *://*.1337x.to/*
@@ -14,6 +14,7 @@
 // @match        *://*.1337x.is/*
 // @match        *://*.1337x.gd/*
 // @match        *://l337xdarkkaqfwzntnfk5bmoaroivtl6xsbatabvlb52umg6v3ch44yd.onion/*
+// @sandbox      JavaScript
 // @grant        none
 // ==/UserScript==
 
