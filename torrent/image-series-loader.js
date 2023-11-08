@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Series Loader
 // @namespace    http://tampermonkey.net/
-// @version      1.6.0
+// @version      1.7.0
 // @description  Load images on the page that are in a series.
 // @author       Optimus Prime
 // @match        *://*.1337x.to/*
