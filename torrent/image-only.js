@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Image Only
 // @namespace    https://github.com/optimus29
-// @version      1.1.4
+// @version      1.2.0
 // @description  Detect image and show only the image.
 // @author       Optimus Prime
 // @match        http://*/*
