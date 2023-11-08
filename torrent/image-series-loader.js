@@ -15,6 +15,7 @@
 // @match        *://*.1337x.gd/*
 // @match        *://l337xdarkkaqfwzntnfk5bmoaroivtl6xsbatabvlb52umg6v3ch44yd.onion/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=1337x.to
+// @sandbox      JavaScript
 // @grant        none
 // ==/UserScript==
 
