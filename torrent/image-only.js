@@ -6,6 +6,7 @@
 // @author       Optimus Prime
 // @match        http://*/*
 // @match        https://*/*
+// @sandbox      JavaScript
 // ==/UserScript==
 
 (function () {
