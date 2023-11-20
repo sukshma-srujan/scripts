@@ -1,19 +1,19 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.10.0
+// @version      1.11.0
 // @description  Load full images from thumbnails or small images on torrent description page.
 // @author       Optimus Prime
-// @match        *://*.1337x.to/*
-// @match        *://*.1337x.so/*
-// @match        *://*.1337x.st/*
-// @match        *://*.1337x.ws/*
-// @match        *://*.x1337x.ws/*
-// @match        *://*.1337x.eu/*
-// @match        *://*.1337x.se/*
-// @match        *://*.1337x.is/*
-// @match        *://*.1337x.gd/*
-// @match        *://l337xdarkkaqfwzntnfk5bmoaroivtl6xsbatabvlb52umg6v3ch44yd.onion/*
+// @match        *://*.1337x.to/torrent/*
+// @match        *://*.1337x.so/torrent/*
+// @match        *://*.1337x.st/torrent/*
+// @match        *://*.1337x.ws/torrent/*
+// @match        *://*.x1337x.ws/torrent/*
+// @match        *://*.1337x.eu/torrent/*
+// @match        *://*.1337x.se/torrent/*
+// @match        *://*.1337x.is/torrent/*
+// @match        *://*.1337x.gd/torrent/*
+// @match        *://l337xdarkkaqfwzntnfk5bmoaroivtl6xsbatabvlb52umg6v3ch44yd.onion/torrent/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=1337x.to
 // @grant        none
 // ==/UserScript==
