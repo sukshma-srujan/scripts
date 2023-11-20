@@ -1,11 +1,19 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/jkbhu85
-// @version      1.12.0
+// @version      1.13.0
 // @description  Link to image
 // @author       Optimus Prime
-// @include      /^https?:\/\/(www.)?x?1337x.*/torrent/.*$/
-// @sandbox      JavaScript
+// @match        *://*.1337x.to/torrent/*
+// @match        *://*.1337x.so/torrent/*
+// @match        *://*.1337x.st/torrent/*
+// @match        *://*.1337x.ws/torrent/*
+// @match        *://*.x1337x.ws/torrent/*
+// @match        *://*.1337x.eu/torrent/*
+// @match        *://*.1337x.se/torrent/*
+// @match        *://*.1337x.is/torrent/*
+// @match        *://*.1337x.gd/torrent/*
+// @match        *://l337xdarkkaqfwzntnfk5bmoaroivtl6xsbatabvlb52umg6v3ch44yd.onion/torrent/*
 // ==/UserScript==
 
 (function() {
@@ -85,7 +93,7 @@
     const specs = [
         {
             name: "jpeg.html",
-            pattern: /^(.*)\/(ia|ib|y|i|x)-([a-z])\/(.*.jpe?g)(.html)$/i,
+            pattern: /^(.*)\/(ia|ib|y|i|x)-([a-z0-9])\/(.*.jpe?g)(.html)$/i,
             replacement: "$1/$3/$4"
         },
         {
