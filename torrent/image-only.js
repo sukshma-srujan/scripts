@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         Image Only
 // @namespace    https://github.com/optimus29
-// @version      1.2.0
+// @version      1.3.0
 // @description  Detect image and show only the image.
 // @author       Optimus Prime
 // @match        http://*/*
 // @match        https://*/*
-// @sandbox      JavaScript
 // ==/UserScript==
 
 (function () {
@@ -85,7 +84,8 @@
                 "center img#myImg",
                 "a > img.pic.img.img-responsive",
                 "#full_image img#full_img",
-                "#image-outer #main-image"
+                "#image-outer #main-image",
+                "center table tbody center a img"
             ];
 
             let imageElement;
