@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/optimus29
-// @version      1.11.0
+// @version      1.12.0
 // @description  Load full images from thumbnails or small images on torrent description page.
 // @author       Optimus Prime
 // @match        *://*.1337x.to/torrent/*
@@ -251,6 +251,7 @@
     imgAnchor.href = href;
     imgAnchor.innerHTML = href;
     imgAnchor.setAttribute("target", "_blank");
+    imgAnchor.classList.add("full-image-loader_link");
     applyStyle(imgAnchor, imageLinkStyle);
     parent.appendChild(imgAnchor);
   }
