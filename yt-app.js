@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JK YT App
 // @namespace    http://tampermonkey.net/
-// @version      0.0.2
+// @version      0.0.3
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       You
 // @match        https://www.youtube.com/
@@ -25,7 +25,7 @@
 
   const addMyStyles = function() {
     const css = `
-    .jk-ytd-overlay {
+    .jk-ytd-video-overlay {
       position: absolute;
       top: 0;
       right: 0;
@@ -85,15 +85,14 @@
 
       applyStyle(ytApp.iframe, iframeStyle);
       ytApp.wrapper.appendChild(ytApp.iframe);
-      ytApp.wrapper.classList("jk-yt-wrapper");
+      ytApp.wrapper.classList.add("jk-yt-wrapper");
       document.body.appendChild(ytApp.wrapper);
 
       const closeBtn = document.createElement("button");
       closeBtn.classList.add("jk-yt-close-btn");
       closeBtn.setAttribute("type", "button");
       closeBtn.addEventListener("click", () => ytApp.hide());
-      closeBtn.innerHTML = "x";
-      applyStyle(closeBtn, closeBtnStyle);
+      closeBtn.innerHTML = "X";
 
       ytApp.wrapper.appendChild(closeBtn);
     },
@@ -154,7 +153,7 @@ ytd-rich-item-renderer {
     elem /* an ytd-rich-item-renderer element*/
   ) {
     const overlay = document.createElement('div');
-    overlay.classList.add('jk-ytd-overlay');
+    overlay.classList.add('jk-ytd-video-overlay');
     overlay.setAttribute('data-overlay', "jk-overlay");
     overlay.onclick = window.enableYtApp;
     elem.appendChild(overlay);
