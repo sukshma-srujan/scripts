@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JK YT App
 // @namespace    http://tampermonkey.net/
-// @version      0.0.4
+// @version      0.0.5
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       You
 // @match        https://www.youtube.com/
@@ -25,6 +25,10 @@
 
   const addMyStyles = function() {
     const css = `
+    ytd-rich-item-renderer {
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 1rem;
+    }
     .jk-ytd-video-overlay {
       position: absolute;
       top: 0;
@@ -32,7 +36,6 @@
       bottom: 0;
       left: 0;
       background: transparent;
-      border: 1px solid rgba(255,0,0,.2);
     }
     .jk-yt-wrapper {
       position: fixed;
