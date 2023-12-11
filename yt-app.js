@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JK YT App
 // @namespace    http://tampermonkey.net/
-// @version      0.0.3
+// @version      0.0.4
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       You
 // @match        https://www.youtube.com/
@@ -56,7 +56,7 @@
       margin: 0px;
       padding: 1rem;
       line-height: 1;
-      border-radius: 100%;
+      border-radius: .5rem;
       background: rgba(255, 255, 255, 0.3);
       width: 1rem;
       height: 1rem;
