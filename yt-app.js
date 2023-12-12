@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         JK YT App
 // @namespace    http://tampermonkey.net/
-// @version      0.0.5
+// @version      0.0.6
 // @description  Add native app like capability to have YouTube video play while browsing the page.
-// @author       You
+// @author       Jitendra Kumar
 // @match        https://www.youtube.com/
+// @match        https://www.youtube.com/@*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
@@ -12,6 +13,7 @@
 (function () {
   'use strict';
   const APP_NAME = "JK_YT_APP";
+  const VIDEO_ELEMENTS = "ytd-video-renderer,ytd-grid-video-renderer,ytd-rich-item-renderer,ytd-reel-item-renderer";
 
   /* Utility methods */
   const log = function (str) {
@@ -25,11 +27,12 @@
 
   const addMyStyles = function() {
     const css = `
-    ytd-rich-item-renderer {
+    .jk-yt-video {
       border: 1px solid rgba(255,255,255,0.07);
       border-radius: 1rem;
+      box-sizing: border-box;
     }
-    .jk-ytd-video-overlay {
+    .jk-yt-video-overlay {
       position: absolute;
       top: 0;
       right: 0;
@@ -47,7 +50,6 @@
       background: black;
       z-index: 10000;
       box-sizing: border-box;
-      padding-top: 1rem;
       box-shadow: 0 0 .5rem rgba(255, 255, 255, 0.25);
       border-radius: .5rem;
     }
@@ -122,7 +124,7 @@
   from { opacity: 0.8; }
   to { opacity: 1; }
 }
-ytd-rich-item-renderer {
+${VIDEO_ELEMENTS}{
   animation-duration: 0.25s;
   animation-name: nodeInserted;
   position: relative;
@@ -155,12 +157,16 @@ ytd-rich-item-renderer {
   const prepareYoutubeVideo = function (
     elem /* an ytd-rich-item-renderer element*/
   ) {
+    if (elem.getAttribute("data-jk-yt-app")) {
+      return;
+    }
     const overlay = document.createElement('div');
-    overlay.classList.add('jk-ytd-video-overlay');
+    overlay.classList.add('jk-yt-video-overlay');
     overlay.setAttribute('data-overlay', "jk-overlay");
     overlay.onclick = window.enableYtApp;
     elem.appendChild(overlay);
     elem.setAttribute("data-jk-yt-app", "ready");
+    elem.classList.add("jk-yt-video");
   };
 
   const nodeInsertListener = function (event) {
@@ -174,7 +180,7 @@ ytd-rich-item-renderer {
     ytApp.init();
 
     document
-      .querySelectorAll("ytd-rich-item-renderer")
+      .querySelectorAll(VIDEO_ELEMENTS)
       .forEach((e) => prepareYoutubeVideo(e));
     detectNewVideos();
     addMyStyles();
