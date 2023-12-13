@@ -93,7 +93,7 @@
   const specs = [
     {
       name: "jpeg.html",
-      pattern: /^(.*)\/(ia|ib|y|i|x)-([a-z0-9])\/(.*.jpe?g)(.html)$/i,
+      pattern: /^(.*)\/(ia|ib|y|i|x|n)-([a-z0-9])\/(.*.jpe?g)(.html)$/i,
       replacement: "$1/$3/$4"
     },
     {
