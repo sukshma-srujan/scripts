@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         JK YT App
-// @namespace    http://tampermonkey.net/
-// @version      0.0.7
+// @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
+// @namespace    https://github.com/jkbhu85
+// @version      0.0.8
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
 // @match        https://www.youtube.com/@*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
+// @noframes
 // ==/UserScript==
 
 (function () {
