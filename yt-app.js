@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JK YT App
 // @namespace    http://tampermonkey.net/
-// @version      0.0.6
+// @version      0.0.7
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -40,6 +40,25 @@
       left: 0;
       background: transparent;
     }
+    .jk-yt-video-overlay-btn {
+      position: absolute;
+      display: flex;
+      flex-wrap: nowrap;
+      justify-content: center;
+      align-items: center;
+      bottom: 0;
+      right: 0;
+      width: 5vh;
+      height: 5vh;
+      font-size: 2vh;
+      font-weight: bold;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.5);
+      color: black;
+      cursor: pointer;
+      text-decoration: none;
+      border-radius: 100%;
+    }
     .jk-yt-wrapper {
       position: fixed;
       top: 1rem;
@@ -53,25 +72,55 @@
       box-shadow: 0 0 .5rem rgba(255, 255, 255, 0.25);
       border-radius: .5rem;
     }
-    .jk-yt-close-btn {
+    .jk-yt-wrapper-sm {
+      top: initial;
+      left: initial;
+      width: 640px;
+      height: 360px;
+    }
+    .jk-yt-btn-bar {
       position: absolute;
       right: 0px;
       top: 0px;
+    }
+    .jk-yt-btn {
       border: 0px;
       margin: 0px;
-      padding: 1rem;
+      padding: .75rem;
+      border-radius: 100%;
+      background: rgba(255, 255, 255, 0.6);
+      font-size: 1rem;
       line-height: 1;
-      border-radius: .5rem;
-      background: rgba(255, 255, 255, 0.3);
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+      float: left;
+      line-height: 1;
+      text-transform: uppercase;
+      box-sizing: content-box;
       width: 1rem;
       height: 1rem;
-      box-sizing: content-box;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
     }
-    .jk-yt-close-btn:hover {
-      background: rgba(255, 255, 255, 0.4);
+    .jk-yt-btn + .jk-yt-btn {
+      margin-left: .25rem;
+    }
+    .jk-yt-btn:hover {
+      background: rgba(255, 255, 255, 0.7);
+    }
+    .jk-yt-hide {
+      display: none;
+    }
+    .jk-yt-iframe {
+      width: 100%;
+      height: 100%;
+    }
+    .jk-shrink-video {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 10000;
     }
     `;
     const style = document.createElement('style');
@@ -82,24 +131,39 @@
   const ytApp = {
     wrapper: document.createElement("div"),
     iframe: document.createElement("iframe"),
+    btns: [],
     init: function () {
-      const iframeStyle = {
-        width: "100%",
-        height: "100%"
-      };
-
-      applyStyle(ytApp.iframe, iframeStyle);
+      ytApp.iframe.classList.add("jk-yt-iframe");
       ytApp.wrapper.appendChild(ytApp.iframe);
       ytApp.wrapper.classList.add("jk-yt-wrapper");
       document.body.appendChild(ytApp.wrapper);
 
+      const shrinkBtn = document.createElement("button");
+      shrinkBtn.classList.add("jk-yt-btn", "jk-yt-shrink-btn");
+      shrinkBtn.setAttribute("type", "button");
+      shrinkBtn.addEventListener("click", () => ytApp.shrink());
+      shrinkBtn.innerHTML = "S";
+      ytApp.btns.push(shrinkBtn);
+
+      const expandBtn = document.createElement("button");
+      expandBtn.classList.add("jk-yt-btn", "jk-yt-expand-btn", "jk-yt-hide");
+      expandBtn.setAttribute("type", "button");
+      expandBtn.addEventListener("click", () => ytApp.expand());
+      expandBtn.innerHTML = "E";
+      ytApp.btns.push(expandBtn);
+
       const closeBtn = document.createElement("button");
-      closeBtn.classList.add("jk-yt-close-btn");
+      closeBtn.classList.add("jk-yt-btn", "jk-yt-close-btn");
       closeBtn.setAttribute("type", "button");
       closeBtn.addEventListener("click", () => ytApp.hide());
       closeBtn.innerHTML = "X";
+      ytApp.btns.push(closeBtn);
 
-      ytApp.wrapper.appendChild(closeBtn);
+      const btnBar = document.createElement("div");
+      btnBar.classList.add("jk-yt-btn-bar");
+
+      ytApp.btns.forEach(btn => btnBar.appendChild(btn));
+      ytApp.wrapper.appendChild(btnBar);
     },
     show: function (url) {
       ytApp.iframe.src = url;
@@ -144,6 +208,9 @@ ${VIDEO_ELEMENTS}{
   };
 
   window.enableYtApp = function(event) {
+    if (!event.target.classList.contains("jk-yt-video-overlay")) {
+      return;
+    }
     event.preventDefault();
     event.stopImmediatePropagation();
     const videoUrl = extractVideoUrl(event.target.parentNode);
@@ -154,19 +221,27 @@ ${VIDEO_ELEMENTS}{
     ytApp.show(videoUrl);
   }
 
-  const prepareYoutubeVideo = function (
-    elem /* an ytd-rich-item-renderer element*/
-  ) {
-    if (elem.getAttribute("data-jk-yt-app")) {
+  const prepareYoutubeVideo = function (video) {
+    if (video.getAttribute("data-jk-yt-app")) {
       return;
     }
     const overlay = document.createElement('div');
     overlay.classList.add('jk-yt-video-overlay');
     overlay.setAttribute('data-overlay', "jk-overlay");
     overlay.onclick = window.enableYtApp;
-    elem.appendChild(overlay);
-    elem.setAttribute("data-jk-yt-app", "ready");
-    elem.classList.add("jk-yt-video");
+    const videoUrl = extractVideoUrl(video);
+    if (videoUrl) {
+      const anchor = document.createElement("a");
+      anchor.href = videoUrl;
+      anchor.setAttribute("target", "_blank");
+      anchor.classList.add("jk-yt-video-overlay-btn");
+      anchor.innerHTML = "N";
+      overlay.appendChild(anchor);
+    }
+
+    video.appendChild(overlay);
+    video.setAttribute("data-jk-yt-app", "ready");
+    video.classList.add("jk-yt-video");
   };
 
   const nodeInsertListener = function (event) {
