@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.0.8
+// @version      0.0.9
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -50,10 +50,11 @@
       align-items: center;
       bottom: 0;
       right: 0;
-      width: 5vh;
-      height: 5vh;
-      font-size: 2vh;
+      width: 2.5vw;
+      height: 2.5vw;
+      font-size: 1vw;
       font-weight: bold;
+      font-family: inherit;
       text-transform: uppercase;
       background: rgba(255,255,255,0.5);
       color: black;
