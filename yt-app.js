@@ -2,14 +2,14 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.0.9
+// @version      0.0.10
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
 // @match        https://www.youtube.com/@*
+// @match        https://www.youtube.com/watch*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
-// @noframes
 // ==/UserScript==
 
 (function () {
@@ -262,8 +262,26 @@ ${VIDEO_ELEMENTS}{
       .forEach((e) => prepareYoutubeVideo(e));
     detectNewVideos();
     addMyStyles();
+    window.onmessage = function(e) {
+      if(e.data === 'YT_APP_CLOSE') {
+        ytApp.hide();
+      }
+    }
     log("the game has begun. enjoy!");
   };
 
-  letTheGameBegin();
+  const enableEscapeInIframe = function() {
+    window.addEventListener("keyup", (e) => {
+      if (e.key === 'Escape') {
+        window.top.postMessage('YT_APP_CLOSE', '*');
+      }
+    });
+  }
+
+  if (window.self === window.parent) {
+    letTheGameBegin();
+  }
+  if (window.self != window.parent) {
+    enableEscapeInIframe();
+  }
 })();
