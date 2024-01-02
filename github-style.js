@@ -60,10 +60,13 @@ body {
   font-family: var(--jk-ff);
 }
 pre,
+code,
 .commit-ref,
 .blob-code-inner,
 .text-mono,
-.react-code-text {
+.react-code-text,
+.react-code-view-edit,
+.ͼ5 .cm-content{
   font-family: var(--jk-mff) !important;
 }
 `.trim();
