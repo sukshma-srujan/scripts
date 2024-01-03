@@ -2,10 +2,11 @@
 // @name         Wikipedia UI
 // @namespace    https://github.com/jkbhu85
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/wikipedia-ui.js
-// @version      1.2.0
+// @version      1.3.0
 // @description  Change font, font size and appearance of top of page.
 // @author       Jitendra Kumar
 // @match        https://*.wikipedia.org/*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=wikipedia.org
 // @grant        none
 // ==/UserScript==
 
