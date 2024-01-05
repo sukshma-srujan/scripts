@@ -2,7 +2,7 @@
 // @name         Video Style
 // @namespace    https://github.com/jkbhu85
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/video-style.js
-// @version      1.0.0
+// @version      1.1.0
 // @description  Video style
 // @author       Jitendra Kumar
 // @match        https://*/*
@@ -33,6 +33,11 @@ body {
 .mozaique {
   margin-left: -.25rem;
   margin-right: -.25rem;
+  display: flex;
+  flex-wrap: wrap;
+}
+.mozaique > .clearfix {
+  display: none;
 }
 .thumb-block {
   text-align: left;
