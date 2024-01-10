@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Link to Image
 // @namespace    https://github.com/jkbhu85
-// @version      1.14.0
+// @version      1.15.0
 // @description  Link to image
 // @author       Optimus Prime
 // @match        *://*.1337x.to/torrent/*
@@ -93,7 +93,7 @@
   const specs = [
     {
       name: "jpeg.html",
-      pattern: /^(.*)\/(ia|ib|y|i|x|n)-([a-z0-9])\/(.*.jpe?g)(.html)$/i,
+      pattern: /^(.*)\/(i?[a-zA-Z])-([a-z0-9])\/(.*.jpe?g)(.html)$/i,
       replacement: "$1/$3/$4"
     },
     {
