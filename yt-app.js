@@ -2,12 +2,14 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.0.10
+// @version      0.0.11
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
 // @match        https://www.youtube.com/@*
 // @match        https://www.youtube.com/watch*
+// @match        https://www.youtube.com/shorts/*
+// @match        https://www.youtube.com/results*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
@@ -206,7 +208,7 @@ ${VIDEO_ELEMENTS}{
   const extractVideoUrl = function (
     elem /* an ytd-rich-item-renderer element*/
   ) {
-    const a = elem.querySelector("ytd-thumbnail a");
+    const a = elem.querySelector("ytd-thumbnail a#thumbnail");
     return a === null ? null : a.href;
   };
 
@@ -277,11 +279,60 @@ ${VIDEO_ELEMENTS}{
       }
     });
   }
+  const enableShrinkExpand = function() {
+    const max = document.createElement("button");
+    const min = document.createElement("button");
+    const b = [max, min];
+
+    const btnBar = document.createElement("div");
+    applyStyle(btnBar, {
+      position: "fixed",
+      bottom: "0",
+      left: "0",
+      right: "0",
+      zIndex: "100000",
+      borderTop: "1px solid #ffffff22",
+      background: "#ffffff22"
+    });
+    for (let btn of b) {
+      btnBar.appendChild(btn);
+      btn.setAttribute("type", "button");
+      applyStyle(btn, {
+        margin: "1rem",
+      });
+    }
+    max.innerHTML = "Max";
+    min.innerHTML = "Min";
+    document.body.appendChild(btnBar);
+    const style = document.createElement("style");
+    style.innerHTML = `
+    .max-video {
+      position: fixed !important;
+      top: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      left: 0 !important;
+    }
+    `;
+    document.body.appendChild(style);
+    max.addEventListener("click", (e) => {
+      log("Max clicked");
+      const a = document.querySelector("video.video-stream.html5-main-video");
+      a.classList.add("max-video");
+    });
+    min.addEventListener("click", (e) => {
+      log("Min clicked");
+      const a = document.querySelector("video.video-stream.html5-main-video");
+      a.classList.remove("max-video");
+    });
+  }
 
   if (window.self === window.parent) {
     letTheGameBegin();
   }
   if (window.self != window.parent) {
+    log("Escape to close the popup window.");
     enableEscapeInIframe();
+    //enableShrinkExpand();
   }
 })();
