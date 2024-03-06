@@ -2,7 +2,7 @@
 // @name         Github Style
 // @namespace    https://github.com/jkbhu85
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/github-style.js
-// @version      1.3.0
+// @version      1.4.0
 // @description  Github Style
 // @author       Jitendra Kumar
 // @match        https://github.com/*
@@ -74,6 +74,10 @@ code,
   font-family: var(--jk-mff) !important;
 }
 `.trim();
+    const cspMeta = document.createElement("meta");
+    cspMeta.setAttribute("http-equiv", "Content-Security-Policy");
+    cspMeta.setAttribute("content", "style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;");
+    document.head.appendChild(cspMeta);
     const style = document.createElement('style');
     style.innerHTML = css;
     style.setAttribute("title", "jk_github_style");
