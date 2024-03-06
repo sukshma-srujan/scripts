@@ -2,7 +2,7 @@
 // @name         Github Style
 // @namespace    https://github.com/jkbhu85
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/github-style.js
-// @version      1.2.0
+// @version      1.3.0
 // @description  Github Style
 // @author       Jitendra Kumar
 // @match        https://github.com/*
@@ -28,18 +28,20 @@
   const cssFontStyleWindows = `
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,200;0,400;0,600;1,400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap');
 :root {
-  --jk-ff: "Roboto", sans-serif;
-  --jk-mff: "Jetbrains Mono", ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  --jk-ff: "Roboto", "Noto Sans Devanagari", sans-serif;
+  --jk-mff: "Jetbrains Mono", "Noto Sans Devanagari", ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
 }
 `.trim();
 
   const cssFontStyleMac = `
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,200;0,400;0,600;1,400&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@100..900&display=swap');
 :root {
-  --jk-ff: "IBM Plex Sans", sans-serif;
-  --jk-mff: "Jetbrains Mono", ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  --jk-ff: "IBM Plex Sans", "Noto Sans Devanagari", sans-serif;
+  --jk-mff: "Jetbrains Mono", "Noto Sans Devanagari", ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
 }
 `.trim();
 
@@ -66,7 +68,9 @@ code,
 .text-mono,
 .react-code-text,
 .react-code-view-edit,
-.ͼ5 .cm-content{
+.ͼ5 .cm-content,
+.react-blob-print-hide
+{
   font-family: var(--jk-mff) !important;
 }
 `.trim();
