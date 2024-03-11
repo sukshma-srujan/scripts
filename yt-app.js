@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.0.11
+// @version      0.0.12
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -20,10 +20,22 @@
   const VIDEO_ELEMENTS = "ytd-video-renderer,ytd-grid-video-renderer,ytd-rich-item-renderer,ytd-reel-item-renderer";
 
   /* Utility methods */
-  const log = function (str) {
+  const by = function _by(selector) {
+    if (!selector) return null;
+    return document.querySelector(selector);
+  }
+  const byAll = function _byAll(selector) {
+    if (!selector) return null;
+    return document.querySelectorAll(selector);
+  }
+  const byId = function _byId(selector) {
+    if (!selector) return null;
+    return by(`#${selector}`);
+  }
+  const log = function _log(str) {
     console.log(APP_NAME, str);
   };
-  const applyStyle = function (elem, style) {
+  const applyStyle = function _applyStyle(elem, style) {
     for (let prop in style) {
       elem.style[prop] = style[prop];
     }
@@ -32,7 +44,7 @@
   const addMyStyles = function() {
     const css = `
     .jk-yt-video {
-      border: 1px solid rgba(255,255,255,0.07);
+      border: 0px solid rgba(255,255,255,0.07);
       border-radius: 1rem;
       box-sizing: border-box;
     }
@@ -66,16 +78,16 @@
     }
     .jk-yt-wrapper {
       position: fixed;
-      top: 1rem;
-      right: 1rem;
-      bottom: 1rem;
-      left: 1rem;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       display: none;
       background: black;
       z-index: 10000;
       box-sizing: border-box;
       box-shadow: 0 0 .5rem rgba(255, 255, 255, 0.25);
-      border-radius: .5rem;
+      border-radius: 0;
     }
     .jk-yt-wrapper-sm {
       top: initial;
@@ -144,7 +156,7 @@
       document.body.appendChild(ytApp.wrapper);
 
       const shrinkBtn = document.createElement("button");
-      shrinkBtn.classList.add("jk-yt-btn", "jk-yt-shrink-btn");
+      shrinkBtn.classList.add("jk-yt-btn", "jk-yt-shrink-btn", "jk-yt-hide");
       shrinkBtn.setAttribute("type", "button");
       shrinkBtn.addEventListener("click", () => ytApp.shrink());
       shrinkBtn.innerHTML = "S";
@@ -206,7 +218,7 @@ ${VIDEO_ELEMENTS}{
   };
 
   const extractVideoUrl = function (
-    elem /* an ytd-rich-item-renderer element*/
+  elem /* an ytd-rich-item-renderer element*/
   ) {
     const a = elem.querySelector("ytd-thumbnail a#thumbnail");
     return a === null ? null : a.href;
@@ -274,7 +286,7 @@ ${VIDEO_ELEMENTS}{
 
   const enableEscapeInIframe = function() {
     window.addEventListener("keyup", (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' && !window.fullScreen) {
         window.top.postMessage('YT_APP_CLOSE', '*');
       }
     });
@@ -326,6 +338,39 @@ ${VIDEO_ELEMENTS}{
       a.classList.remove("max-video");
     });
   }
+  const setCountryCode = function _setCountryCode() {
+    console.log('setting country code');
+
+    function changeName() {
+      let elem;
+      if ((elem = by("#logo #country-code"))) {
+        elem.innerHTML = 'भारत';
+      }
+
+      const svg = document.querySelector("#logo svg svg");
+      if (svg) {
+        const enNameElem = svg.querySelector("g:last-child");
+        if (enNameElem) {
+          enNameElem.style.display = "none";
+
+          const hiNameGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          const hiNameText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          hiNameGroup.appendChild(hiNameText);
+          hiNameText.innerHTML = 'विड्योमंच';
+          applyStyle(hiNameText, {
+            fontFamily: "inherit",
+            fontSize: "1.45rem",
+            fontWeight: "bold"
+          });
+          hiNameText.setAttribute("x", 32);
+          hiNameText.setAttribute("y", 16);
+          svg.appendChild(hiNameGroup);
+        }
+      }
+    }
+    changeName();
+    setTimeout(() => changeName(), 3000);
+  }
 
   if (window.self === window.parent) {
     letTheGameBegin();
@@ -335,4 +380,5 @@ ${VIDEO_ELEMENTS}{
     enableEscapeInIframe();
     //enableShrinkExpand();
   }
+  setCountryCode();
 })();
