@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.0.12
+// @version      0.1.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -130,6 +130,8 @@
     .jk-yt-iframe {
       width: 100%;
       height: 100%;
+      box-sizing: border-box;
+      border: 1px solid #795548;
     }
     .jk-shrink-video {
       position: fixed;
