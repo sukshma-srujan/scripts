@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.2.0
+// @version      0.3.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -382,12 +382,18 @@ ${VIDEO_ELEMENTS}{
     enableEscapeInIframe();
     //enableShrinkExpand();
   }
-  setCountryCode();
+  try {
+    setCountryCode();
+  } catch (e) {
+    console.err(e);
+  }
 
+  log("jkYtVideoInfoHide");
   // enable video info visibility toggle
-  (function jkYtVideoInfoHide() {
+  const jkYtVideoInfoHide = function _jkYtVideoInfoHide() {
     if (location.pathname != "/watch") {
-      return;
+      log("jkYtVideoInfoHide, not on video watch page");
+      return true;
     }
     const jkdiv = document.createElement("div");
     jkdiv.innerHTML = `
@@ -420,13 +426,14 @@ ${VIDEO_ELEMENTS}{
     aria-disabled="false"
     style="touch-action: pan-y"
     id="videoInfoToggleButton"
+    checked=""
     >
     <div class="toggle-container style-scope tp-yt-paper-toggle-button"></div>
   </tp-yt-paper-toggle-button>
   </div>`;
     const aboveTheFold = document.querySelector("#above-the-fold");
     if (!aboveTheFold) {
-      return;
+      return false;
     }
     const jkmeta = aboveTheFold.parentElement;
     jkmeta.appendChild(jkdiv);
@@ -444,7 +451,23 @@ ${VIDEO_ELEMENTS}{
       console.log("video info hide checked", isChecked);
       setVideoInfoHidden(isChecked);
     });
-  })();
+    log("jkYtVideoInfoHide done!");
+    return true;
+  };
+  let jkVideoInfoHideRetryCount = 4;
+  const jkVideoInfoHideRetry = function _jkVideoInfoHideRetry() {
+    if(!jkVideoInfoHideRetryCount) {
+      log('Could not setup Video hide');
+      return;
+    }
+    jkVideoInfoHideRetryCount--;
+    if (jkYtVideoInfoHide()) {
+      return;
+    }
+    setTimeout(() => jkVideoInfoHideRetry(), 3000);
+  }
+
+  jkVideoInfoHideRetry();
 
   const cssFutureUse =
 `
