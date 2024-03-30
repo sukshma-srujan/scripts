@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.3.0
+// @version      0.3.1
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -445,12 +445,15 @@ ${VIDEO_ELEMENTS}{
     };
 
     const toggleBtn = document.querySelector("#videoInfoToggleButton");
-    toggleBtn.addEventListener("click", (e) => {
+    const handleVideoInfoHideClick = function _handleVideoInfoHideClick() {
       const checked = toggleBtn.getAttribute("checked");
       const isChecked = checked === "";
       console.log("video info hide checked", isChecked);
       setVideoInfoHidden(isChecked);
-    });
+    }
+
+    toggleBtn.addEventListener("click", (e) => handleVideoInfoHideClick());
+    handleVideoInfoHideClick();
     log("jkYtVideoInfoHide done!");
     return true;
   };
