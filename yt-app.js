@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.1.0
+// @version      0.2.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -383,6 +383,68 @@ ${VIDEO_ELEMENTS}{
     //enableShrinkExpand();
   }
   setCountryCode();
+
+  // enable video info visibility toggle
+  (function jkYtVideoInfoHide() {
+    if (location.pathname != "/watch") {
+      return;
+    }
+    const jkdiv = document.createElement("div");
+    jkdiv.innerHTML = `
+  <style>
+  #videoInfoToggleContainer {
+  display: flex;
+  -moz-box-orient: horizontal;
+  -moz-box-direction: normal;
+  flex-direction: row;
+  -moz-box-align: center;
+  align-items: center;
+  margin-top: 1rem;
+  opacity: .5;
+  }
+  .jk-yt-hide-video-info {
+  visibility: hidden !important;
+  }
+  </style>
+  <div id="videoInfoToggleContainer" class="style-scope ytd-toggle-item-renderer">
+  <div id="caption" class="style-scope ytd-toggle-item-renderer">
+    Video info hidden
+  </div>
+  <tp-yt-paper-toggle-button
+    noink=""
+    class="style-scope ytd-toggle-item-renderer"
+    role="button"
+    aria-pressed="false"
+    tabindex="0"
+    toggles=""
+    aria-disabled="false"
+    style="touch-action: pan-y"
+    id="videoInfoToggleButton"
+    >
+    <div class="toggle-container style-scope tp-yt-paper-toggle-button"></div>
+  </tp-yt-paper-toggle-button>
+  </div>`;
+    const aboveTheFold = document.querySelector("#above-the-fold");
+    if (!aboveTheFold) {
+      return;
+    }
+    const jkmeta = aboveTheFold.parentElement;
+    jkmeta.appendChild(jkdiv);
+
+    const setVideoInfoHidden = function _setVideoInfoHidden(hidden) {
+      const hideClassName = "jk-yt-hide-video-info";
+      if (hidden) aboveTheFold.classList.add(hideClassName);
+      else aboveTheFold.classList.remove(hideClassName);
+    };
+
+    const toggleBtn = document.querySelector("#videoInfoToggleButton");
+    toggleBtn.addEventListener("click", (e) => {
+      const checked = toggleBtn.getAttribute("checked");
+      const isChecked = checked === "";
+      console.log("video info hide checked", isChecked);
+      setVideoInfoHidden(isChecked);
+    });
+  })();
 
   const cssFutureUse =
 `
