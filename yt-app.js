@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.3.1
+// @version      0.3.2
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -395,6 +395,10 @@ ${VIDEO_ELEMENTS}{
       log("jkYtVideoInfoHide, not on video watch page");
       return true;
     }
+    const aboveTheFold = document.querySelector("#above-the-fold");
+    if (!aboveTheFold) {
+      return false;
+    }
     const jkdiv = document.createElement("div");
     jkdiv.innerHTML = `
   <style>
@@ -431,10 +435,6 @@ ${VIDEO_ELEMENTS}{
     <div class="toggle-container style-scope tp-yt-paper-toggle-button"></div>
   </tp-yt-paper-toggle-button>
   </div>`;
-    const aboveTheFold = document.querySelector("#above-the-fold");
-    if (!aboveTheFold) {
-      return false;
-    }
     const jkmeta = aboveTheFold.parentElement;
     jkmeta.appendChild(jkdiv);
 
@@ -457,7 +457,7 @@ ${VIDEO_ELEMENTS}{
     log("jkYtVideoInfoHide done!");
     return true;
   };
-  let jkVideoInfoHideRetryCount = 4;
+  let jkVideoInfoHideRetryCount = 12;
   const jkVideoInfoHideRetry = function _jkVideoInfoHideRetry() {
     if(!jkVideoInfoHideRetryCount) {
       log('Could not setup Video hide');
@@ -467,7 +467,7 @@ ${VIDEO_ELEMENTS}{
     if (jkYtVideoInfoHide()) {
       return;
     }
-    setTimeout(() => jkVideoInfoHideRetry(), 3000);
+    setTimeout(() => jkVideoInfoHideRetry(), 1000);
   }
 
   jkVideoInfoHideRetry();
