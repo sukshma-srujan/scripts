@@ -383,4 +383,27 @@ ${VIDEO_ELEMENTS}{
     //enableShrinkExpand();
   }
   setCountryCode();
+
+  const cssFutureUse =
+`
+/* hide video title */
+#title {
+  visibility: hidden !important;
+}
+
+/* hide channel info */
+#owner.ytd-watch-metadata {
+  visibility: hidden !important;
+}
+
+/* hide buttons */
+#actions.ytd-watch-metadata {
+  visibility: hidden !important;
+}
+
+/* hide video description */
+#description.ytd-watch-metadata {
+  visibility: hidden !important;
+}
+`;
 })();
