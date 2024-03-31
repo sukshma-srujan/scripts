@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.4.0
+// @version      0.4.1
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -473,6 +473,10 @@ ${VIDEO_ELEMENTS}{
   jkVideoInfoHideRetry();
 
   const verticallyCenterVideo = function _verticallyCenterVideo() {
+    if (location.pathname != "/watch") {
+      log("verticallyCenterVideo, not on video watch page");
+      return;
+    }
     const video = document.querySelector("#ytd-player");
     if (video) {
       const r = window.innerHeight - video.clientHeight;
