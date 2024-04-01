@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.4.2
+// @version      0.4.3
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -341,7 +341,7 @@ ${VIDEO_ELEMENTS}{
     });
   }
   const setCountryCode = function _setCountryCode() {
-    console.log('setting country code');
+    log('setting country code');
 
     function changeName() {
       let elem;
@@ -388,11 +388,9 @@ ${VIDEO_ELEMENTS}{
     console.err(e);
   }
 
-  log("jkYtVideoInfoHide");
   // enable video info visibility toggle
   const jkYtVideoInfoHide = function _jkYtVideoInfoHide() {
     if (location.pathname != "/watch") {
-      log("jkYtVideoInfoHide, not on video watch page");
       return true;
     }
     const aboveTheFold = document.querySelector("#above-the-fold");
@@ -448,19 +446,19 @@ ${VIDEO_ELEMENTS}{
     const handleVideoInfoHideClick = function _handleVideoInfoHideClick() {
       const checked = toggleBtn.getAttribute("checked");
       const isChecked = checked === "";
-      console.log("video info hide checked", isChecked);
+      log("video info hide checked" + isChecked);
       setVideoInfoHidden(isChecked);
     }
 
     toggleBtn.addEventListener("click", (e) => handleVideoInfoHideClick());
     handleVideoInfoHideClick();
-    log("jkYtVideoInfoHide done!");
+    log("Video info show/hide applied");
     return true;
   };
   let jkVideoInfoHideRetryCount = 12;
   const jkVideoInfoHideRetry = function _jkVideoInfoHideRetry() {
     if(!jkVideoInfoHideRetryCount) {
-      log('Could not setup Video hide');
+      log('Could not setup video info hide');
       return;
     }
     jkVideoInfoHideRetryCount--;
@@ -472,25 +470,37 @@ ${VIDEO_ELEMENTS}{
 
   jkVideoInfoHideRetry();
 
+  let verticalCenterVideoAttemptCounter = 12;
   const verticallyCenterVideo = function _verticallyCenterVideo() {
     if (location.pathname != "/watch") {
-      log("verticallyCenterVideo, not on video watch page");
+      log("verticallyCenterVideo not on video watch page");
       return;
     }
-    // this feature is not working properly.
-    // though, the video is centering vertically,
-    // the video controls are not working properly.
-    // The controls are going out of focus, due to
-    // some positioning issue.
-    const video = document.querySelector("#ytd-player");
-    if (video) {
+
+    const masthead = document.querySelector("#masthead-container");
+    const video = document.querySelector("#player");
+
+    if (video && masthead) {
       const r = window.innerHeight - video.clientHeight;
       const rect = video.getBoundingClientRect();
       const marginTop = r / 2 - rect.top;
       video.style.marginTop = marginTop + "px";
+
+
+      if (window.self != window.parent) {
+        log("verticallyCenterVideo in iframe");
+        masthead.style.visibility = "hidden";
+        return;
+      }
+      log("verticallyCenterVideo applied");
+    } else {
+      if (verticalCenterVideoAttemptCounter > 0) {
+        setTimeout(() => verticallyCenterVideo(), 1000);
+      }
     }
+    verticalCenterVideoAttemptCounter--;
   }
-  //verticallyCenterVideo();
+  verticallyCenterVideo();
 
   const cssFutureUse =
 `
