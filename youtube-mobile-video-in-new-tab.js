@@ -1,18 +1,25 @@
 // ==UserScript==
-// @name         Youtube Utilities
-// @namespace    http://tampermonkey.net/
-// @version      1.5.0
-// @description  Open a video in a new tab in mobile youtube.
-// @author       Optimus Prime
+// @name         YouTube Mobile
+// @namespace    https://github.com/suksham-srujan
+// @version      1.6.0
+// @description  Open videos in a new tab in YouTube mobile.
+// @author       Jitendra Kumar
 // @match        https://m.youtube.com/*
-// @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
-    const css = `
+(function () {
+  "use strict";
+  const LOG_MSG_PREFIX = "[JkYtMobile]";
+  const log = function _log(msg) {
+    console.log(LOG_MSG_PREFIX, msg);
+  };
+  const warn = function _warn(msg) {
+    console.warn(LOG_MSG_PREFIX, msg);
+  };
+
+  const css = `
 /* for opening videos in tab directly */
 @keyframes nodeInserted {
     from { opacity: 0.99; }
@@ -23,6 +30,10 @@ ytm-media-item {
     animation-name: nodeInserted;
     position: relative;
 }
+ytm-media-item a.open-in-new-tab {
+  box-sizing: border-box;
+  border: 1px solid rgba(150, 100, 0, 0.5);
+}
 /* hide reels */
 ytd-reel-shelf-renderer,
 ytd-rich-shelf-renderer,
@@ -30,64 +41,73 @@ ytm-reel-shelf-renderer {
     display: none !important;
 }
 `;
-    const attrViedoInNewTab = 'data-video-in-new-tab';
+  const attrViedoInNewTab = "data-video-in-new-tab";
+  const videoAnchorSelector = "a.media-item-thumbnail-container";
+  const mediaItemTagName = "ytm-media-item";
+  const mediaItemSelector = mediaItemTagName;
 
-    const style = document.createElement('style');
-    style.innerHTML = css;
-    document.body.appendChild(style);
+  const style = document.createElement("style");
+  style.innerHTML = css;
+  document.body.appendChild(style);
 
-    function findParent(elem) {
-        if (elem == document.body) {
-            return null;
-        }
-        const tg = elem.tagName.toLowerCase();
-        if (tg === 'ytm-media-item') {
-            return elem;
-        }
-        return findParent(elem.parentNode);
+  function findParent(elem) {
+    if (elem == document.body) {
+      return null;
     }
-
-    window.openInNewTab = function(event) {
-        console.log(event.target.tagName);
-        let elem;
-        if ((elem = findParent(event.target)) != null) {
-            console.log('element found');
-            event.preventDefault();
-            event.stopPropagation();
-            const a = elem.querySelector("a.media-item-thumbnail-container");
-            if (a) {
-                console.log("Opening in new tab. Link: " + a.href);
-                window.open(a.href, "_blank");
-            }
-        } else {
-            console.warn('parent not found.');
-        }
+    const tg = elem.tagName.toLowerCase();
+    if (tg === mediaItemTagName) {
+      return elem;
     }
+    return findParent(elem.parentNode);
+  }
 
-    const coverSetter = function setupCover(elem) {
-        if (elem.getAttribute(attrViedoInNewTab) === 't') {
-            return;
-        }
-        elem.onclick = window.openInNewTab;
-        elem.setAttribute(attrViedoInNewTab, "t");
+  window.openInNewTab = function (event) {
+    let elem;
+    if ((elem = findParent(event.target)) != null) {
+      log("element found");
+      event.preventDefault();
+      event.stopPropagation();
+      const a = elem.querySelector(videoAnchorSelector);
+      if (a) {
+        log("Opening in new tab. Link: " + a.href);
+        window.open(a.href, "_blank");
+      }
+    } else {
+      warn("parent not found.");
     }
+  };
 
-    const nodeInsertListener = function(event){
-        if (event.animationName == "nodeInserted") {
-            coverSetter(event.target);
-        }
+  const coverSetter = function _coverSetter(elem) {
+    if (elem.getAttribute(attrViedoInNewTab) === "t") {
+      return;
     }
+    const a = elem.querySelector(videoAnchorSelector);
+    if (a) {
+      a.onclick = window.openInNewTab;
+      a.classList.add("open-in-new-tab");
+    } else {
+      log("anchor in video not found");
+    }
+    elem.setAttribute(attrViedoInNewTab, "t");
+  };
 
-    function videoInNewTab() {
-        document.addEventListener("animationstart", nodeInsertListener, false);
-        console.log("Video in new tab set up for new items.");
+  const nodeInsertListener = function (event) {
+    if (event.animationName == "nodeInserted") {
+      coverSetter(event.target);
     }
+  };
 
-    function videoInNewTabExistingItems() {
-        const items = document.querySelectorAll("ytm-media-item");
-        items.forEach(e => coverSetter(e));
-        console.log("Video in new tab set up for existing [" + items.length + "] items.");
-    }
-    videoInNewTab();
-    videoInNewTabExistingItems();
+  function videoInNewTab() {
+    document.addEventListener("animationstart", nodeInsertListener, false);
+    log("Video in new tab set up for new items.");
+  }
+
+  function videoInNewTabExistingItems() {
+    const items = document.querySelectorAll(mediaItemSelector);
+    items.forEach((e) => coverSetter(e));
+    log("Video in new tab set up for existing [" + items.length + "] items.");
+  }
+
+  videoInNewTab();
+  videoInNewTabExistingItems();
 })();
