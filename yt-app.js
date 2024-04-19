@@ -2,10 +2,11 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.4.3
+// @version      0.5.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
+// @match        https://www.youtube.com/?app=desktop
 // @match        https://www.youtube.com/@*
 // @match        https://www.youtube.com/watch*
 // @match        https://www.youtube.com/shorts/*
@@ -470,7 +471,8 @@ ${VIDEO_ELEMENTS}{
 
   jkVideoInfoHideRetry();
 
-  let verticalCenterVideoAttemptCounter = 12;
+  const maxVerticalCenterVideoAttemp = 12;
+  let verticalCenterVideoAttemptCounter = maxVerticalCenterVideoAttemp;
   const verticallyCenterVideo = function _verticallyCenterVideo() {
     if (location.pathname != "/watch") {
       log("verticallyCenterVideo not on video watch page");
@@ -481,11 +483,24 @@ ${VIDEO_ELEMENTS}{
     const video = document.querySelector("#player");
 
     if (video && masthead) {
+      const spacer = (function() {
+        const id = "jk-vid-spacer";
+        let e0 = byId(id);
+        if (!e0) {
+          e0 = document.createElement("div");
+          e0.id = id;
+          const vw = video.parentNode;
+          vw.insertBefore(e0, video);
+          log("new spacer inserted");
+        }
+        e0.style.marginTop = "0px";
+        return e0;
+      })();
+
       const r = window.innerHeight - video.clientHeight;
       const rect = video.getBoundingClientRect();
       const marginTop = r / 2 - rect.top;
-      video.style.marginTop = marginTop + "px";
-
+      spacer.style.marginTop = marginTop + "px";
 
       if (window.self != window.parent) {
         log("verticallyCenterVideo in iframe");
@@ -500,7 +515,18 @@ ${VIDEO_ELEMENTS}{
     }
     verticalCenterVideoAttemptCounter--;
   }
-  verticallyCenterVideo();
+
+  setTimeout(() => verticallyCenterVideo(), 7500);
+
+  const _gcenter0 = {tHandle: null};
+  window.addEventListener('resize', () => {
+    if (_gcenter0.tHandle) {
+      window.clearTimeout(_gcenter0.tHandle);
+      _gcenter0.tHandle = null;
+    }
+    verticalCenterVideoAttemptCounter = maxVerticalCenterVideoAttemp;
+    _gcenter0.tHandle = setTimeout(() => verticallyCenterVideo(), 350);
+  });
 
   const cssFutureUse =
 `
