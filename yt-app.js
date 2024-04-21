@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.1
+// @version      0.5.3
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -41,6 +41,10 @@
       elem.style[prop] = style[prop];
     }
   };
+  const preventEventAction = function _preventEventAction(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  }
 
   const addMyStyles = function() {
     const css = `
@@ -129,10 +133,17 @@
       display: none;
     }
     .jk-yt-iframe {
-      width: 100%;
-      height: 100%;
+      --iframe-spacing: .75rem;
+      width: calc(100% - 2*var(--iframe-spacing));
+      height: calc(100% - 2*var(--iframe-spacing));
       box-sizing: border-box;
-      border: 1px solid #795548;
+      border: 1px solid #ffffff1a;
+      left: var(--iframe-spacing);
+      right: var(--iframe-spacing);
+      top: var(--iframe-spacing);
+      bottom: var(--iframe-spacing);
+      position: fixed;
+      border-radius: .5rem;
     }
     .jk-shrink-video {
       position: fixed;
@@ -231,8 +242,7 @@ ${VIDEO_ELEMENTS}{
     if (!event.target.classList.contains("jk-yt-video-overlay")) {
       return;
     }
-    event.preventDefault();
-    event.stopImmediatePropagation();
+    preventEventAction(event);
     const videoUrl = extractVideoUrl(event.target.parentNode);
     if (videoUrl === null) {
       log("The element has no video url.");
@@ -289,10 +299,13 @@ ${VIDEO_ELEMENTS}{
 
   const enableEscapeInIframe = function() {
     window.addEventListener("keyup", (e) => {
-      if (e.key === 'Escape' && !window.fullScreen) {
+      if (e.key === 'Escape') {
+        if (window.fullScreen) {
+          preventEventAction(e);
+        }
         window.top.postMessage('YT_APP_CLOSE', '*');
       }
-    });
+    }, true);
   }
   const enableShrinkExpand = function() {
     const max = document.createElement("button");
@@ -479,10 +492,18 @@ ${VIDEO_ELEMENTS}{
       return;
     }
 
-    const masthead = document.querySelector("#masthead-container");
-    const video = document.querySelector("#player");
+    const masthead = byId("masthead-container");
+    const video = byId("player");
 
     if (video && masthead) {
+      if (window.self != window.parent) {
+        log("verticallyCenterVideo in iframe");
+        masthead.style.display = "none";
+        const pm = byId("page-manager");
+        if (pm) {
+          pm.style.marginTop = "0px";
+        }
+      }
       const spacer = (function() {
         const id = "jk-vid-spacer";
         let e0 = byId(id);
@@ -501,13 +522,8 @@ ${VIDEO_ELEMENTS}{
       const rect = video.getBoundingClientRect();
       const marginTop = r / 2 - rect.top;
       spacer.style.marginTop = marginTop + "px";
-
-      if (window.self != window.parent) {
-        log("verticallyCenterVideo in iframe");
-        masthead.style.visibility = "hidden";
-        return;
-      }
       log("verticallyCenterVideo applied");
+        return;
     } else {
       if (verticalCenterVideoAttemptCounter > 0) {
         setTimeout(() => verticallyCenterVideo(), 1000);
