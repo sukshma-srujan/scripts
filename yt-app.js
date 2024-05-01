@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.3
+// @version      0.5.4
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -493,9 +493,8 @@ ${VIDEO_ELEMENTS}{
     }
 
     const masthead = byId("masthead-container");
-    const video = byId("player");
 
-    if (video && masthead) {
+    if (masthead) {
       if (window.self != window.parent) {
         log("verticallyCenterVideo in iframe");
         masthead.style.display = "none";
@@ -504,14 +503,19 @@ ${VIDEO_ELEMENTS}{
           pm.style.marginTop = "0px";
         }
       }
+    }
+
+    const video = byId("player");
+    const primaryInner = byId("primary-inner");
+
+    if (video && primaryInner) {
       const spacer = (function() {
         const id = "jk-vid-spacer";
         let e0 = byId(id);
         if (!e0) {
           e0 = document.createElement("div");
           e0.id = id;
-          const vw = video.parentNode;
-          vw.insertBefore(e0, video);
+          primaryInner.insertBefore(e0, video);
           log("new spacer inserted");
         }
         e0.style.marginTop = "0px";
@@ -522,8 +526,8 @@ ${VIDEO_ELEMENTS}{
       const rect = video.getBoundingClientRect();
       const marginTop = r / 2 - rect.top;
       spacer.style.marginTop = marginTop + "px";
-      log("verticallyCenterVideo applied");
-        return;
+      log("verticallyCenterVideo applied, marginTop: " + marginTop);
+      return;
     } else {
       if (verticalCenterVideoAttemptCounter > 0) {
         setTimeout(() => verticallyCenterVideo(), 1000);
