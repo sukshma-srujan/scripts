@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.4
+// @version      0.5.5
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -19,6 +19,7 @@
   'use strict';
   const APP_NAME = "JK_YT_APP";
   const VIDEO_ELEMENTS = "ytd-video-renderer,ytd-grid-video-renderer,ytd-rich-item-renderer,ytd-reel-item-renderer";
+  window.ytAppData = {};
 
   /* Utility methods */
   const by = function _by(selector) {
@@ -252,7 +253,7 @@ ${VIDEO_ELEMENTS}{
   }
 
   const prepareYoutubeVideo = function (video) {
-    if (video.getAttribute("data-jk-yt-app")) {
+    if (video.getAttribute("data-jk-yt-app") || video.classList.contains('ytd-rich-shelf-renderer')) {
       return;
     }
     const overlay = document.createElement('div');
