@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.5
+// @version      0.5.6
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -403,88 +403,6 @@ ${VIDEO_ELEMENTS}{
     console.err(e);
   }
 
-  // enable video info visibility toggle
-  const jkYtVideoInfoHide = function _jkYtVideoInfoHide() {
-    if (location.pathname != "/watch") {
-      return true;
-    }
-    const aboveTheFold = document.querySelector("#above-the-fold");
-    if (!aboveTheFold) {
-      return false;
-    }
-    const jkdiv = document.createElement("div");
-    jkdiv.innerHTML = `
-  <style>
-  #videoInfoToggleContainer {
-  display: flex;
-  -moz-box-orient: horizontal;
-  -moz-box-direction: normal;
-  flex-direction: row;
-  -moz-box-align: center;
-  align-items: center;
-  margin-top: 1rem;
-  opacity: .5;
-  }
-  .jk-yt-hide-video-info {
-  visibility: hidden !important;
-  }
-  </style>
-  <div id="videoInfoToggleContainer" class="style-scope ytd-toggle-item-renderer">
-  <div id="caption" class="style-scope ytd-toggle-item-renderer">
-    Video info hidden
-  </div>
-  <tp-yt-paper-toggle-button
-    noink=""
-    class="style-scope ytd-toggle-item-renderer"
-    role="button"
-    aria-pressed="false"
-    tabindex="0"
-    toggles=""
-    aria-disabled="false"
-    style="touch-action: pan-y"
-    id="videoInfoToggleButton"
-    checked=""
-    >
-    <div class="toggle-container style-scope tp-yt-paper-toggle-button"></div>
-  </tp-yt-paper-toggle-button>
-  </div>`;
-    const jkmeta = aboveTheFold.parentElement;
-    jkmeta.appendChild(jkdiv);
-
-    const setVideoInfoHidden = function _setVideoInfoHidden(hidden) {
-      const hideClassName = "jk-yt-hide-video-info";
-      if (hidden) aboveTheFold.classList.add(hideClassName);
-      else aboveTheFold.classList.remove(hideClassName);
-    };
-
-    const toggleBtn = document.querySelector("#videoInfoToggleButton");
-    const handleVideoInfoHideClick = function _handleVideoInfoHideClick() {
-      const checked = toggleBtn.getAttribute("checked");
-      const isChecked = checked === "";
-      log("video info hide checked" + isChecked);
-      setVideoInfoHidden(isChecked);
-    }
-
-    toggleBtn.addEventListener("click", (e) => handleVideoInfoHideClick());
-    handleVideoInfoHideClick();
-    log("Video info show/hide applied");
-    return true;
-  };
-  let jkVideoInfoHideRetryCount = 12;
-  const jkVideoInfoHideRetry = function _jkVideoInfoHideRetry() {
-    if(!jkVideoInfoHideRetryCount) {
-      log('Could not setup video info hide');
-      return;
-    }
-    jkVideoInfoHideRetryCount--;
-    if (jkYtVideoInfoHide()) {
-      return;
-    }
-    setTimeout(() => jkVideoInfoHideRetry(), 1000);
-  }
-
-  jkVideoInfoHideRetry();
-
   const maxVerticalCenterVideoAttemp = 12;
   let verticalCenterVideoAttemptCounter = maxVerticalCenterVideoAttemp;
   const verticallyCenterVideo = function _verticallyCenterVideo() {
@@ -492,10 +410,12 @@ ${VIDEO_ELEMENTS}{
       log("verticallyCenterVideo not on video watch page");
       return;
     }
+    verticalCenterVideoAttemptCounter--;
 
     const masthead = byId("masthead-container");
-
+    let mastheadHeight = 0;
     if (masthead) {
+      mastheadHeight = masthead.clientHeight;
       if (window.self != window.parent) {
         log("verticallyCenterVideo in iframe");
         masthead.style.display = "none";
@@ -503,41 +423,72 @@ ${VIDEO_ELEMENTS}{
         if (pm) {
           pm.style.marginTop = "0px";
         }
+        mastheadHeight = 0;
       }
     }
 
     const video = byId("player");
-    const primaryInner = byId("primary-inner");
+    const primary = byId('primary');
 
-    if (video && primaryInner) {
-      const spacer = (function() {
-        const id = "jk-vid-spacer";
+    if (video && primary) {
+      const spacerBottom = (function _findOrCreateBottomSpacer() {
+        const id = 'jk-vid-spacer-bottom';
+        const aboveTheFold = document.querySelector("#above-the-fold");
+        if (!aboveTheFold) {
+          return null;
+        }
         let e0 = byId(id);
         if (!e0) {
           e0 = document.createElement("div");
           e0.id = id;
-          primaryInner.insertBefore(e0, video);
+          aboveTheFold.before(e0);
+          log("new bottom spacer inserted");
+        }
+        e0.style.marginTop = "0px";
+        return e0;
+      })();
+      const spacer = (function _findOrCreateTopSpacer() {
+        const id = "jk-vid-spacer";
+        let e0 = byId(id);
+        if (e0 && e0.nextElementSibing != video) {
+          log("spacer next element sibling is not video", e0.nextElementSibling);
+          e0.remove();
+          e0 = undefined;
+        }
+        if (!e0) {
+          e0 = document.createElement("div");
+          e0.id = id;
+          video.before(e0);
           log("new spacer inserted");
         }
         e0.style.marginTop = "0px";
         return e0;
       })();
 
-      const r = window.innerHeight - video.clientHeight;
-      const rect = video.getBoundingClientRect();
-      const marginTop = r / 2 - rect.top;
-      spacer.style.marginTop = marginTop + "px";
-      log("verticallyCenterVideo applied, marginTop: " + marginTop);
+      const mth = mastheadHeight;
+      const vch = video.clientHeight;
+      const vct = video.clientTop;
+      const r = window.innerHeight - vch;
+      const pstyle = getComputedStyle(primary);
+      const pdt = pstyle.paddingTop.replace('px', '');
+      const mt = r / 2 - vct - mth - pdt;
+      spacer.style.marginTop = mt + "px";
+      //log("verticallyCenterVideo applied, mt: " + mt + ", vch: " + vch + ", vct: " + vct + ", mth: " + mth + ", pdt: " + pdt);
+      log("verticallyCenterVideo applied, mt: " + mt);
+      if (spacerBottom) {
+        const marginBottom = window.innerHeight / 2;
+        spacerBottom.style.marginTop = marginBottom + 'px';
+        log("verticallyCenterVideo applied, marginBottom: " + marginBottom);
+      }
       return;
     } else {
       if (verticalCenterVideoAttemptCounter > 0) {
         setTimeout(() => verticallyCenterVideo(), 1000);
       }
     }
-    verticalCenterVideoAttemptCounter--;
   }
 
-  setTimeout(() => verticallyCenterVideo(), 1200);
+  setTimeout(() => verticallyCenterVideo(), 3000);
 
   const _gcenter0 = {tHandle: null};
   window.addEventListener('resize', () => {
@@ -548,27 +499,4 @@ ${VIDEO_ELEMENTS}{
     verticalCenterVideoAttemptCounter = maxVerticalCenterVideoAttemp;
     _gcenter0.tHandle = setTimeout(() => verticallyCenterVideo(), 350);
   });
-
-  const cssFutureUse =
-`
-/* hide video title */
-#title {
-  visibility: hidden !important;
-}
-
-/* hide channel info */
-#owner.ytd-watch-metadata {
-  visibility: hidden !important;
-}
-
-/* hide buttons */
-#actions.ytd-watch-metadata {
-  visibility: hidden !important;
-}
-
-/* hide video description */
-#description.ytd-watch-metadata {
-  visibility: hidden !important;
-}
-`;
 })();
