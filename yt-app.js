@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.6
+// @version      0.5.7
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -53,6 +53,7 @@
       border: 0px solid rgba(255,255,255,0.07);
       border-radius: 1rem;
       box-sizing: border-box;
+      position: relative;
     }
     .jk-yt-video-overlay {
       position: absolute;
@@ -61,6 +62,8 @@
       bottom: 0;
       left: 0;
       background: transparent;
+      border: 1px solid rgb(255, 167, 38,.5);
+      border-radius: 12px; /*there is no standard css variable in youtube CSS*/
     }
     .jk-yt-video-overlay-btn {
       position: absolute;
@@ -68,11 +71,11 @@
       flex-wrap: nowrap;
       justify-content: center;
       align-items: center;
-      bottom: 0;
-      right: 0;
-      width: 2.5vw;
-      height: 2.5vw;
-      font-size: 1vw;
+      top: 0;
+      left: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-size: 1rem;
       font-weight: bold;
       font-family: inherit;
       text-transform: uppercase;
@@ -256,23 +259,25 @@ ${VIDEO_ELEMENTS}{
     if (video.getAttribute("data-jk-yt-app") || video.classList.contains('ytd-rich-shelf-renderer')) {
       return;
     }
-    const overlay = document.createElement('div');
-    overlay.classList.add('jk-yt-video-overlay');
-    overlay.setAttribute('data-overlay', "jk-overlay");
-    overlay.onclick = window.enableYtApp;
     const videoUrl = extractVideoUrl(video);
-    if (videoUrl) {
+    const thumbnail = video.querySelector("#thumbnail");
+    if (videoUrl && thumbnail) {
+      const overlay = document.createElement('div');
+      overlay.classList.add('jk-yt-video-overlay');
+      overlay.setAttribute('data-overlay', "jk-overlay");
+      overlay.onclick = window.enableYtApp;
+
       const anchor = document.createElement("a");
       anchor.href = videoUrl;
       anchor.setAttribute("target", "_blank");
       anchor.classList.add("jk-yt-video-overlay-btn");
       anchor.innerHTML = "N";
       overlay.appendChild(anchor);
-    }
 
-    video.appendChild(overlay);
-    video.setAttribute("data-jk-yt-app", "ready");
-    video.classList.add("jk-yt-video");
+      thumbnail.appendChild(overlay);
+      thumbnail.setAttribute("data-jk-yt-app", "ready");
+      thumbnail.classList.add("jk-yt-video");
+    }
   };
 
   const nodeInsertListener = function (event) {
