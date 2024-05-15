@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.7
+// @version      0.5.8
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -34,8 +34,19 @@
     if (!selector) return null;
     return by(`#${selector}`);
   }
-  const log = function _log(str) {
-    console.log(APP_NAME, str);
+  const log = function _log(str, obj) {
+    if (obj) {
+      console.log(APP_NAME, str, obj);
+    } else {
+      console.log(APP_NAME, str);
+    }
+  };
+  const err = function _log(str, obj) {
+    if (obj) {
+      console.error(APP_NAME, str, obj);
+    } else {
+      console.error(APP_NAME, str);
+    }
   };
   const applyStyle = function _applyStyle(elem, style) {
     for (let prop in style) {
@@ -47,7 +58,7 @@
     e.stopImmediatePropagation();
   }
 
-  const addMyStyles = function() {
+  const addMyStyles = function _addMyStyles() {
     const css = `
     .jk-yt-video {
       border: 0px solid rgba(255,255,255,0.07);
@@ -61,6 +72,7 @@
       right: 0;
       bottom: 0;
       left: 0;
+      cursor: pointer;
       background: transparent;
       border: 1px solid rgb(255, 167, 38,.5);
       border-radius: 12px; /*there is no standard css variable in youtube CSS*/
@@ -216,7 +228,7 @@
     expand: function () {},
   };
 
-  const detectNewVideos = function () {
+  const enableNewVideoInsertionDetection = function _enableNewVideoInsertionDetection() {
     const css = `
 /* to get notified when new elements are created on the page  */
 @keyframes nodeInserted {
@@ -235,14 +247,15 @@ ${VIDEO_ELEMENTS}{
     document.body.appendChild(style);
   };
 
-  const extractVideoUrl = function (
-  elem /* an ytd-rich-item-renderer element*/
-  ) {
-    const a = elem.querySelector("ytd-thumbnail a#thumbnail");
+  const extractVideoUrl = function _extractVideoUrl(elem) {
+    let a = elem.querySelector("ytd-thumbnail a#thumbnail");
+    if (!a && elem.tagName === 'A' && elem.getAttribute("id") === 'thumbnail') {
+      a = elem;
+    }
     return a === null ? null : a.href;
   };
 
-  window.enableYtApp = function(event) {
+  window.enableYtApp = function _enableYtApp(event) {
     if (!event.target.classList.contains("jk-yt-video-overlay")) {
       return;
     }
@@ -255,12 +268,18 @@ ${VIDEO_ELEMENTS}{
     ytApp.show(videoUrl);
   }
 
-  const prepareYoutubeVideo = function (video) {
+  const prepareYoutubeVideo = function _prepareYoutubeVideo(video) {
     if (video.getAttribute("data-jk-yt-app") || video.classList.contains('ytd-rich-shelf-renderer')) {
       return;
     }
     const videoUrl = extractVideoUrl(video);
-    const thumbnail = video.querySelector("#thumbnail");
+    const thumbnail = (function _findThumbnail() {
+      let t = video.querySelector("#thumbnail");
+      if (t == null) {
+        t = video.querySelector('ytd-thumbnail');
+      }
+      return t || video;
+    })();
     if (videoUrl && thumbnail) {
       const overlay = document.createElement('div');
       overlay.classList.add('jk-yt-video-overlay');
@@ -272,17 +291,27 @@ ${VIDEO_ELEMENTS}{
       anchor.setAttribute("target", "_blank");
       anchor.classList.add("jk-yt-video-overlay-btn");
       anchor.innerHTML = "N";
+
       overlay.appendChild(anchor);
 
       thumbnail.appendChild(overlay);
       thumbnail.setAttribute("data-jk-yt-app", "ready");
       thumbnail.classList.add("jk-yt-video");
+    } else {
+      const isFirstTime = !video.classList.contains("jk-no-video");
+      if (!isFirstTime) {
+        log("could not set on video", video);
+      }
     }
   };
 
   const nodeInsertListener = function (event) {
     if (event.animationName === "nodeInserted") {
-      prepareYoutubeVideo(event.target);
+      try {
+        prepareYoutubeVideo(event.target);
+      } catch (err) {
+        err('Error while preparing video', event.target);
+      }
     }
   };
 
@@ -293,7 +322,7 @@ ${VIDEO_ELEMENTS}{
     document
       .querySelectorAll(VIDEO_ELEMENTS)
       .forEach((e) => prepareYoutubeVideo(e));
-    detectNewVideos();
+    enableNewVideoInsertionDetection();
     addMyStyles();
     window.onmessage = function(e) {
       if(e.data === 'YT_APP_CLOSE') {
