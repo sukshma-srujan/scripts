@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hindi Kahani Style
 // @namespace    https://github.com/sukshma-srujan
-// @version      1.0.0
+// @version      1.0.1
 // @description  Improve Style of Hindi Kahani
 // @author       Jitendra Kumar
 // @match        https://hindikahani.hindi-kavita.com/*
@@ -26,8 +26,12 @@
   padding: 0;
   border: 0;
 }
+.section h2,
 .section h1 {
   color: #BF360C;
+}
+.section h2 {
+  font-weight: normal;
 }
 .section h1:last-of-type {
   padding-bottom: 2rem;
