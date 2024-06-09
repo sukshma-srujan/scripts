@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Pirate Bay Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.4.0
+// @version      1.5.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
 // @match        https://thepiratebay.org/*
@@ -13,23 +13,41 @@
     'use strict';
 
     const css =
-`
-@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
+`@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Merienda:wght@400;600&display=swap');
+:root {
+  --border-radius-1: .25rem;
+  --border-radius-2: .5rem;
+}
 body {
   font-family: 'Merienda', 'Fira Sans', sans-serif;
   font-size: .85rem;
+  background-color: #D7CCC8;
+}
+#home > header > nav > section > img {
+  opacity: .5;
+  border-radius: var(--border-radius-2);
+  box-shadow: 0 0 .5rem rgba(255,255,255,1);
 }
 .browse .col-center {
   padding: 0;
 }
+#logo {
+  opacity: .75;
+}
+#search {
+  background-color: rgba(255, 255, 255, .5);
+  border: 1px solid rgba(0, 0, 0, .5);
+  border-radius: var(--border-radius-1);
+}
 #browse h1 {
-  font-weight: normal;
+  font-weight: 550 !important;
+  background: transparent !important;
+  border-bottom: 1px solid rgba(0,0,0,.2) !important;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
   padding: 0rem;
   padding-bottom: .5rem;
-  border-bottom: .125rem solid #EFEBE9;
-  background: #fff;
-  margin-bottom: 1rem;
 }
 /* the results table*/
 #torrents {
@@ -66,21 +84,26 @@ body {
 }
 /* Torrent description page */
 #description_container {
+  border-radius: var(--border-radius-2);
   padding: 1rem;
 }
 #description_container > h2:first-of-type {
+  font-weight: 300;
   margin: -1rem;
   margin-bottom: .5rem;
   padding: 1rem 1.5rem;
+  border-radius: var(--border-radius-2);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 #description_container .text-box {
   font: 1.25em "Syne Mono";
   background: rgba(255,255,255,.5);
   border-radius: .25rem;
   padding: 1.5rem;
-}
-`;
+}`;
     const style = document.createElement('style');
     style.innerHTML = css;
+    style.setAttribute('title', 'jk-the-pirate-bay-style');
     document.body.appendChild(style);
 })();
