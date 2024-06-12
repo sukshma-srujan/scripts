@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
-// @namespace    https://github.com/optimus29
-// @version      1.12.0
+// @namespace    https://github.com/sukshma-srujan
+// @version      1.13.0
 // @description  Load full images from thumbnails or small images on torrent description page.
 // @author       Optimus Prime
 // @match        *://*.1337x.to/torrent/*
@@ -62,6 +62,11 @@
 
   const IMAGE_SELECTORS = "img[data-original], img.img-responsive.descrimg, #description > a > img";
   const SPEC = [
+    {
+      attemptName: "as-it-is",
+      pattern: /(https:\/\/i\.ibb\.co.*)$/i,
+      replacements: ['$1']
+    },
     {
       attemptName: 'imagehaha',
       pattern: /^https?:\/\/img\d\d\.imagehaha.com\/th\/\d{5}\/[a-zA-Z0-9]+\.(jpg|jpeg|png)$/,
