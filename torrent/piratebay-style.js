@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Pirate Bay Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.5.0
+// @version      1.6.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
 // @match        https://thepiratebay.org/*
@@ -51,7 +51,9 @@ body {
 }
 /* the results table*/
 #torrents {
-  margin-top: 5px;
+  margin-top: 1rem;
+  border-radius: var(--border-radius-2);
+  overflow: hidden;
 }
 /* table header */
 .list-header {}
@@ -59,21 +61,20 @@ body {
   border: 0;
 }
 .list-header .list-item {
-  padding: .5rem .5rem !important;
+  padding: .75rem 1rem !important;
   text-align: left !important;
+  font-weight: 500;
 }
 /* a result */
 .list-entry {}
 .list-entry > * {
-  padding: .75rem .5rem !important;
+  padding: .75rem 1rem !important;
 }
 #torrents li.list-entry {
-  background-color: rgb(239, 235, 233,.25);
-  background-color: #ffffff;
+  background-color: #ffffff80;
 }
 #torrents li.list-entry.alt {
-  background-color: rgb(215, 204, 200, .25);
-  background-color: #ffffff;
+  background-color: #ffffff80;
 }
 #torrents li.list-entry > * {
   border-bottom: 1px solid #EFEBE9;
