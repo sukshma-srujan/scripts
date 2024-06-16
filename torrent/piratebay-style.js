@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Pirate Bay Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.6.0
+// @version      1.7.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
 // @match        https://thepiratebay.org/*
@@ -87,6 +87,7 @@ body {
 #description_container {
   border-radius: var(--border-radius-2);
   padding: 1rem;
+  background: #ffffff80;
 }
 #description_container > h2:first-of-type {
   font-weight: 300;
@@ -99,9 +100,20 @@ body {
 }
 #description_container .text-box {
   font: 1.25em "Syne Mono";
-  background: rgba(255,255,255,.5);
+  background: #ffffff40;
   border-radius: .25rem;
   padding: 1.5rem;
+}
+#description_container #filelist ol li {
+  padding: .25rem 0;
+  font-size: .8rem;
+  color: #373737f0;
+}
+#description_container #filelist ol li + li {
+  border-top: 1px solid #00000010;
+}
+#description_container #filelist ol li.alt {
+  background-color: transparent;
 }`;
     const style = document.createElement('style');
     style.innerHTML = css;
