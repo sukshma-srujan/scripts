@@ -47,6 +47,7 @@
   font-size: 1.25rem;
   line-height: 2;
   margin-top: 0;
+  font-weight: 400;
 }
 .section .full a,
 .list li a {
