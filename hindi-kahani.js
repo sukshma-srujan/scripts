@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hindi Kahani Style
 // @namespace    https://github.com/sukshma-srujan
-// @version      1.0.4
+// @version      1.0.5
 // @description  Improve Style of Hindi Kahani
 // @author       Jitendra Kumar
 // @match        https://hindikahani.hindi-kavita.com/*
