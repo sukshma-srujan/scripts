@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Pirate Bay Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.7.0
+// @version      1.8.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
 // @match        https://thepiratebay.org/*
@@ -78,6 +78,9 @@ body {
 }
 #torrents li.list-entry > * {
   border-bottom: 1px solid #EFEBE9;
+}
+#torrents span.item-title {
+  display: table-cell;
 }
 #torrents.view-single li.list-entry span.item-icons {
   width: initial;
