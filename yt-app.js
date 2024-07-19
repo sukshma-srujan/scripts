@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.8
+// @version      0.5.9
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -334,7 +334,7 @@ ${VIDEO_ELEMENTS}{
 
   const enableEscapeInIframe = function() {
     window.addEventListener("keyup", (e) => {
-      if (e.key === 'Escape') {
+      if (e.key === 'Escape' || e.key.toUpperCase() === 'X') {
         if (window.fullScreen) {
           preventEventAction(e);
         }
