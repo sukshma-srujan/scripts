@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.9
+// @version      0.5.10
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/
@@ -396,12 +396,16 @@ ${VIDEO_ELEMENTS}{
       let elem;
       if ((elem = by("#logo #country-code"))) {
         elem.innerHTML = 'भारत';
+      } else {
+        log('Could not set the name of the country');
       }
 
-      const svg = document.querySelector("#logo svg svg");
-      if (svg) {
+      const svgArr = document.querySelectorAll('#logo svg');
+      log("Number of app name svg elements: " + svgArr.length);
+      for(let svg of svgArr) {
         const enNameElem = svg.querySelector("g:last-child");
         if (enNameElem) {
+          log("Setting Hindi app name in element with id: " + enNameElem.id);
           enNameElem.style.display = "none";
 
           const hiNameGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -420,7 +424,7 @@ ${VIDEO_ELEMENTS}{
       }
     }
     changeName();
-    setTimeout(() => changeName(), 3000);
+    setTimeout(() => changeName(), 5000);
   }
 
   if (window.self === window.parent) {
