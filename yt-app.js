@@ -2,10 +2,10 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.5.10
+// @version      0.6.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
-// @match        https://www.youtube.com/
+// @match        https://www.youtube.com
 // @match        https://www.youtube.com/?app=desktop
 // @match        https://www.youtube.com/@*
 // @match        https://www.youtube.com/watch*
@@ -56,6 +56,25 @@
   const preventEventAction = function _preventEventAction(e) {
     e.preventDefault();
     e.stopImmediatePropagation();
+  }
+
+  const ytBgStyle = function _ytBgStyle() {
+    const css =
+`ytd-app::before {
+  background-image: url('https://github.com/sukshma-srujan/content/blob/main/108405_marble_pattern_efficient.jpg?raw=true');
+  background-repeat: repeat;
+  background-size: 100%;
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  content: "";
+  opacity: 0.75;
+  background-attachment: fixed;
+}`;
+    addCssToDoc(css);
   }
 
   const addMyStyles = function _addMyStyles() {
@@ -170,6 +189,11 @@
       z-index: 10000;
     }
     `;
+    addCssToDoc(css);
+    ytBgStyle();
+  }
+
+  const addCssToDoc = function _addCssToDoc(css) {
     const style = document.createElement('style');
     style.innerHTML = css;
     document.body.appendChild(style);
@@ -389,40 +413,41 @@ ${VIDEO_ELEMENTS}{
       a.classList.remove("max-video");
     });
   }
-  const setCountryCode = function _setCountryCode() {
-    log('setting country code');
 
-    function changeName() {
-      let elem;
-      if ((elem = by("#logo #country-code"))) {
-        elem.innerHTML = 'भारत';
-      } else {
-        log('Could not set the name of the country');
-      }
+  const changeName = function _changeName() {
+    let elem;
+    if ((elem = by("#logo #country-code"))) {
+      elem.innerHTML = 'भारत';
+    } else {
+      log('Could not set the name of the country');
+    }
 
-      const svgArr = document.querySelectorAll('#logo svg');
-      log("Number of app name svg elements: " + svgArr.length);
-      for(let svg of svgArr) {
-        const enNameElem = svg.querySelector("g:last-child");
-        if (enNameElem) {
-          log("Setting Hindi app name in element with id: " + enNameElem.id);
-          enNameElem.style.display = "none";
+    const svgArr = document.querySelectorAll('#logo svg');
+    log("Number of app name svg elements: " + svgArr.length);
+    for(let svg of svgArr) {
+      const enNameElem = svg.querySelector("g:last-child");
+      if (enNameElem) {
+        log("Setting Hindi app name in element with id: " + enNameElem.id);
+        enNameElem.style.display = "none";
 
-          const hiNameGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-          const hiNameText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-          hiNameGroup.appendChild(hiNameText);
-          hiNameText.innerHTML = 'विड्योमंच';
-          applyStyle(hiNameText, {
-            fontFamily: "inherit",
-            fontSize: "1.45rem",
-            fontWeight: "bold"
-          });
-          hiNameText.setAttribute("x", 32);
-          hiNameText.setAttribute("y", 16);
-          svg.appendChild(hiNameGroup);
-        }
+        const hiNameGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        const hiNameText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        hiNameGroup.appendChild(hiNameText);
+        hiNameText.innerHTML = 'विड्योमंच';
+        applyStyle(hiNameText, {
+          fontFamily: "inherit",
+          fontSize: "1.45rem",
+          fontWeight: "bold"
+        });
+        hiNameText.setAttribute("x", 32);
+        hiNameText.setAttribute("y", 16);
+        svg.appendChild(hiNameGroup);
       }
     }
+  }
+
+  const setCountryCode = function _setCountryCode() {
+    log('setting country code');
     changeName();
     setTimeout(() => changeName(), 5000);
   }
@@ -433,6 +458,7 @@ ${VIDEO_ELEMENTS}{
   if (window.self != window.parent) {
     log("Escape to close the popup window.");
     enableEscapeInIframe();
+    ytBgStyle();
     //enableShrinkExpand();
   }
   try {
