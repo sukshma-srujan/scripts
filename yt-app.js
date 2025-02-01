@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.6.0
+// @version      0.7.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com
@@ -57,6 +57,19 @@
     e.preventDefault();
     e.stopImmediatePropagation();
   }
+
+  const onSystemColorSchemeChange = function _onSystemColorSchemeChange(isDark) {
+    const html = document.querySelector("html");
+    if (isDark) {
+      html.setAttribute("dark", "");
+    } else {
+      html.removeAttribute("dark");
+    }
+  }
+  
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',({ matches }) => {
+    onSystemColorSchemeChange(matches);
+  })
 
   const ytBgStyle = function _ytBgStyle() {
     const css =
