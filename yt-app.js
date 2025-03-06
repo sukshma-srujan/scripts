@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.9.0
+// @version      0.10.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com
@@ -16,6 +16,11 @@
 // ==/UserScript==
 
 (function () {
+  if (window.trustedTypes && window.trustedTypes.createPolicy) {
+    window.trustedTypes.createPolicy('default', {
+      createHTML: (string, sink) => string
+    });
+  }
   'use strict';
   const APP_NAME = "JK_YT_APP";
   const VIDEO_ELEMENTS = "ytd-video-renderer,ytd-grid-video-renderer,ytd-rich-item-renderer,ytd-reel-item-renderer";
@@ -90,11 +95,11 @@
 ytd-player {
   box-shadow: 0 0 4px #00000040;
 }`;
-    addCssToDoc(css);
-  }
+      addCssToDoc(css);
+    }
 
-  const addMyStyles = function _addMyStyles() {
-    const css = `
+    const addMyStyles = function _addMyStyles() {
+      const css = `
     .jk-yt-video {
       border: 0px solid rgba(255,255,255,0.07);
       border-radius: 1rem;
@@ -285,10 +290,10 @@ ${VIDEO_ELEMENTS}{
 }
 `;
 
-    const style = document.createElement("style");
-    style.innerHTML = css;
-    document.body.appendChild(style);
-  };
+      const style = document.createElement("style");
+      style.innerHTML = css;
+      document.body.appendChild(style);
+    };
 
   const extractVideoUrl = function _extractVideoUrl(elem) {
     let a = elem.querySelector("ytd-thumbnail a#thumbnail");
@@ -420,60 +425,60 @@ ${VIDEO_ELEMENTS}{
       left: 0 !important;
     }
     `;
-    document.body.appendChild(style);
-    max.addEventListener("click", (e) => {
-      log("Max clicked");
-      const a = document.querySelector("video.video-stream.html5-main-video");
-      a.classList.add("max-video");
-    });
-    min.addEventListener("click", (e) => {
-      log("Min clicked");
-      const a = document.querySelector("video.video-stream.html5-main-video");
-      a.classList.remove("max-video");
-    });
-  }
-
-  const changeName = function _changeName() {
-    let elem;
-    if ((elem = by("#logo #country-code"))) {
-      elem.innerHTML = 'भारत';
-    } else {
-      log('Could not set the name of the country');
+      document.body.appendChild(style);
+      max.addEventListener("click", (e) => {
+        log("Max clicked");
+        const a = document.querySelector("video.video-stream.html5-main-video");
+        a.classList.add("max-video");
+      });
+      min.addEventListener("click", (e) => {
+        log("Min clicked");
+        const a = document.querySelector("video.video-stream.html5-main-video");
+        a.classList.remove("max-video");
+      });
     }
 
-    const svgArr = document.querySelectorAll('#logo svg');
-    log("Number of app name svg elements: " + svgArr.length);
-    for(let svg of svgArr) {
-      const enNameElem = svg.querySelector("g:last-child");
-      if (enNameElem) {
-        log("Setting Hindi app name in element with id: " + enNameElem.id);
-        enNameElem.style.display = "none";
+    const changeName = function _changeName() {
+      let elem;
+      if ((elem = by("#logo #country-code"))) {
+        elem.innerHTML = 'भारत';
+      } else {
+        log('Could not set the name of the country');
+      }
 
-        const hiNameGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-        const hiNameText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        hiNameGroup.appendChild(hiNameText);
-        hiNameText.innerHTML = 'विड्योमंच';
-        applyStyle(hiNameText, {
-          fontFamily: "inherit",
-          fontSize: "1.45rem",
-          fontWeight: "bold"
-        });
-        hiNameText.setAttribute("x", 32);
-        hiNameText.setAttribute("y", 16);
-        svg.appendChild(hiNameGroup);
+      const svgArr = document.querySelectorAll('#logo svg');
+      log("Number of app name svg elements: " + svgArr.length);
+      for(let svg of svgArr) {
+        const enNameElem = svg.querySelector("g:last-child");
+        if (enNameElem) {
+          log("Setting Hindi app name in element with id: " + enNameElem.id);
+          enNameElem.style.display = "none";
+
+          const hiNameGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+          const hiNameText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          hiNameGroup.appendChild(hiNameText);
+          hiNameText.innerHTML = 'विड्योमंच';
+          applyStyle(hiNameText, {
+            fontFamily: "inherit",
+            fontSize: "1.45rem",
+            fontWeight: "bold"
+          });
+          hiNameText.setAttribute("x", 32);
+          hiNameText.setAttribute("y", 16);
+          svg.appendChild(hiNameGroup);
+        }
       }
     }
-  }
 
-  const setCountryCode = function _setCountryCode() {
-    log('setting country code');
-    changeName();
-    setTimeout(() => changeName(), 5000);
-  }
+    const setCountryCode = function _setCountryCode() {
+      log('setting country code');
+      changeName();
+      setTimeout(() => changeName(), 5000);
+    }
 
-  if (window.self === window.parent) {
-    letTheGameBegin();
-  }
+    if (window.self === window.parent) {
+      letTheGameBegin();
+    }
   if (window.self != window.parent) {
     log("Escape to close the popup window.");
     enableEscapeInIframe();
