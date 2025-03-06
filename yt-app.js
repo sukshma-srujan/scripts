@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.8.0
+// @version      0.9.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com
@@ -203,6 +203,9 @@ ytd-player {
       bottom: 0;
       left: 0;
       z-index: 10000;
+    }
+    ytd-player {
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
     `;
     addCssToDoc(css);
