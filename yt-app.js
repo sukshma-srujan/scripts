@@ -2,7 +2,7 @@
 // @name         JK YT App
 // @homepage     https://github.com/jkbhu85/scripts/blob/main/yt-app.js
 // @namespace    https://github.com/jkbhu85
-// @version      0.10.0
+// @version      0.11.0
 // @description  Add native app like capability to have YouTube video play while browsing the page.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com
@@ -11,6 +11,7 @@
 // @match        https://www.youtube.com/watch*
 // @match        https://www.youtube.com/shorts/*
 // @match        https://www.youtube.com/results*
+// @match        https://www.youtube.com/feed/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
@@ -79,7 +80,7 @@
   const ytBgStyle = function _ytBgStyle() {
     const css =
 `ytd-app::before {
-  background-image: url('https://github.com/sukshma-srujan/content/blob/main/108405_marble_pattern_efficient.jpg?raw=true');
+  /*background-image: url('https://github.com/sukshma-srujan/content/blob/main/108405_marble_pattern_efficient.jpg?raw=true');*/
   background-repeat: repeat;
   background-size: 100%;
   position: absolute;
@@ -587,4 +588,23 @@ ${VIDEO_ELEMENTS}{
     verticalCenterVideoAttemptCounter = maxVerticalCenterVideoAttemp;
     _gcenter0.tHandle = setTimeout(() => verticallyCenterVideo(), 350);
   });
+
+  const pauseVideos = function _pauseVideos() {
+    if (window.location.pathname.startsWith("/@")) {
+      document.querySelectorAll('video').forEach(vid => vid.pause());
+      log("paused videos");
+    }
+  }
+  const pauseRepeatedly = function _pauseRepeatedly() {
+    pauseVideos();
+    if (!window.ytAppData.pauseCounter) {
+      window.ytAppData.pauseCounter = 1;
+    } else {
+      window.ytAppData.pauseCounter += 1;
+    }
+    if (window.ytAppData.pauseCounter < 4) {
+      setTimeout(() => pauseRepeatedly(), 1000);
+    }
+  }
+  pauseRepeatedly();
 })();
