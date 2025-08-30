@@ -1,7 +1,7 @@
 // ==UserScript==
-// @name         Vertically Centered Youtbue Video
+// @name         Vcentered YT Vid
 // @namespace    http://tampermonkey.net/
-// @version      0.0.1
+// @version      0.0.2
 // @description  Vertically center a youtube video.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/watch*
