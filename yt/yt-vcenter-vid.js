@@ -1,21 +1,19 @@
 // ==UserScript==
 // @name         Vcentered YT Vid
 // @namespace    http://tampermonkey.net/
-// @version      0.0.3
+// @version      0.0.4
 // @description  Vertically center a youtube video.
 // @author       Jitendra Kumar
-// @match        https://www.youtube.com/watch*
+// @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
 // ==/UserScript==
 
 (function vcyv() {
   'use strict';
-  
-  if (window.trustedTypes && window.trustedTypes.createPolicy) {
-    window.trustedTypes.createPolicy('default', {
-      createHTML: (string, sink) => string
-    });
+
+  if (location.pathname != '/watch') {
+    return;
   }
 
   const APP_NAME = "JK_VCENTER_VID";
