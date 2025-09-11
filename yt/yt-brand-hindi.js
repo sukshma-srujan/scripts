@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Hindi YT name and country
 // @namespace    http://tampermonkey.net/
-// @version      0.0.1
+// @version      0.0.2
 // @description  Change youtube brand name and country name to Hindi
-// @author       You
+// @author       Jitendra Kumar
 // @match        https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=youtube.com
 // @grant        none
@@ -13,12 +13,12 @@
   'use strict';
 
   if (window.trustedTypes && window.trustedTypes.createPolicy) {
-    window.trustedTypes.createPolicy('default', {
+    window.trustedTypes.createPolicy('jk_hytbrand_policy', {
       createHTML: (string, sink) => string
     });
   }
 
-  const APP_NAME = "JK_YT_HINDI";
+  const APP_NAME = "[JK_YT_HINDI]";
 
   /* Utility methods */
   const log = function _log(str, obj) {
@@ -26,6 +26,13 @@
       console.log(APP_NAME, str, obj);
     } else {
       console.log(APP_NAME, str);
+    }
+  };
+  const err = function _err(str, obj) {
+    if (obj) {
+      console.error(APP_NAME, str, obj);
+    } else {
+      console.error(APP_NAME, str);
     }
   };
   const by = function _by(selector) {
@@ -79,7 +86,7 @@
   }
 
   const setCountryCode = function _setCountryCode() {
-    log('setting country code');
+    log('Will change youtube brand name and country code');
     changeName();
     setTimeout(() => changeName(), 5000);
   }
@@ -87,6 +94,6 @@
   try {
     setCountryCode();
   } catch (e) {
-    console.err(e);
+    err(e);
   }
 })();
