@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/sukshma-srujan
-// @version      1.14.0
+// @version      1.15.0
 // @description  Load full images from thumbnails or small images on torrent description page.
 // @author       Optimus Prime
 // @match        *://*.1337x.to/torrent/*
@@ -98,6 +98,11 @@
         const newUrl = origUrl + '/' + imageName;
         return newUrl.replace('/th/', '/i/');
       }
+    },
+    {
+      attemptName: "pixhost",
+      pattern: /^(https:\/\/)(t1)(\.pixhost\.to\/)(thumbs)(\/.*)$/i,
+      replacements: ['$1img1$3images$5']
     },
     {
       attemptName: "remove-th",
