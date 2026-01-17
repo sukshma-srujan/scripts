@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hindi YT name and country
 // @namespace    http://tampermonkey.net/
-// @version      0.0.2
+// @version      1.0.0
 // @description  Change youtube brand name and country name to Hindi
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/*
@@ -13,7 +13,7 @@
   'use strict';
 
   if (window.trustedTypes && window.trustedTypes.createPolicy) {
-    window.trustedTypes.createPolicy('jk_hytbrand_policy', {
+    window.trustedTypes.createPolicy('default', {
       createHTML: (string, sink) => string
     });
   }
@@ -87,7 +87,6 @@
 
   const setCountryCode = function _setCountryCode() {
     log('Will change youtube brand name and country code');
-    changeName();
     setTimeout(() => changeName(), 5000);
   }
 
