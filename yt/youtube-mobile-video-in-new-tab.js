@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Mobile
 // @namespace    https://github.com/suksham-srujan
-// @version      1.7.0
+// @version      1.8.0
 // @description  Open videos in a new tab in YouTube mobile.
 // @author       Jitendra Kumar
 // @match        https://m.youtube.com/*
@@ -23,33 +23,27 @@
     window.trustedTypes.createPolicy('default', {createHTML: (string, sink) => string});
   }
 
+  const attrViedoInNewTab = "data-video-in-new-tab";
+  const videoAnchorSelector = "a.ytLockupViewModelContentImage";
+  const mediaItemTagName = "ytm-rich-item-renderer";
+  const mediaItemSelector = mediaItemTagName;
+
   const css = `
 /* for opening videos in tab directly */
 @keyframes nodeInserted {
     from { opacity: 0.99; }
     to { opacity: 1; }
 }
-ytm-media-item {
+${mediaItemTagName} {
     animation-duration: 0.001s;
     animation-name: nodeInserted;
     position: relative;
 }
-ytm-media-item a.open-in-new-tab {
+${mediaItemTagName} a.open-in-new-tab {
   box-sizing: border-box;
   border: 1px solid rgba(150, 100, 0, 0.5);
-  border-radius: 12px;
-}
-/* hide reels */
-ytd-reel-shelf-renderer,
-ytd-rich-shelf-renderer,
-ytm-reel-shelf-renderer {
-    display: none !important;
 }
 `;
-  const attrViedoInNewTab = "data-video-in-new-tab";
-  const videoAnchorSelector = "a.media-item-thumbnail-container";
-  const mediaItemTagName = "ytm-media-item";
-  const mediaItemSelector = mediaItemTagName;
 
   const style = document.createElement("style");
   style.innerHTML = css;
