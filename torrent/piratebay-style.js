@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Pirate Bay Style
 // @namespace    https://github.com/jkbhu85
-// @version      1.8.0
+// @version      1.9.0
 // @description  Tweak appearance of the pirate bay website.
 // @author       Jitendra Kumar
 // @match        https://thepiratebay.org/*
@@ -22,18 +22,12 @@
 body {
   font-family: 'Merienda', 'Fira Sans', sans-serif;
   font-size: .85rem;
-  background-color: #D7CCC8;
-}
-#home > header > nav > section > img {
-  opacity: .5;
-  border-radius: var(--border-radius-2);
-  box-shadow: 0 0 .5rem rgba(255,255,255,1);
 }
 .browse .col-center {
   padding: 0;
 }
 #logo {
-  opacity: .75;
+  opacity: 1;
 }
 #search {
   background-color: rgba(255, 255, 255, .5);
