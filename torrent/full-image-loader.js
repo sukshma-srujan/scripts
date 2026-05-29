@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Full Image Loader
 // @namespace    https://github.com/sukshma-srujan
-// @version      1.15.0
+// @version      1.16.0
 // @description  Load full images from thumbnails or small images on torrent description page.
 // @author       Optimus Prime
 // @match        *://*.1337x.to/torrent/*
@@ -21,7 +21,7 @@
 (function() {
   "use strict";
 
-  const APP_NAME = "FULL_IMG_LOADER";
+  const APP_NAME = "[JK_FULL_IMG_LOADER]";
   const debugging = true;
 
   const log = function _log(msg) {
@@ -154,6 +154,11 @@
       attemptName: "t-to-o",
       pattern: /^(.+)\/thumbs2(.+)\/(.+)\/(.+)_t(\..+)$/i,
       replacements: ["$1/images2$2/$3/$4_o$5"]
+    },
+    {
+      attemptName: "remove-md-1",
+      pattern: /^(.+)(\.md\.)(.+)$/i,
+      replacements: ["$1.$3"]
     }
   ];
 
