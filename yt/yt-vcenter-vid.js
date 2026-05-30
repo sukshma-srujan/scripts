@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vcentered YT Vid
 // @namespace    http://tampermonkey.net/
-// @version      0.0.4
+// @version      0.1.0
 // @description  Vertically center a youtube video.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/*
@@ -12,11 +12,7 @@
 (function vcyv() {
   'use strict';
 
-  if (location.pathname != '/watch') {
-    return;
-  }
-
-  const APP_NAME = "JK_VCENTER_VID";
+  const APP_NAME = "[JK_VCENTER_VID]";
 
   /* Utility methods */
   const by = function _by(selector) {
@@ -53,8 +49,8 @@
 
   const maxVerticalCenterVideoAttemp = 12;
   let verticalCenterVideoAttemptCounter = maxVerticalCenterVideoAttemp;
-  const verticallyCenterVideo = function _verticallyCenterVideo() {
-    if (location.pathname != "/watch") {
+  const verticallyCenterVideo = function _verticallyCenterVideo(pathNameCheckDisabled) {
+    if (!pathNameCheckDisabled && location.pathname != "/watch") {
       log("verticallyCenterVideo not on video watch page");
       return;
     }
@@ -146,5 +142,16 @@
     }
     verticalCenterVideoAttemptCounter = maxVerticalCenterVideoAttemp;
     _gcenter0.tHandle = setTimeout(() => verticallyCenterVideo(), 350);
+  });
+
+  window.navigation.addEventListener("navigate", (event) => {
+    if (event.navigationType != 'push') {
+      return;
+    }
+    const url = new URL(event.destination.url);
+    if (url.pathname != "/watch") {
+      return;
+    }
+    verticallyCenterVideo(true);
   });
 })();
