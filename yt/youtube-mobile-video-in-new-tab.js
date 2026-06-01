@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Mobile
 // @namespace    https://github.com/suksham-srujan
-// @version      1.8.0
+// @version      1.9.0
 // @description  Open videos in a new tab in YouTube mobile.
 // @author       Jitendra Kumar
 // @match        https://m.youtube.com/*
@@ -11,7 +11,7 @@
 
 (function () {
   "use strict";
-  const LOG_MSG_PREFIX = "[JkYtMobile]";
+  const LOG_MSG_PREFIX = "[JK_YT_MOBILE]";
   const log = function _log(msg) {
     console.log(LOG_MSG_PREFIX, msg);
   };
@@ -39,9 +39,10 @@ ${mediaItemTagName} {
     animation-name: nodeInserted;
     position: relative;
 }
-${mediaItemTagName} a.open-in-new-tab {
+${mediaItemTagName} a.open-in-new-tab .ytThumbnailViewModelImage img {
   box-sizing: border-box;
   border: 1px solid rgba(150, 100, 0, 0.5);
+  border-radius: 5px;
 }
 `;
 
