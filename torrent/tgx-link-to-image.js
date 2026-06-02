@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         TGx - Link to Image
 // @namespace    https://github.com/optimus-prime
-// @version      1.0.0
+// @version      1.0.1
 // @description  Display images by fetching from the URLs of the links in the description.
 // @author       Optimus Prime
 // @match        https://torrentgalaxy.to/torrent/*
 // @match        https://torrentgalaxy.mx/torrent/*
+// @match        https://torrentgalaxy.one/torrent/*
 // @match        https://tgx.rs/torrent/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=torrentgalaxy.to
 // @grant        none
