@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Vcentered YT Vid
 // @namespace    http://tampermonkey.net/
-// @version      0.1.0
+// @version      0.2.0
 // @description  Vertically center a youtube video.
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/*
@@ -74,61 +74,70 @@
     const video = byId("player");
     const primary = byId('primary');
 
-    if (video && primary) {
-      const spacerBottom = (function _findOrCreateBottomSpacer() {
-        const id = 'jk-vid-spacer-bottom';
-        const aboveTheFold = document.querySelector("#above-the-fold");
-        if (!aboveTheFold) {
-          return null;
-        }
-        let e0 = byId(id);
-        if (!e0) {
-          e0 = document.createElement("div");
-          e0.id = id;
-          aboveTheFold.before(e0);
-          log("new bottom spacer inserted");
-        }
-        e0.style.marginTop = "0px";
-        return e0;
-      })();
-      const spacer = (function _findOrCreateTopSpacer() {
-        const id = "jk-vid-spacer";
-        let e0 = byId(id);
-        if (e0 && e0.nextElementSibing != video) {
-          log("spacer next element sibling is not video", e0.nextElementSibling);
-          e0.remove();
-          e0 = undefined;
-        }
-        if (!e0) {
-          e0 = document.createElement("div");
-          e0.id = id;
-          video.before(e0);
-          log("new spacer inserted");
-        }
-        e0.style.marginTop = "0px";
-        return e0;
-      })();
-
-      const mth = mastheadHeight;
-      const vch = video.clientHeight;
-      const vct = video.clientTop;
-      const r = window.innerHeight - vch;
-      const pstyle = getComputedStyle(primary);
-      const pdt = pstyle.paddingTop.replace('px', '');
-      const mt = r / 2 - vct - mth - pdt;
-      spacer.style.marginTop = mt + "px";
-      //log("verticallyCenterVideo applied, mt: " + mt + ", vch: " + vch + ", vct: " + vct + ", mth: " + mth + ", pdt: " + pdt);
-      log("verticallyCenterVideo applied, mt: " + mt);
-      if (spacerBottom) {
-        const marginBottom = window.innerHeight / 2;
-        spacerBottom.style.marginTop = marginBottom + 'px';
-        log("verticallyCenterVideo applied, marginBottom: " + marginBottom);
-      }
-      return;
-    } else {
+    if (!video || !primary || video.clientHeight === 0) {
       if (verticalCenterVideoAttemptCounter > 0) {
         setTimeout(() => verticallyCenterVideo(), 1000);
       }
+      return;
+    }
+
+    const spacerBottom = (function _findOrCreateBottomSpacer() {
+      const id = 'jk-vid-spacer-bottom';
+      const aboveTheFold = document.querySelector("#above-the-fold");
+      if (!aboveTheFold) {
+        return null;
+      }
+      let e0 = byId(id);
+      if (!e0) {
+        e0 = document.createElement("div");
+        e0.id = id;
+        aboveTheFold.before(e0);
+        log("new bottom spacer inserted");
+      }
+      e0.style.marginTop = "0px";
+      return e0;
+    })();
+    const spacer = (function _findOrCreateTopSpacer() {
+      const id = "jk-vid-spacer";
+      let e0 = byId(id);
+      if (e0 && e0.nextElementSibing != video) {
+        log("spacer next element sibling is not video", e0.nextElementSibling);
+        e0.remove();
+        e0 = undefined;
+      }
+      if (!e0) {
+        e0 = document.createElement("div");
+        e0.id = id;
+        video.before(e0);
+        log("new spacer inserted");
+      }
+      e0.style.marginTop = "0px";
+      return e0;
+    })();
+
+    const mth = mastheadHeight;
+    const vch = video.clientHeight;
+    const vct = video.clientTop;
+    const r = window.innerHeight - vch;
+    const pstyle = getComputedStyle(primary);
+    const pdt = pstyle.paddingTop.replace('px', '');
+    const mt = r / 2 - vct - mth - pdt;
+    /**
+    log(
+      "verticallyCenterVideo applied, marginTop: " + mt +
+      ", videoHeight: " + vch +
+      ", videoSpaceTop: " + vct +
+      ", mastheadHeight: " + mth +
+      ", videoPaddingTop: " + pdt);
+    /**/
+    if (mt > 0) {
+      spacer.style.marginTop = mt + "px";
+      log("VCentering video, marginTop: " + mt);
+    }
+    if (spacerBottom) {
+      const marginBottom = window.innerHeight / 2;
+      spacerBottom.style.marginTop = marginBottom + 'px';
+      log("VCentering video, marginBottom: " + marginBottom);
     }
   }
 
