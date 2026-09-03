@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Hindi YT name and country
 // @namespace    http://tampermonkey.net/
-// @version      1.0.0
+// @version      1.1.0
 // @description  Change youtube brand name and country name to Hindi
 // @author       Jitendra Kumar
 // @match        https://www.youtube.com/*
@@ -72,7 +72,9 @@
         const hiNameGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
         const hiNameText = document.createElementNS("http://www.w3.org/2000/svg", "text");
         hiNameGroup.appendChild(hiNameText);
-        hiNameText.innerHTML = 'विड्योमंच';
+        const yth = 'विड्योमंच';
+        hiNameText.innerHTML = yth;
+        window.title = yth;
         applyStyle(hiNameText, {
           fontFamily: "inherit",
           fontSize: "1.45rem",
